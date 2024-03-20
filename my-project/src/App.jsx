@@ -5,6 +5,7 @@ import Inbox from "./pages/Inbox";
 import Users from "./pages/Users";
 import Rooms from "./pages/Rooms";
 import Sidebar from "./components/Sidebar";
+import Reservation from "./pages/Reservation";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/users" element={<Users />} />
           <Route path="/rooms" element={<Rooms />} />
+          <Route path="/reservation" element={<Reservation />} />
         </Routes>
       </main>
     </BrowserRouter>

@@ -2,16 +2,14 @@ import React, { useState, useEffect } from "react"; // Import useState
 import { MultiSelect } from "primereact/multiselect";
 import axios from "axios";
 const RoomModal = ({ closeModal }) => {
-  const [room, setRoom] = useState({
-    room_name: "",
-    price: 0,
-    miniDes: "",
-    description: "",
-    roomAmenities: [],
-    buildingAmenities: [],
-    image_name: [],
-  });
-  const [files, setFile] = useState([]);
+  const [roomName, setRoomName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [miniDes, setMiniDes] = useState("");
+  const [description, setDescription] = useState("");
+  const [roomAmenitiesData, setRoomAmenitiesData] = useState([]);
+  const [buildingAmenitiesData, setBuildingAmenitiesData] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [image, setImage] = useState([]);
   const roomAmenities = [
     { Amenities: "Air-Condition" },
     { Amenities: "Unlimited Wifi" },
@@ -77,20 +75,86 @@ const RoomModal = ({ closeModal }) => {
 
   const handleChange = (e) => {
     e.preventDefault();
-    setRoom({ ...room, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    switch (name) {
+      case "roomName":
+        setRoomName(value);
+        break;
+      case "price":
+        setPrice(parseFloat(value));
+        break;
+      case "miniDes":
+        setMiniDes(value);
+        break;
+      case "description":
+        setDescription(value);
+        break;
+      case "roomAmenitiesData":
+        setRoomAmenitiesData(value);
+        break;
+      case "buildingAmenitiesData":
+        setBuildingAmenitiesData(value);
+        break;
+      default:
+        break;
+    }
   };
 
   const handleFileInputChange = (e) => {
+    setFiles([]);
     const selectedFiles = Array.from(e.target.files);
-    setRoom([...room, ...selectedFiles]);
+    if (e.target.files) {
+      const fileArray = selectedFiles.map((file) => URL.createObjectURL(file));
+      setImage((prevFiles) => [...prevFiles, ...selectedFiles]);
+      setFiles((prev) => prev.concat(fileArray));
+    }
   };
 
   const handleDeleteImage = (index) => {
-    setFile([...files.slice(0, index), ...files.slice(index + 1)]);
+    setImage([...files.slice(0, index), ...files.slice(index + 1)]);
   };
 
   const handleModal = () => {
     closeModal();
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // const files_image = e.target[0].files; // Assuming this is where you're retrieving the files from the file input
+
+    const formData = new FormData();
+    var datas = e.target[0].files;
+    for (let i = 0; i < datas.length; i++) {
+      formData.append("file_name[]", datas[i]);
+    }
+    formData.append("room_name", roomName);
+    formData.append("price", price);
+    formData.append("mini_description", miniDes);
+    formData.append("description", description);
+    formData.append("room_amenities", JSON.stringify(roomAmenitiesData));
+    formData.append(
+      "building_amenities",
+      JSON.stringify(buildingAmenitiesData)
+    );
+    formData.append("file_name", files);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/admin/add-room",
+        formData,
+        {
+          method: "POST",
+          headers: {
+            Authorization:
+              "Bearer 3|M2nvVPm4KMEJZtKveDMoMaLPsWnRNoupjiUMoaYpc798d068",
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(res.data);
+    } catch (error) {
+      console.log("Error: ", error);
+    }
   };
 
   return (
@@ -106,17 +170,15 @@ const RoomModal = ({ closeModal }) => {
         className="rounded-md p-3 bg-actNav w-5/6 h-5/6 overflow-auto scrollbar-thin scrollbar-webkit"
       >
         <h1 className="text-2xl font-bold mt-2">Edit Room</h1>
-        <form>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <label className="flex flex-col justify-center items-center">
             <div className="flex flex-col justify-center items-center bg-white text-darkText rounded-xl border border-solid p-3 aspect-square w-40 cursor-pointer">
               + Add Image <br />
               <span className="font-lighter text-sm">Up to 10 Images</span>
               <input
                 type="file"
-                id="images"
-                name="image_name"
+                name="file_name[]"
                 className="hidden"
-                value={room.image_name}
                 onChange={handleFileInputChange}
                 multiple
                 accept="image/jpg, image/jpeg, image/webp"
@@ -124,7 +186,7 @@ const RoomModal = ({ closeModal }) => {
             </div>
           </label>
           <div className="flex flex-wrap justify-center items-center mt-3">
-            {files.map((image, index) => (
+            {image.map((image, index) => (
               <div key={index} className="m-2">
                 <img
                   src={URL.createObjectURL(image)}
@@ -151,7 +213,7 @@ const RoomModal = ({ closeModal }) => {
                   Title:{" "}
                 </label>
                 <input
-                  name="room_name"
+                  name="roomName"
                   className="shadow appearance-none border rounded w-full py-1 px-1 bg-white text-darkText"
                   // defaultValue={roomToEdit ? roomToEdit.title : ""}
                   onChange={handleChange}
@@ -221,8 +283,8 @@ const RoomModal = ({ closeModal }) => {
                   Room Amenities:{" "}
                 </label>
                 <MultiSelect
-                  name="roomAmenities"
-                  value={room.roomAmenities}
+                  name="roomAmenitiesData"
+                  value={roomAmenitiesData}
                   onChange={handleChange}
                   options={roomAmenities}
                   optionLabel="Amenities"
@@ -237,9 +299,9 @@ const RoomModal = ({ closeModal }) => {
                   Building Amenities:{" "}
                 </label>
                 <MultiSelect
-                  value={room.buildingAmenities}
+                  value={buildingAmenitiesData}
                   onChange={handleChange}
-                  name="buildingAmenities"
+                  name="buildingAmenitiesData"
                   options={buildingAmenities}
                   optionLabel="Amenities"
                   filter

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { FaPlus } from "react-icons/fa";
 import br1 from "../assets/br1.jpg";
 import br2 from "../assets/br2.jpg";
 import RoomModal from "../components/RoomModal";
+import axios from "axios";
 
 const Rooms = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,6 +24,28 @@ const Rooms = () => {
       )
     );
   };
+
+  const [datos, setDatos] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get("http://localhost:8000/api/admin/rooms", {
+          headers: {
+            Authorization:
+              "Bearer 3|M2nvVPm4KMEJZtKveDMoMaLPsWnRNoupjiUMoaYpc798d068",
+          },
+        });
+        setDatos(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setData(datos.data);
+  }, []);
 
   const [data, setData] = useState([]);
 
@@ -59,7 +82,7 @@ const Rooms = () => {
                   <img
                     src={room.src}
                     className="object-cover w-full h-3/4 rounded-xl"
-                    alt={room.title}
+                    alt={room.room_name}
                   ></img>
                   <h1 className="m-1 g-2 text-actText font-semibold">
                     {room.title}

@@ -45,7 +45,7 @@ const Reservation = () => {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
-  // Function to check if a date is the current day
+  // Function to check if a date is the current day nababaliw na ako sa react send welp
   const isCurrentDay = (date) => {
     return (
       date.getFullYear() === currentDate.getFullYear() &&
@@ -54,7 +54,7 @@ const Reservation = () => {
     );
   };
 
-  // Set selectedTime to current time when component mounts
+  // Set selectedTime to current time when component mounts hehe
   useEffect(() => {
     const currentTime = new Date();
     const hours = String(currentTime.getHours()).padStart(2, '0');
@@ -62,6 +62,7 @@ const Reservation = () => {
     setSelectedTime(`${hours}:${minutes}`);
   }, []);
 
+  //Year and Month will change depending on the selected Month and Year hehe
   useEffect(() => {
     const daysInMonth = getDaysInMonth(selectedYear, selectedMonth);
     const newDates = Array.from({ length: daysInMonth }, (_, index) => new Date(selectedYear, selectedMonth, index + 1));
@@ -83,7 +84,7 @@ const Reservation = () => {
                     selectedDate && selectedDate.getTime() === date.getTime() ? 'text-black bg-bordColor border-black' : 'bg-mainBg border-black border border--300 rounded-xl shadow'
                   } rounded-xl px-4 py-2 m-1 hover:bg-actNav`}
                   style={{
-                    backgroundColor: isCurrentDay(date) ? '#bef264' : '', // Set background color for current day
+                    backgroundColor: isCurrentDay(date) ? '#bef264' : '', // Set background color for current day di nagana if galing sa tailwind.config yung color
                   }}
                   onClick={() => handleDateClick(date)}
                 >
@@ -109,6 +110,7 @@ const Reservation = () => {
           </div>
         </div>
         {/* Select Year, Time, and Month */}
+        {/* Select Year */}
         <div className="col-span-1 lg:col-span-1">
           <div className="bg-mainCol mt-2 pt-1 border-b-[1px] border-mainBorder p-4 rounded-xl shadow">
             <h2 className='py-2'>Select Year:</h2>
@@ -124,7 +126,7 @@ const Reservation = () => {
                 <option key={year} value={year}>{year}</option>
               ))}
             </select>
-
+            {/*Select Month */}
             <div className='bg-mainCol py-2'>
               <h2 className='py-2'>Select Month:</h2>
               <select
@@ -140,7 +142,7 @@ const Reservation = () => {
                 ))}
               </select>
             </div>
-
+            {/* Select Time */}
             <div className="bg-mainCol py-2">
               <h2 className='py-2'>Select Time:</h2>
               <input
@@ -158,3 +160,4 @@ const Reservation = () => {
 }
 
 export default Reservation;
+//Documentations needed too para magets hehe at di makalimutan purposes of each part ng code

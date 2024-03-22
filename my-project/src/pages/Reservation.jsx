@@ -99,7 +99,7 @@ const Reservation = () => {
   };
 
   return (
-    <section className='w-4/5 font-semibold bg-backColor h-screen overflow-y-auto flex flex-col justify-start items-center gap-2 p-4 scrollbar-thin scrollbar-webkit'>
+    <section className='w-4/5 grow font-semibold bg-backColor h-screen overflow-y-auto flex flex-col justify-start items-center gap-2 p-4 scrollbar-thin scrollbar-webkit'>
       <div id='main-section' className='grid lg:grid-cols-3 grid-cols-1 gap-4 w-full h-full'>
         {/* Select Day */}
         <div className="col-span-1 lg:col-span-2">
@@ -107,7 +107,7 @@ const Reservation = () => {
             <h2 className='text-3xl text-act-text font-semibold py-2'>Reserve Day:</h2>
             <div className="grid grid-cols-7 gap-2">
             {weekDayNames.map((dayName, index) => (
-            <div key={index} className="text-xl text-center bg-backColor text-lg border border-bordColor border--300 rounded-xl mt-4">{dayName}</div>
+            <div key={index} className="text-2xl text-center bg-backColor text-lg border border-bordColor border--300 rounded-xl mt-4">{dayName}</div>
               ))}
               {arrangeDays().map(date => (
                 <button

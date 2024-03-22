@@ -104,10 +104,10 @@ const Reservation = () => {
         {/* Select Day */}
         <div className="col-span-1 lg:col-span-2">
           <div className="bg-mainCol mt-2 border-b-[1px] border-mainBorder p-4 rounded-xl shadow">
-            <h2 className='text-2xl text-act-text font-semibold py-2'>Reserve Day:</h2>
+            <h2 className='text-3xl text-act-text font-semibold py-2'>Reserve Day:</h2>
             <div className="grid grid-cols-7 gap-2">
             {weekDayNames.map((dayName, index) => (
-            <div key={index} className="text-center text-lg border border-bordColor border--300 rounded-xl">{dayName}</div>
+            <div key={index} className="text-xl text-center bg-backColor text-lg border border-bordColor border--300 rounded-xl mt-4">{dayName}</div>
               ))}
               {arrangeDays().map(date => (
                 <button
@@ -127,15 +127,17 @@ const Reservation = () => {
             </div>
           </div>
           {/* Date Info if it's reserved */}
-          <div key="reservationInfo" className="col-span-1 lg:col-span-2">
+          <div key="reservationInfo" className="col-span-1 lg:col-span-2 py-4">
             <div className='bg-mainCol mt-2 border-b-[1px] border-mainBorder p-4 rounded-xl shadow'>
-              <h2 className='text-2xl text-act-text font-semibold py-2'>Reservation Info:</h2>
+              <h2 className='text-2xl text-act-text font-semibold py-2 text-3xl'>Reservation Info:</h2>
               {reservationInfo && (
                 <div className='bg-backColor rounded-md w-full overflow-wrap flex-col justify-start items-center gap-2 mt-2 p-2'>
-                  <p>{`Reservation Date: ${reservationInfo.date}`}</p>
-                  <p>{`Customer Name: ${reservationInfo.name}`}</p>
-                  <p>{`Room: `}</p>
-                  <p>{`Room Details: `}</p>
+                  <p className="mt-4">{`Reservation Date: ${reservationInfo.date}`}</p>
+                  <p className="mt-4">{`Customer Name: ${reservationInfo.name}`}</p>
+                  <p className="mt-4">{`Room: `}</p>
+                  <p className="mt-4">{`Room Details: `}</p>
+                  <p className="mt-4">{`Contact Number: `}</p>
+                  <p className="mt-4">{`Email Address: `}</p>
                   {/* Add more reservation information as needed */}
                 </div>
               )}
@@ -146,7 +148,7 @@ const Reservation = () => {
         {/* Select Year */}
         <div className="col-span-1 lg:col-span-1">
           <div className="bg-mainCol mt-2 pt-1 border-b-[1px] border-mainBorder p-4 rounded-xl shadow">
-            <h2 className='py-2'>Select Year:</h2>
+            <h2 className='py-2 text-3xl text-center'>- Year -</h2>
             <select
               value={selectedYear || ''}
               onChange={(e) => {
@@ -162,7 +164,7 @@ const Reservation = () => {
             {/*Select Month */}
             <div className='bg-mainCol py-2'>
               <h2 className
-              ='py-2'>Select Month:</h2>
+              ='py-2 text-3xl text-center'>- Month -</h2>
               <select
                 value={selectedMonth || ''}
                 onChange={(e) => {
@@ -177,8 +179,8 @@ const Reservation = () => {
               </select>
             </div>
             {/* Select Time */}
-            <div className="bg-mainCol py-2">
-              <h2 className='py-2'>Select Time:</h2>
+            <div className="bg-mainCol py-2 ">
+              <h2 className='py-2 text-3xl text-center'>- Time -</h2>
               <input
                 type="time"
                 value={selectedTime}
@@ -187,6 +189,21 @@ const Reservation = () => {
               />
             </div>
           </div>
+          {/* Reservation Part diko pa lang alam gagawin hehe */}
+          <div className="bg-mainCol mt-4 pt-1 border-b-[1px] border-mainBorder p-4 rounded-xl shadow">
+          {/* Add your content for the new grid here */}
+          <h2 className='py-2 text-3xl'>Reservation:</h2>
+          <div className="bg-mainCol py-2 flex justify-center items-center">
+            <div className='bg-backColor rounded-md w-full overflow-wrap flex-col justify-center items-center gap-2 mt-2 p-2'>
+              <h2 className='py-2 text-3xl text-center'>Pareserve Ako</h2> {/* WORK IN PROGRESS DIKO PA ALAM ILALAGAY HAHAHAHHAHAHA*/}
+            </div>
+          </div>
+          <div className="flex justify-center">
+            <button className="bg-notActText hover:bg-cirlce text-white font-bold py-2 px-4 rounded mt-4">
+              Reserve
+            </button>
+          </div>
+        </div>
         </div>
       </div>
     </section>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+//Beware for my spaghetti code sorry po medyo naguguluhan pa me sa ReactJS
 const Reservation = () => {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
@@ -16,19 +17,25 @@ const Reservation = () => {
   const handleDateClick = (date) => {
     setSelectedDate(date);
     // Fetch reservation info for the selected date
-    const info = fetchReservationInfo(date);
-    setReservationInfo(info);
+    fetchReservationInfo(date)
+      .then((info) => setReservationInfo(info))
+      .catch((error) => console.error('Error fetching reservation info:', error));
   };
 
   // Function to fetch reservation info for a specific date
-  const fetchReservationInfo = (date) => {
-    // Implement logic to get the information from the database
-    // I'll just return a sample reservation info object
-    return {
-      date: date.toDateString(), // Sample reservation info
-      name: 'Sean Lowie Berbon',
-      // Add more reservation information as needed
-    };
+  const fetchReservationInfo = async (date) => {
+    try {
+      // Implement logic to get the information from the database
+      // Sample reservation info
+      const info = {
+        date: date.toDateString(),
+        name: 'Sean Lowie Berbon',
+        // Add more reservation information as needed
+      };
+      return info;
+    } catch (error) {
+      throw new Error('Failed to fetch reservation info');
+    }
   };
 
   // Function to get the number of days in a month
@@ -45,6 +52,9 @@ const Reservation = () => {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
+  //Generate weekday names in week
+  const weekDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
   // Function to check if a date is the current day nababaliw na ako sa react send welp
   const isCurrentDay = (date) => {
     return (
@@ -54,7 +64,7 @@ const Reservation = () => {
     );
   };
 
-  // Set selectedTime to current time when component mounts hehe
+   // Set selectedTime to current time when component mounts hehe
   useEffect(() => {
     const currentTime = new Date();
     const hours = String(currentTime.getHours()).padStart(2, '0');
@@ -62,12 +72,31 @@ const Reservation = () => {
     setSelectedTime(`${hours}:${minutes}`);
   }, []);
 
-  //Year and Month will change depending on the selected Month and Year hehe
+  // Year and Month will change depending on the selected Month and Year hehe
   useEffect(() => {
     const daysInMonth = getDaysInMonth(selectedYear, selectedMonth);
     const newDates = Array.from({ length: daysInMonth }, (_, index) => new Date(selectedYear, selectedMonth, index + 1));
     setDates(newDates);
   }, [selectedYear, selectedMonth]);
+
+  // Arrange days based on day of the week (Monday, Tuesday, etc.)
+  const arrangeDays = () => {
+    const orderedDates = [];
+    const firstDayOfMonth = new Date(selectedYear, selectedMonth, 1);
+    let currentDay = new Date(firstDayOfMonth);
+    
+    // Move to the previous Sunday
+    while (currentDay.getDay() !== 0) { // 0 corresponds to Sunday
+      currentDay.setDate(currentDay.getDate() - 1);
+    }
+  
+    // Push days of the previous month
+    while (orderedDates.length < 36) { // 36 value para ma-fit yung 31 day per month if 30 then magshoshow yung preivous days of month sa current month.
+      orderedDates.push(new Date(currentDay));
+      currentDay.setDate(currentDay.getDate() + 1);
+    }
+    return orderedDates;
+  };
 
   return (
     <section className='w-4/5 font-semibold bg-backColor h-screen overflow-y-auto flex flex-col justify-start items-center gap-2 p-4 scrollbar-thin scrollbar-webkit'>
@@ -77,16 +106,20 @@ const Reservation = () => {
           <div className="bg-mainCol mt-2 border-b-[1px] border-mainBorder p-4 rounded-xl shadow">
             <h2 className='text-2xl text-act-text font-semibold py-2'>Reserve Day:</h2>
             <div className="grid grid-cols-7 gap-2">
-              {dates.map(date => (
+            {weekDayNames.map((dayName, index) => (
+            <div key={index} className="text-center text-lg border border-bordColor border--300 rounded-xl">{dayName}</div>
+              ))}
+              {arrangeDays().map(date => (
                 <button
                   key={date}
                   className={`date-button ${
-                    selectedDate && selectedDate.getTime() === date.getTime() ? 'text-black bg-bordColor border-black' : 'bg-mainBg border-black border border--300 rounded-xl shadow'
+                    selectedDate && selectedDate.getTime() === date.getTime() ? 'text-black bg-bordColor border-black' : 'bg-mainBg border-gray-300 border border--300 rounded-xl shadow'
                   } rounded-xl px-4 py-2 m-1 hover:bg-actNav`}
                   style={{
-                    backgroundColor: isCurrentDay(date) ? '#bef264' : '', // Set background color for current day di nagana if galing sa tailwind.config yung color
+                    backgroundColor: date.getMonth() !== selectedMonth ? 'rgba(240, 240, 240, 0.5)' : (isCurrentDay(date) ? '#bef264' : ''),
                   }}
                   onClick={() => handleDateClick(date)}
+                  disabled={date.getMonth() !== selectedMonth} // Disable buttons for dates of the previous/next month
                 >
                   {date.getDate()}
                 </button>
@@ -128,7 +161,8 @@ const Reservation = () => {
             </select>
             {/*Select Month */}
             <div className='bg-mainCol py-2'>
-              <h2 className='py-2'>Select Month:</h2>
+              <h2 className
+              ='py-2'>Select Month:</h2>
               <select
                 value={selectedMonth || ''}
                 onChange={(e) => {

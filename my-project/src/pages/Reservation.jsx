@@ -19,6 +19,10 @@ const Reservation = () => {
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
+  const roomNum = [
+    'Room #1',  'Room #2'
+  ];
+
   const weekDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   useEffect(() => {
@@ -186,7 +190,9 @@ const Reservation = () => {
                     })(),
                     borderColor: 'black',
                   }}
-                  onClick={() => handleDateClick(date)}
+                  onClick={() => handleDateClick(date)
+                    
+                  }
                   disabled={date.getMonth() !== selectedMonth} // Disable buttons for dates in other months
                 >
                   {date.getDate()}
@@ -264,7 +270,14 @@ const Reservation = () => {
             <h2 className='py-2 text-3xl'>Room Information:</h2>
             <div className="bg-mainCol py-2 flex justify-center items-center">
               <div className='bg-backColor rounded-md w-full overflow-wrap flex-col justify-center items-center gap-2 mt-2 p-2'>
-                <h2 className='py-2 text-3xl text-center'>Pareserve Ako</h2> {/* WORK IN PROGRESS DIKO PA ALAM ILALAGAY HAHAHAHHAHAHA*/}
+              <select 
+                value={roomNum}
+                onChange={(e) => setRoomNum(e.target.value)}>
+                {roomNum.map((room, index) => (
+                  <option key={index} value={room}>{room}</option>
+                ))}
+              </select>
+              {/* WORK IN PROGRESS DIKO PA ALAM ILALAGAY HAHAHAHHAHAHA*/}
               </div>
             </div>
             <div className="flex justify-center">

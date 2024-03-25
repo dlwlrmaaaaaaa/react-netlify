@@ -9,7 +9,6 @@ export default {
       colors: {
         'actText': '#422D01',
         'notActText': '#816A3C',
-
         'backColor' : '#fcf8f0', 
         'mainCol' : '#efd19b', 
         'mainBorder' : '#bfa77c', 

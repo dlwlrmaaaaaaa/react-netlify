@@ -9,6 +9,7 @@ import Dashboard from "../pages/Dashboard";
 import Inbox from "../pages/Inbox";
 import Users from "../pages/Users";
 import Rooms from "../pages/Rooms";
+import axiosClient from "../axios";
 
 const variants = {
   expanded: { width: "20%" },
@@ -42,6 +43,26 @@ const navItems = [
     path: "/users",
   },
 ];
+
+const token = localStorage.getItem("auth_token");
+
+const handleLogout = async (e) => {
+  e.preventDefault();
+  console.log(token);
+  try {
+    const res = await axiosClient.post("/admin/logout", null, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.status === 200) {
+      localStorage.removeItem("auth_token");
+      location.reload();
+    }
+  } catch (error) {
+    console.log("Error Logout: ", error);
+  }
+};
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true);
@@ -119,6 +140,7 @@ const Sidebar = () => {
       <div
         id="logout-box"
         className="w-full flex flex-col justify-start items-center gap-3 cursor-pointer"
+        onClick={handleLogout}
       >
         <div className="bg-mainBorder w-full h-[1px]"></div>
         <div className="flex justify-center items-center gap-2">

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import logo from '../assets/logo.png';
-import { FaBars, FaCircleUser } from 'react-icons/fa6';
-import { IoCloseSharp } from 'react-icons/io5';
+import React, { useState } from "react";
+import logo from "../assets/logo.png";
+import { FaBars, FaCircleUser } from "react-icons/fa6";
+import { IoCloseSharp } from "react-icons/io5";
 
 const Header = () => {
   const Links = [
-    { name: 'HOME', path: '/home' },
-    { name: 'CONTACT US', path: '/' },
-    { name: 'ROOMS', path: '/' },
-    { name: 'REVIEWS', path: '/' }
+    { name: "HOME", path: "/home" },
+    { name: "CONTACT US", path: "/contact_us" },
+    { name: "ROOMS", path: "/available_rooms" },
+    { name: "REVIEWS", path: "/reviews" },
   ];
 
   const [isOpen, setIsOpen] = useState(false);
@@ -27,21 +27,24 @@ const Header = () => {
 
         <div
           onClick={() => setIsOpen(!isOpen)}
-          className="w-7 h-7 absolute top-6 right-8 cursor-pointer md:hidden">
-            {isOpen ? <IoCloseSharp /> : <FaBars />}
+          className="w-7 h-7 absolute top-6 right-8 cursor-pointer md:hidden"
+        >
+          {isOpen ? <IoCloseSharp /> : <FaBars />}
         </div>
 
         {/* navlinks here */}
         <ul
-          className={`md:flex md:items-center md:pb-0 pb-12 ${isOpen ? 'block' : 'hidden md:block'}`} >
+          className={`md:flex md:items-center md:pb-0 pb-12 ${
+            isOpen ? "block" : "hidden md:block"
+          }`}
+        >
           {Links.map((link, index) => (
-            <li
-              key={index}
-              className="font-bold my-7 md:my-0 md:ml-8">
+            <li key={index} className="font-bold my-7 md:my-0 md:ml-8">
               <a
                 href={link.src}
-                className="text-notActText duration-500 hover:text-actText cursor-pointer">
-                 {link.name}
+                className="text-notActText duration-500 hover:text-actText cursor-pointer"
+              >
+                {link.name}
               </a>
             </li>
           ))}
@@ -52,12 +55,13 @@ const Header = () => {
           {/* dropdown */}
           <li
             className="font-semibold my-7 md:my-0 md:ml-8 relative"
-            onClick={toggleDropdown}>
+            onClick={toggleDropdown}
+          >
             <span className="cursor-pointer text-slate-500">
               <FaCircleUser size={30} />
             </span>
             {showDropdown && (
-              <ul className="absolute top-full left-0 bg-white border border-gray-200 rounded-md mt-1">
+              <ul className="absolute top-full left-0 bg-white border border-gray-200 rounded-md mt-1 z-10">
                 <li className="py-2 px-4 hover:bg-gray-100">
                   <a href="#" className="text-notActText">
                     Profile

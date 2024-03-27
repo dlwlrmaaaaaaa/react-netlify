@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../axios";
-import CryptoJS from "crypto-js";
+
 import { Navigate } from "react-router-dom";
 const Login = ({ setLogin }) => {
   const [signIn, setSignIn] = useState(true);
@@ -13,6 +13,7 @@ const Login = ({ setLogin }) => {
   const [error, setError] = useState({ _Html: "" });
   const [url, setUrl] = useState(null);
   const [userData, setUserData] = useState({});
+  const [tokenType, setTokenType] = useState(null);
   // Toggle function to switch between Sign In and Sign Up
 
   const toggleSignIn = () => setSignIn(!signIn);
@@ -32,22 +33,23 @@ const Login = ({ setLogin }) => {
       .catch((error) => console.error("Error: ", error));
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const data = {
       email: email,
       password: password,
     };
-    try {
-      const res = await axiosClient.post("/admin_login", data);
-      if (res.status === 201) {
-        const { auth_token } = res.data;
-        localStorage.setItem("auth_token", auth_token);
+    axiosClient
+      .post("/admin_login", data)
+      .then((res) => {
+        return res.data.data;
+      })
+      .then((data) => {
+        setUserData(data.admin);
+        localStorage.setItem("auth_token", data.auth_token);
         location.reload();
-      }
-    } catch (error) {
-      console.error("Error in Login: ", error);
-    }
+      })
+      .catch((err) => console.log(err));
   };
   const handleSignup = (e) => {
     e.preventDefault();
@@ -62,7 +64,7 @@ const Login = ({ setLogin }) => {
       .post("/register", userData)
       .then((data) => {
         setUserData({ data });
-        window.location.href = "/home";
+        window.location.href = "/";
       })
       .catch((error) => {
         console.log(error.response.data.message);

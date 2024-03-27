@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react"; // Import useState
 import { MultiSelect } from "primereact/multiselect";
 import axios from "axios";
+import axiosClient from "../axios";
+import { useNavigate } from "react-router-dom";
 const RoomModal = ({ closeModal }) => {
+  const navigate = useNavigate();
   const [roomName, setRoomName] = useState("");
   const [price, setPrice] = useState(0);
   const [miniDes, setMiniDes] = useState("");
@@ -70,7 +73,6 @@ const RoomModal = ({ closeModal }) => {
   //     setSelectedBuildingAmenities([]);
   //   }
   // }, [roomToEdit]);
-
   //
 
   const handleChange = (e) => {
@@ -118,7 +120,7 @@ const RoomModal = ({ closeModal }) => {
     closeModal();
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // const files_image = e.target[0].files; // Assuming this is where you're retrieving the files from the file input
 
@@ -139,19 +141,14 @@ const RoomModal = ({ closeModal }) => {
     formData.append("file_name", files);
 
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/admin/add-room",
-        formData,
-        {
-          method: "POST",
-          headers: {
-            Authorization:
-              "Bearer 3|M2nvVPm4KMEJZtKveDMoMaLPsWnRNoupjiUMoaYpc798d068",
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log(res.data);
+      axiosClient
+        .post("http://localhost:8000/api/admin/add-room", formData)
+        .then(() => {
+          location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (error) {
       console.log("Error: ", error);
     }

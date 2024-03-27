@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import axiosClient from "../axios";
 import { useLocation } from "react-router-dom";
 
-const Home = () => {
+const GoogleCallBack = () => {
   const location = useLocation();
   // itong code dito gagawan dapat ng isa pang file hindi ito dapat nandito para to sa GoogleCallBack.jsx
   useEffect(() => {
@@ -16,4 +16,4 @@ const Home = () => {
   }, []);
 };
 
-export default Home;
+export default GoogleCallBack;

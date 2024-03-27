@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Inbox from "./pages/Inbox";
 import Users from "./pages/Users";
@@ -9,27 +9,29 @@ import Reservation from "./pages/Reservation";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import GoogleCallBack from "./pages/GoogleCallBack";
+import Payment from "./pages/Payments";
 import Contact from "./pages/Contact";
 import BookRoom from "./pages/BookRoom";
 import Payment from "./pages/Payments";
+
 import Feedbacks from "./pages/Feedbacks";
 
 const App = () => {
   const token = localStorage.getItem("auth_token");
-
+  const token_type = localStorage.getItem("auth_type", "admin");
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/home" element={<Home />} />
-          <Route path="/google/callback" element={<GoogleCallBack />} />
-          <Route
-            path="/login"
-            element={
-              token ? <Navigate to="/dashboard" replace={true} /> : <Login />
-            }
-          />
-        </Routes>
+      <Routes>
+        <Route path="/google/callback" element={<GoogleCallBack />} />
+        <Route
+          path="/login"
+          element={
+            token ? <Navigate to="/dashboard" replace={true} /> : <Login />
+          }
+        />
+      </Routes>
+
+      {token_type === "admin" ? (
         <main
           className={
             token
@@ -80,7 +82,11 @@ const App = () => {
             />
           </Routes>
         </main>
-      </BrowserRouter>
+      ) : (
+        <Routes>
+          <Route path="/home" element={<Home />} />
+        </Routes>
+      )}
       {/* <Home /> */}
     </>
   );

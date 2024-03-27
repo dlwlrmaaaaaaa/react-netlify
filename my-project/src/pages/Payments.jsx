@@ -3,9 +3,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import room from '../JSON/Room.json';
 import br1 from '../assets/br1.jpg'
-import { FaCalendar, FaUsers, FaPlus, FaMinus, FaShieldAlt } from "react-icons/fa";
-import { MdOutlineAccessTimeFilled, MdOutlineAccessTime, MdPlaylistAdd } from "react-icons/md";
-import { IoCloseCircleSharp } from "react-icons/io5";
 
 const Payment = () => {
   return (

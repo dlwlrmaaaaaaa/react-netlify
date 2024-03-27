@@ -11,9 +11,9 @@ import Home from "./pages/Home";
 import GoogleCallBack from "./pages/GoogleCallBack";
 import Contact from "./pages/Contact";
 import BookRoom from "./pages/BookRoom";
-import Payment from "./pages/Payment";
+import Payment from "./pages/Payments";
 import Feedbacks from "./pages/Feedbacks";
-// import Payment from "./pages/Payment";
+
 const App = () => {
   const token = localStorage.getItem("auth_token");
 

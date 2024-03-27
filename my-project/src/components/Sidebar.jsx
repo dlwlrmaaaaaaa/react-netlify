@@ -66,6 +66,11 @@ const handleLogout = async (e) => {
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isActive, setIsActive] = useState(null);
+
+  const handleNavItemClick = (index) => {
+    setIsActive(index);
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -115,6 +120,9 @@ const Sidebar = () => {
                 "flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl hover:bg-actNav hover:shadow-xl hover:font-bold hover:text-actText " +
                 (isExpanded ? "px-6 py-1" : "p-1")
               }
+              onClick={(e) => {
+                handleNavItemClick(e);
+              }}
             >
               <div className="bg-cirlce p-2 rounded-full">
                 <item.icon className="md:w-6 w-4 h-4 md:h-6" />

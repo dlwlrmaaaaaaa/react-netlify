@@ -3,7 +3,15 @@ import { MultiSelect } from "primereact/multiselect";
 import axios from "axios";
 import axiosClient from "../axios";
 import { useNavigate } from "react-router-dom";
-const RoomModal = ({ closeModal }) => {
+const RoomModal = ({
+  closeModal,
+  updateRoom,
+  roomId,
+  setId,
+  setUpdateRoom,
+  setData,
+  data,
+}) => {
   const navigate = useNavigate();
   const [roomName, setRoomName] = useState("");
   const [price, setPrice] = useState(0);
@@ -13,6 +21,30 @@ const RoomModal = ({ closeModal }) => {
   const [buildingAmenitiesData, setBuildingAmenitiesData] = useState([]);
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState([]);
+
+  const [isLoading, setLoading] = useState(false);
+
+  const getData = () => {
+    data.map((item) => {
+      if (roomId === item.id) {
+        setRoomName(item.room_name);
+        setPrice(item.price);
+        setMiniDes(item.mini_description);
+        setDescription(item.description);
+        setImage(JSON.parse(item.file_name));
+      }
+    });
+    setLoading(true);
+  };
+
+  useEffect(() => {
+    if (!isLoading) {
+      getData();
+    }
+  }, [isLoading]);
+
+  const handleUpdate = () => {};
+
   const roomAmenities = [
     { Amenities: "Air-Condition" },
     { Amenities: "Unlimited Wifi" },
@@ -45,35 +77,6 @@ const RoomModal = ({ closeModal }) => {
     { Amenities: "🚬 Smoking Area" },
     { Amenities: "🔥 Grill Pit" },
   ];
-  // const [buildingOptions] = useState(buildingAmenities);
-
-  // const onSelectFile = (event) => {
-  //   const selectedFiles = event.target.files;
-  //   const selectedFilesArray = Array.from(selectedFiles);
-  //   const imagesArray = selectedFilesArray.map((file) => {
-  //     return URL.createObjectURL(file);
-  //   });
-  //   setSelectedImages((prevImages) => [...prevImages, ...imagesArray]); // Append new images to existing ones
-  // };
-  // const [selectedImages, setSelectedImages] = useState([]);
-
-  // const [selectedRoomAmenities, setSelectedRoomAmenities] = useState([]);
-  // const [selectedBuildingAmenities, setSelectedBuildingAmenities] = useState(
-  //   []
-  // );
-
-  // useEffect(() => {
-  //   if (roomToEdit) {
-  //     setSelectedImages([roomToEdit.src]);
-  //     setSelectedRoomAmenities(roomToEdit.roomAmenities || []);
-  //     setSelectedBuildingAmenities(roomToEdit.buildingAmenities || []);
-  //   } else {
-  //     setSelectedImages([]);
-  //     setSelectedRoomAmenities([]);
-  //     setSelectedBuildingAmenities([]);
-  //   }
-  // }, [roomToEdit]);
-  //
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -113,10 +116,16 @@ const RoomModal = ({ closeModal }) => {
   };
 
   const handleDeleteImage = (index) => {
-    setImage([...files.slice(0, index), ...files.slice(index + 1)]);
+    if (updateRoom) {
+      setImage([...image.slice(0, index), ...image.slice(index + 1)]);
+    } else {
+      setImage([...files.slice(0, index), ...files.slice(index + 1)]);
+    }
   };
 
   const handleModal = () => {
+    setUpdateRoom(null);
+    setId(null);
     closeModal();
   };
 
@@ -185,11 +194,19 @@ const RoomModal = ({ closeModal }) => {
           <div className="flex flex-wrap justify-center items-center mt-3">
             {image.map((image, index) => (
               <div key={index} className="m-2">
-                <img
-                  src={URL.createObjectURL(image)}
-                  className="h-40"
-                  alt={`Uploaded Image ${index}`}
-                />
+                {updateRoom ? (
+                  <img
+                    src={`http://localhost:8000/storage/images/${image}`}
+                    className="h-40"
+                    alt={`Uploaded Image ${index}`}
+                  />
+                ) : (
+                  <img
+                    src={URL.createObjectURL(image)}
+                    className="h-40"
+                    alt={`Uploaded Image ${index}`}
+                  />
+                )}
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
                   onClick={(e) => {
@@ -211,6 +228,7 @@ const RoomModal = ({ closeModal }) => {
                 </label>
                 <input
                   name="roomName"
+                  value={roomName}
                   className="shadow appearance-none border rounded w-full py-1 px-1 bg-white text-darkText"
                   // defaultValue={roomToEdit ? roomToEdit.title : ""}
                   onChange={handleChange}
@@ -223,6 +241,7 @@ const RoomModal = ({ closeModal }) => {
                 </label>
                 <input
                   name="price"
+                  value={price}
                   className="shadow appearance-none border rounded w-full py-1 px-1 bg-white text-darkText"
                   // defaultValue={roomToEdit ? roomToEdit.price : ""}
                   onChange={handleChange}
@@ -249,6 +268,7 @@ const RoomModal = ({ closeModal }) => {
                 </label>
                 <input
                   name="miniDes"
+                  value={miniDes}
                   className="shadow appearance-none border rounded w-full py-1 px-1 bg-white text-darkText"
                   // defaultValue={roomToEdit ? roomToEdit.miniDes : ""}
                   onChange={handleChange}
@@ -261,6 +281,7 @@ const RoomModal = ({ closeModal }) => {
               <textarea
                 id="description"
                 type="text"
+                value={description}
                 className="mt-2 bg-white text-darkText text-mg flex capitalize-first p-2 items-center justify-between shadow rounded-lg resize-none scrollbar-thin scrollbar-webkit"
                 style={{
                   width: "100%",
@@ -328,13 +349,23 @@ const RoomModal = ({ closeModal }) => {
                 Delete
               </button>
             )} */}
-            <button
-              className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-              type="submit"
-            >
-              {" "}
-              Submit
-            </button>
+            {updateRoom === true ? (
+              <button
+                className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                onClick={(e) => handleUpdate}
+              >
+                {" "}
+                Update
+              </button>
+            ) : (
+              <button
+                className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                type="submit"
+              >
+                {" "}
+                Submit
+              </button>
+            )}
           </div>
         </form>
       </div>

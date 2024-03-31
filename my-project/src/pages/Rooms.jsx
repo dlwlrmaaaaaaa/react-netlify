@@ -10,7 +10,7 @@ const Rooms = () => {
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [updateRoom, setUpdateRoom] = useState(null);
-  const [id, setID] = useState(null);
+  const [id, setId] = useState(null);
 
   const getRooms = () => {
     //itong axiosClient ang reference ay ayung nasa axios.js naka default na siya
@@ -40,6 +40,7 @@ const Rooms = () => {
     //check the handleUpdate and handleAddroom functions
     if (id !== null) {
       setUpdateRoom(true);
+      setId(id);
     }
     setIsModalOpen(true);
   };
@@ -133,7 +134,7 @@ const Rooms = () => {
                 // roomId={roomToEdit ? roomToEdit.id : null}
                 updateRoom={updateRoom}
                 setUpdateRoom={setUpdateRoom}
-                setId={setID} //setting the id
+                setId={setId} //setting the id
                 roomId={id} //transferring the id
                 setData={setData} //Setting the the data to RoomModal
                 data={data} //transferring the data to RoomModal

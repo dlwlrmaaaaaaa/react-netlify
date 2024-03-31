@@ -3,6 +3,7 @@ import Sidebar from "../components/Sidebar";
 import { FaPlus } from "react-icons/fa";
 import RoomModal from "../components/RoomModal";
 import axiosClient from "../axios";
+import Loading from "../components/Loading";
 
 const Rooms = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,7 +28,9 @@ const Rooms = () => {
       .catch((err) => {
         console.log(err);
       });
-    setLoading(true);
+    setTimeout(() => {
+      setLoading(true);
+    }, 3000);
   };
 
   const closeModal = () => {
@@ -96,25 +99,27 @@ const Rooms = () => {
             </h1>
           </div>
           <div className="grid sm:grid-cols-3 grid-cols-1 w-full h-screen mt-3 overflow-y-auto scrollbar-thin scrollbar-webkit">
-            {isLoading
-              ? data.map((item, index) => (
+            {isLoading ? (
+              data.map((item, index) => (
+                <div
+                  id="rooms"
+                  className="featured flex justify-center cursor-pointer"
+                  key={item.id}
+                  onClick={() => handleUpdate(item.id)}
+                >
                   <div
-                    id="rooms"
-                    className="featured flex justify-center cursor-pointer"
-                    key={item.id}
-                    onClick={() => handleUpdate(item.id)}
-                  >
-                    <div
-                      id="roomEdit"
-                      className="featured-item w-5/6 h-5/6 relative bg-white rounded-xl overflow-hidden Rounded-xl gap-5 
+                    id="roomEdit"
+                    className="featured-item w-5/6 h-5/6 relative bg-white rounded-xl overflow-hidden Rounded-xl gap-5 
                  transition-transform transfrom hover:rotate-[-3deg] hover:scale-105  shadow"
-                      key={index}
-                    >
-                      {getImage(item, index)}
-                    </div>
+                    key={index}
+                  >
+                    {getImage(item, index)}
                   </div>
-                ))
-              : null}
+                </div>
+              ))
+            ) : (
+              <Loading />
+            )}
 
             <div className="flex justify-center">
               <div

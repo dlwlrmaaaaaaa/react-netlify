@@ -31,6 +31,7 @@ const RoomModal = ({
         setPrice(item.price);
         setMiniDes(item.mini_description);
         setDescription(item.description);
+        setFiles(JSON.parse(item.file_name));
         setImage(JSON.parse(item.file_name));
       }
     });
@@ -43,7 +44,17 @@ const RoomModal = ({
     }
   }, [isLoading]);
 
-  const handleUpdate = () => {};
+  const handleUpdate = () => {
+    // const formData = new FormData();
+    // var datas = e.target[0].files;
+    // for (let i = 0; i < datas.length; i++) {
+    //   formData.append("file_name[]", datas[i]);
+    // }
+  };
+
+  useEffect(() => {
+    console.log(files);
+  }, [files]);
 
   const roomAmenities = [
     { Amenities: "Air-Condition" },
@@ -106,7 +117,6 @@ const RoomModal = ({
   };
 
   const handleFileInputChange = (e) => {
-    setFiles([]);
     const selectedFiles = Array.from(e.target.files);
     if (e.target.files) {
       const fileArray = selectedFiles.map((file) => URL.createObjectURL(file));
@@ -163,6 +173,15 @@ const RoomModal = ({
     }
   };
 
+  const renderImage = (image, index) => {
+    const imageURL = image.startsWith("blob:", 0)
+      ? URL.createObjectURL(image)
+      : `http://localhost:8000/storage/images/${image}`;
+    return (
+      <img src={imageURL} className="h-40" alt={`Uploaded Image ${index}`} />
+    );
+  };
+
   return (
     <div
       id="container"
@@ -191,15 +210,11 @@ const RoomModal = ({
               />
             </div>
           </label>
-          <div className="flex flex-wrap justify-center items-center mt-3">
+          <div className="flex flex-wrap justify-center items-center mt-3 w">
             {image.map((image, index) => (
               <div key={index} className="m-2">
                 {updateRoom ? (
-                  <img
-                    src={`http://localhost:8000/storage/images/${image}`}
-                    className="h-40"
-                    alt={`Uploaded Image ${index}`}
-                  />
+                  renderImage(image, index)
                 ) : (
                   <img
                     src={URL.createObjectURL(image)}
@@ -352,7 +367,10 @@ const RoomModal = ({
             {updateRoom === true ? (
               <button
                 className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                onClick={(e) => handleUpdate}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleUpdate;
+                }}
               >
                 {" "}
                 Update

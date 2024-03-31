@@ -9,6 +9,7 @@ import Reservation from "./pages/Reservation";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import GoogleCallBack from "./pages/GoogleCallBack";
+import Loading from "./components/Loading";
 import Payment from "./pages/Payments";
 import Contact from "./pages/Contact";
 import BookRoom from "./pages/BookRoom";
@@ -41,8 +42,6 @@ const App = () => {
         >
           <Sidebar />
           <Routes>
-            <Route path="/" element={<NotFound />} />
-
             <Route
               path="/dashboard"
               element={

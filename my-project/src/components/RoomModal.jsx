@@ -3,7 +3,15 @@ import { MultiSelect } from "primereact/multiselect";
 import axios from "axios";
 import axiosClient from "../axios";
 import { useNavigate } from "react-router-dom";
-const RoomModal = ({ closeModal }) => {
+const RoomModal = ({
+  closeModal,
+  updateRoom,
+  id,
+  setId,
+  setUpdateRoom,
+  setData,
+  data,
+}) => {
   const navigate = useNavigate();
   const [roomName, setRoomName] = useState("");
   const [price, setPrice] = useState(0);
@@ -34,6 +42,11 @@ const RoomModal = ({ closeModal }) => {
   ];
   // const [roomOptions] = useState(roomAmenities);
 
+  //This is will retrieve the data from the Room.jsx
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
   const buildingAmenities = [
     ,
     { Amenities: "🏊🏻‍♂️ Swimming Pool (adult & kids)" },
@@ -45,35 +58,6 @@ const RoomModal = ({ closeModal }) => {
     { Amenities: "🚬 Smoking Area" },
     { Amenities: "🔥 Grill Pit" },
   ];
-  // const [buildingOptions] = useState(buildingAmenities);
-
-  // const onSelectFile = (event) => {
-  //   const selectedFiles = event.target.files;
-  //   const selectedFilesArray = Array.from(selectedFiles);
-  //   const imagesArray = selectedFilesArray.map((file) => {
-  //     return URL.createObjectURL(file);
-  //   });
-  //   setSelectedImages((prevImages) => [...prevImages, ...imagesArray]); // Append new images to existing ones
-  // };
-  // const [selectedImages, setSelectedImages] = useState([]);
-
-  // const [selectedRoomAmenities, setSelectedRoomAmenities] = useState([]);
-  // const [selectedBuildingAmenities, setSelectedBuildingAmenities] = useState(
-  //   []
-  // );
-
-  // useEffect(() => {
-  //   if (roomToEdit) {
-  //     setSelectedImages([roomToEdit.src]);
-  //     setSelectedRoomAmenities(roomToEdit.roomAmenities || []);
-  //     setSelectedBuildingAmenities(roomToEdit.buildingAmenities || []);
-  //   } else {
-  //     setSelectedImages([]);
-  //     setSelectedRoomAmenities([]);
-  //     setSelectedBuildingAmenities([]);
-  //   }
-  // }, [roomToEdit]);
-  //
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -102,6 +86,9 @@ const RoomModal = ({ closeModal }) => {
     }
   };
 
+  if (updateRoom && id !== null) {
+  }
+
   const handleFileInputChange = (e) => {
     setFiles([]);
     const selectedFiles = Array.from(e.target.files);
@@ -117,6 +104,8 @@ const RoomModal = ({ closeModal }) => {
   };
 
   const handleModal = () => {
+    setUpdateRoom(null);
+    setId(null);
     closeModal();
   };
 
@@ -328,13 +317,20 @@ const RoomModal = ({ closeModal }) => {
                 Delete
               </button>
             )} */}
-            <button
-              className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-              type="submit"
-            >
-              {" "}
-              Submit
-            </button>
+            {updateRoom === true ? (
+              <button className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1">
+                {" "}
+                Update
+              </button>
+            ) : (
+              <button
+                className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                type="submit"
+              >
+                {" "}
+                Submit
+              </button>
+            )}
           </div>
         </form>
       </div>

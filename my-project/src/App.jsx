@@ -17,7 +17,8 @@ import Feedbacks from "./pages/Feedbacks";
 
 const App = () => {
   const token = localStorage.getItem("auth_token");
-  const token_type = localStorage.getItem("auth_type", "admin");
+  const token_type = "admin";
+
   return (
     <>
       <Routes>
@@ -41,6 +42,7 @@ const App = () => {
           <Sidebar />
           <Routes>
             <Route path="/" element={<NotFound />} />
+
             <Route
               path="/dashboard"
               element={

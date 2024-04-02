@@ -3,23 +3,20 @@ import Sidebar from "../components/Sidebar";
 import { FaPlus } from "react-icons/fa";
 import RoomModal from "../components/RoomModal";
 import axiosClient from "../axios";
+import Loading from "../components/Loading";
+
 const Rooms = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomToEdit, setRoomToEdit] = useState(null);
   const [data, setData] = useState([]);
-  const [roomData, setRoomData] = useState([]);
-  const [images, setImages] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const [counter, setCounter] = useState(0);
+  const [updateRoom, setUpdateRoom] = useState(null);
+  const [id, setId] = useState(null);
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  useEffect(() => {
+  const getRooms = () => {
+    //itong axiosClient ang reference ay ayung nasa axios.js naka default na siya
+    //pag hindi ko gagamitin yung config na yun magiging ganto yung codes niya
+    //axios.get("http://localhost:8000/api/admin/rooms", {headers: {Authorization: `Bearer token`}})
     axiosClient
       .get("/rooms")
       .then((res) => {
@@ -31,20 +28,83 @@ const Rooms = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+    setTimeout(() => {
+      setLoading(true);
+    }, 3000);
+  };
 
-  // const roomImage = () => {
-  //   const new_array = JSON.parse(item.file_name).slice(0, 1);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
-  //   return new_array.map((imageFileName, imageIndex) => (
-  //     <img
-  //       key={imageIndex}
-  //       src={`http://localhost:8000/storage/images/${imageFileName}`}
-  //       alt={`Room ${item.id} - Image ${imageIndex + 1}`}
-  //       className="object-cover w-full h-3/4 rounded-xl"
-  //     />
-  //   ));
+  const openModal = (id) => {
+    //pag merong id it will return to update room
+    //pag null pang add room
+    //check the handleUpdate and handleAddroom functions
+    if (id !== null) {
+      setUpdateRoom(true);
+      setId(id);
+    }
+    setIsModalOpen(true);
+  };
+  // const updateRoom = (roomId, updatedRoomData) => {
+  //   // Update the room data in the state
+  //   setData(
+  //     data.map((room) =>
+  //       room.id === roomId ? { ...room, ...updatedRoomData } : room
+  //     )
+  //   );
   // };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axiosClient.get("/admin/rooms", {
+          headers: {
+            Authorization:
+              "Bearer 3|M2nvVPm4KMEJZtKveDMoMaLPsWnRNoupjiUMoaYpc798d068",
+          },
+        });
+        const data = res.data;
+        setDatos(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [setDatos]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      getRooms();
+    }
+  }, [isLoading]);
+
+  const getImage = (item, index) => {
+    //dito kinuha ko yung images yung item and index naka set siya sa data.map(item, index) getImage(item, index);
+
+    //ginet ko lang yung first index sa array or json na file_name para ayun lang magdisplay sa room
+    const fileName = JSON.parse(item.file_name)[0];
+
+    //yung item.room_name and all the dots makikita niyo sa response, press f12 then punta kayo sa network refresh niyo yung page
+    //makikita niyo dun yung mga request
+    return (
+      <>
+        <img
+          key={index}
+          src={`http://localhost:8000/storage/images/${fileName}`}
+          className="object-cover w-full  rounded-xl h-3/4"
+          alt={fileName}
+        ></img>
+        <h1 className="m-1 g-2 text-actText font-semibold">{item.room_name}</h1>
+        <h2 className="m-1 g-2 text-darkText font-medium">
+          {parseFloat(item.price)}
+        </h2>
+        <p className="text-gray-300 m-1 g-2 text-clip">
+          {item.mini_description}
+        </p>
+      </>
+    );
+  };
 
   return (
     <>
@@ -56,32 +116,32 @@ const Rooms = () => {
             </h1>
           </div>
           <div className="grid sm:grid-cols-3 grid-cols-1 w-full h-screen mt-3 overflow-y-auto scrollbar-thin scrollbar-webkit">
-            {data.map((item, index) => (
-              <div
-                id="rooms"
-                className="featured flex justify-center cursor-pointer"
-                key={index}
-              >
+            {isLoading ? (
+              data.map((item, index) => (
                 <div
-                  id="roomEdit"
-                  className="featured-item w-5/6 h-5/6 relative bg-white rounded-xl overflow-hidden Rounded-xl gap-5 
-                 transition-transform transfrom hover:rotate-[-3deg] hover:scale-105  shadow"
-                  key={index}
+                  id="rooms"
+                  className="featured flex justify-center cursor-pointer"
+                  key={item.id}
+                  onClick={() => handleUpdate(item.id)}
                 >
-                  <h1 className="m-1 g-2 text-actText font-semibold">
-                    {item.room_name}
-                  </h1>
-                  <h2 className="m-1 g-2 text-darkText font-medium">
-                    {parseFloat(item.price)}
-                  </h2>
+                  <div
+                    id="roomEdit"
+                    className="featured-item w-5/6 h-5/6 relative bg-white rounded-xl overflow-hidden Rounded-xl gap-5 
+                 transition-transform transfrom hover:rotate-[-3deg] hover:scale-105  shadow"
+                    key={index}
+                  >
+                    {getImage(item, index)}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <Loading />
+            )}
 
             <div className="flex justify-center">
               <div
                 id="addNew"
-                onClick={openModal}
+                onClick={() => handleAddRoom()}
                 className="w-5/6 h-5/6 relative bg-white rounded-full flex flex-col items-center cursor-pointer justify-center hover:bg-darkText hover:text-white hover:opacity-75 "
               >
                 <FaPlus size={50} />
@@ -94,7 +154,12 @@ const Rooms = () => {
                 // addNewRoom={addNewRoom}
                 // roomToEdit={roomToEdit}
                 // roomId={roomToEdit ? roomToEdit.id : null}
-                // updateRoom={updateRoom}
+                updateRoom={updateRoom}
+                setUpdateRoom={setUpdateRoom}
+                setId={setId} //setting the id
+                roomId={id} //transferring the id
+                setData={setData} //Setting the the data to RoomModal
+                data={data} //transferring the data to RoomModal
                 // deleteRoom={deleteRoom}
                 // setData={setData} // Pass the setData function
               />

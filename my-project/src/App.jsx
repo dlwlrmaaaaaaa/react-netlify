@@ -13,7 +13,7 @@ import Loading from "./components/Loading";
 import Payment from "./pages/Payments";
 import Contact from "./pages/Contact";
 import BookRoom from "./pages/BookRoom";
-
+import EmailVerify from "./pages/EmailVerify";
 import Feedbacks from "./pages/Feedbacks";
 
 const App = () => {
@@ -24,6 +24,12 @@ const App = () => {
     <>
       <Routes>
         <Route path="/google/callback" element={<GoogleCallBack />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/email/verify" element={<EmailVerify />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/book/payment" element={<Payment />} />
+        <Route path="/book" element={<BookRoom />} />
+        <Route path="/email/verify" element={<EmailVerify />} />
         <Route
           path="/login"
           element={

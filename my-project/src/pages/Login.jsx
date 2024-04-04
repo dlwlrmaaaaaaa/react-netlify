@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../axios";
-import { Navigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import EmailVerify from "./EmailVerify";
-const Login = ({ setLogin }) => {
+import { useStateContext } from "../contexts/contextProvider";
+const Login = () => {
   const [signIn, setSignIn] = useState(true);
   const [name, setName] = useState("");
   // const [lastName, setLastName] = useState("");
@@ -12,12 +13,10 @@ const Login = ({ setLogin }) => {
   const [contactNumber, setContactNumber] = useState("");
   const [error, setError] = useState({ _Html: "" });
   const [url, setUrl] = useState(null);
-  const [tokenType, setTokenType] = useState(null);
-  // Toggle function to switch between Sign In and Sign Up
-
   const toggleSignIn = () => setSignIn(!signIn);
   const [isLoading, setLodaing] = useState(false);
-
+  const {setToken, setUser, token} = useStateContext();
+  const navigate = useNavigate()
   const googleLogin = () => {
     axiosClient
       .get("http://localhost:8000/api/auth")
@@ -42,22 +41,32 @@ const Login = ({ setLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {
-      email: email,
-      password: password,
-    };
-    axiosClient
-      .post("/admin_login", data)
-      .then((res) => {
-        return res.data.data;
+      const data = {
+        email: email,
+        password: password,
+      };
+      
+      axiosClient.post("/admin_login", data)
+      .then(res => {
+        return res.data;
       })
-      .then((data) => {
-        setUserData(data.admin);
-        localStorage.setItem("auth_token", data.auth_token);
-        location.reload();
+      .then(res => {
+        return res.data
       })
-      .catch((err) => console.log(err));
+      .then(res => {
+        setToken(res.auth_token);
+        setUser(res.admin);
+        if(token){
+          navigate("/dashboard");
+        }
+      })
+      .catch(err => {throw err});
+
+     
+ 
+
   };
+
   const handleSignup = (e) => {
     e.preventDefault();
     const userData = {
@@ -76,15 +85,15 @@ const Login = ({ setLogin }) => {
         return res.data;
       })
       .then((data) => {
-        const userdata = {
-          auth_token: data.token,
-          email: data.email,
-        };
-        localStorage.setItem("userData", JSON.stringify(userdata));
+        setToken(data.token);
+        setUser(data.email);
         window.location.href = "/email/verify";
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        const response = error.response;
+        if(response && response.status === 422){
+          console.log(response.data.errors);
+        }
       });
   };
   return (

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 function Code() {
   const [code, setCode] = useState('');
-  const [countdown, setCountdown] = useState(0); // Countdown in seconds
-  const [isResending, setIsResending] = useState(false);
+    const [countdown, setCountdown] = useState(0); // Countdown in seconds
+    const [isResending, setIsResending] = useState(false);
 
   
   function handleKeyPress(event) {
@@ -27,43 +27,12 @@ function Code() {
     }
   }
 
-  // 
-  function handleChange(event) {
-    const inputValue = event.target.value;
-
-    // 
-    if (inputValue.length <= 6) {
-      setCode(inputValue);
-    }
-  }
 
   // Function to handle Resend Code click
-  function handleResendCodeClick() {
-    // Start the 5-minute countdown
-    setCountdown(300); // 5 minutes in seconds
-    setIsResending(true);
-  }
+
 
   // Countdown effect to update countdown every second
-  useEffect(() => {
-    let intervalId;
-    if (isResending && countdown > 0) {
-      intervalId = setInterval(() => {
-        setCountdown(prevCountdown => {
-          if (prevCountdown === 0) {
-            clearInterval(intervalId);
-            setIsResending(false); // Countdown finished, make Resend Code clickable
-            return 0;
-          }
-          return prevCountdown - 1;
-        });
-      }, 1000); // Update countdown every second
-    }
-
-    // Clean up the interval when component unmounts or countdown is stopped
-    return () => clearInterval(intervalId);
-  }, [isResending, countdown]);
-
+ 
   // Format the remaining time in minutes and seconds
   const minutes = Math.floor(countdown / 60);
   const seconds = countdown % 60;

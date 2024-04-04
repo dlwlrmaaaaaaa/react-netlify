@@ -19,6 +19,11 @@ const Header = () => {
     setShowDropdown(!showDropdown);
   };
 
+  const logout = () => {
+    localStorage.removeItem("userData");
+    window.location.href = "/";  
+  }
+
   return (
     <header className="bg-white shadow-md border-b-2 border-bordColor z-50">
       <div className="md:px-10 py-3 px-6 md:flex justify-between items-center relative">
@@ -72,7 +77,7 @@ const Header = () => {
                     Profile
                   </a>
                 </li>
-                <li className="py-2 px-4 hover:bg-gray-100">
+                <li className="py-2 px-4 hover:bg-gray-100" onClick={logout}>
                   <a href="#" className="text-notActText">
                     Logout
                   </a>

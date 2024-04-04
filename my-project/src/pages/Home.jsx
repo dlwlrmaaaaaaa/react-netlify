@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Navigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Carousel from "../components/Carousel";
@@ -7,13 +7,21 @@ import br1 from "../assets/br1.jpg";
 import br2 from "../assets/br2.jpg";
 
 import rooms from "../JSON/Room.json";
+import { useStateContext } from "../contexts/contextProvider";
 
 const Home = () => {
+  const {user, token} = useStateContext();
+  if(token){
+    return <Navigate to="/login"/>
+  }
   // Mapping identifiers to actual image imports
   const imageMap = {
     br1: br1,
     br2: br2,
   };
+  useEffect(() => {
+    console.log(token);
+  }, token)
   return (
     <>
       <Header />

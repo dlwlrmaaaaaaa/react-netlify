@@ -3,12 +3,12 @@ import axios from "axios";
 const axiosClient = axios.create({
   baseURL: "http://localhost:8000/api",
 });
-const userData = JSON.parse(localStorage.getItem("userData"));
-const authToken = userData.auth_token;
+
 axiosClient.interceptors.request.use(
   (config) => {
-    if (authToken) {
-      config.headers.Authorization = `Bearer ${authToken}`;
+    const token = localStorage.getItem("ACCESS_TOKEN");   
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -17,4 +17,18 @@ axiosClient.interceptors.request.use(
   }
 );
 
+axiosClient.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (error) => {
+    const {response} = error;
+    if(response.status === 401){
+      localStorage.removeItem("ACCESS_TOKEN");
+    }
+    throw error;
+  }
+)
+
 export default axiosClient;
+

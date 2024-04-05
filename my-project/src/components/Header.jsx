@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import logo from "../assets/logo.png";
 import { FaBars, FaCircleUser } from "react-icons/fa6";
 import { IoCloseSharp } from "react-icons/io5";
-import { BsMenuButtonFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom"; // Import NavLink
+
 const Header = () => {
   const Links = [
     { name: "HOME", path: "/home" },
-    { name: "CONTACT US", path: "/contact   " },
-    { name: "ROOMS", path: "/available_rooms" },
+    { name: "CONTACT US", path: "/contact" },
     { name: "REVIEWS", path: "/reviews" },
   ];
 
@@ -18,6 +17,11 @@ const Header = () => {
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
+
+  const logout = () => {
+    localStorage.removeItem("userData");
+    window.location.href = "/";  
+  }
 
   return (
     <header className="bg-white shadow-md border-b-2 border-bordColor z-50">
@@ -33,7 +37,6 @@ const Header = () => {
           {isOpen ? <IoCloseSharp /> : <FaBars />}
         </div>
 
-        {/* navlinks here */}
         <ul
           className={`md:flex md:items-center md:pb-0 pb-12 ${
             isOpen ? "block" : "hidden md:block"
@@ -41,23 +44,24 @@ const Header = () => {
         >
           {Links.map((link, index) => (
             <li key={index} className="font-bold my-7 md:my-0 md:ml-8">
-              <a
-                href={link.path}
-                className="text-notActText duration-500 hover:text-actText cursor-pointer"
+              <NavLink
+                to={link.path}
+                className={({ isActive }) => 
+                  isActive ? "text-actText" : "text-notActText hover:text-actText"
+                } // Dynamically set the class
               >
                 {link.name}
-              </a>
+              </NavLink>
             </li>
           ))}
 
-          <Link
-            path="/book"
+          <NavLink
+            to="/home#availableRooms"
             className="bg-actNav text-sm font-bold text-white py-2 px-8 md:ml-8 rounded-full md:static transition duration-75 ease-in-out transform hover:scale-95"
           >
             BOOK NOW
-          </Link>
+          </NavLink>
 
-          {/* dropdown */}
           <li
             className="font-semibold my-7 md:my-0 md:ml-8 relative"
             onClick={toggleDropdown}
@@ -68,11 +72,11 @@ const Header = () => {
             {showDropdown && (
               <ul className="absolute top-full left-[-170%] bg-white border border-gray-200 rounded-md mt-1 z-10">
                 <li className="py-2 px-4 hover:bg-gray-100">
-                  <a href="#" className="text-notActText">
+                  <NavLink to="/profile" className="text-notActText">
                     Profile
-                  </a>
+                  </NavLink>
                 </li>
-                <li className="py-2 px-4 hover:bg-gray-100">
+                <li className="py-2 px-4 hover:bg-gray-100" onClick={logout}>
                   <a href="#" className="text-notActText">
                     Logout
                   </a>

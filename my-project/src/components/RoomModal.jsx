@@ -3,9 +3,6 @@ import { MultiSelect } from "primereact/multiselect";
 import axios from "axios";
 import axiosClient from "../axios";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-const RoomModal = ({ closeModal }) => {
-=======
 const RoomModal = ({
   closeModal,
   updateRoom,
@@ -15,7 +12,6 @@ const RoomModal = ({
   setData,
   data,
 }) => {
->>>>>>> origin/main
   const navigate = useNavigate();
   const [roomName, setRoomName] = useState("");
   const [price, setPrice] = useState(0);
@@ -92,38 +88,6 @@ const RoomModal = ({
     { Amenities: "🚬 Smoking Area" },
     { Amenities: "🔥 Grill Pit" },
   ];
-<<<<<<< HEAD
-  // const [buildingOptions] = useState(buildingAmenities);
-
-  // const onSelectFile = (event) => {
-  //   const selectedFiles = event.target.files;
-  //   const selectedFilesArray = Array.from(selectedFiles);
-  //   const imagesArray = selectedFilesArray.map((file) => {
-  //     return URL.createObjectURL(file);
-  //   });
-  //   setSelectedImages((prevImages) => [...prevImages, ...imagesArray]); // Append new images to existing ones
-  // };
-  // const [selectedImages, setSelectedImages] = useState([]);
-
-  // const [selectedRoomAmenities, setSelectedRoomAmenities] = useState([]);
-  // const [selectedBuildingAmenities, setSelectedBuildingAmenities] = useState(
-  //   []
-  // );
-
-  // useEffect(() => {
-  //   if (roomToEdit) {
-  //     setSelectedImages([roomToEdit.src]);
-  //     setSelectedRoomAmenities(roomToEdit.roomAmenities || []);
-  //     setSelectedBuildingAmenities(roomToEdit.buildingAmenities || []);
-  //   } else {
-  //     setSelectedImages([]);
-  //     setSelectedRoomAmenities([]);
-  //     setSelectedBuildingAmenities([]);
-  //   }
-  // }, [roomToEdit]);
-  //
-=======
->>>>>>> origin/main
 
   const handleChange = (e) => {
     e.preventDefault();

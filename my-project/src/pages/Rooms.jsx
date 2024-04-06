@@ -47,14 +47,31 @@ const Rooms = () => {
     }
     setIsModalOpen(true);
   };
-
-  const handleUpdate = (id) => {
-    openModal(id);
-  };
-
-  const handleAddRoom = () => {
-    openModal(id);
-  };
+  // const updateRoom = (roomId, updatedRoomData) => {
+  //   // Update the room data in the state
+  //   setData(
+  //     data.map((room) =>
+  //       room.id === roomId ? { ...room, ...updatedRoomData } : room
+  //     )
+  //   );
+  // };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axiosClient.get("/admin/rooms", {
+          headers: {
+            Authorization:
+              "Bearer 3|M2nvVPm4KMEJZtKveDMoMaLPsWnRNoupjiUMoaYpc798d068",
+          },
+        });
+        const data = res.data;
+        setDatos(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [setDatos]);
 
   useEffect(() => {
     if (!isLoading) {

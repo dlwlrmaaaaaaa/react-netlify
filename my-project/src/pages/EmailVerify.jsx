@@ -19,7 +19,7 @@ const EmailVerify = () => {
       pin: pin,
     };
 
-    if(data.pin.length !== 6){
+    if (data.pin.length !== 6) {
       setError("It should be 6-digit-code. Please kindly check your email.")
       setTimeout(() => {
         setError(null)
@@ -34,7 +34,7 @@ const EmailVerify = () => {
       .catch((err) => console.log("Error in sending pin: ", err));
   };
 
-  const handleResendCodeClick =()=> {
+  const handleResendCodeClick = () => {
     // Start the 5-minute countdown
     setCountdown(300); // 5 minutes in seconds
     setIsResending(true);
@@ -43,7 +43,7 @@ const EmailVerify = () => {
   const sendError = (irror) => {
     return (
       <span className="text-white bg-red-600 px-1 py-2 m-1 rounded-l-lg rounded-r-lg">{irror}</span>
-      )  
+    )
   }
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const EmailVerify = () => {
         });
       }, 1000); // Update countdown every second
     }
-    
+
     // Clean up the interval when component unmounts or countdown is stopped
     return () => clearInterval(intervalId);
   }, [isResending, countdown]);

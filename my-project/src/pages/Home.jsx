@@ -1,5 +1,5 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
+import { useEffect } from 'react';
+import { Navigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Carousel from "../components/Carousel";
@@ -19,7 +19,21 @@ const Home = () => {
     br1: br1,
     br2: br2,
   };
+  useEffect(() => {
+    console.log(token);
+  }, token)
 
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [location]);
   return (
     <>
       <Header />
@@ -29,7 +43,7 @@ const Home = () => {
           <Carousel />
         </div>
 
-        <div className="flex items-center justify-center border-actNav">
+        <div id="availableRooms" className="flex items-center justify-center border-actNav">
           <h1 className="text-actText text-4xl font-bold m-5">
             Available Rooms
           </h1>

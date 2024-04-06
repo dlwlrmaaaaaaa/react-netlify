@@ -124,7 +124,7 @@ const Login = () => {
                 className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
               />
               <input
-                type="text"
+                type="email"
                 name="email"
                 required
                 placeholder="Email Address"

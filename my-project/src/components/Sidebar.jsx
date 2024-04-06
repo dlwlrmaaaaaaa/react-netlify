@@ -3,7 +3,16 @@ import { MdDashboard, MdLogout } from "react-icons/md";
 import { FaHouse, FaMessage } from "react-icons/fa6";
 import { FaArrowRight, FaUser, FaRegCalendarCheck } from "react-icons/fa";
 import { motion } from "framer-motion";
+<<<<<<< HEAD
 import { NavLink, useLocation } from "react-router-dom";
+=======
+import { NavLink } from "react-router-dom";
+import Dashboard from "../pages/Dashboard";
+import Inbox from "../pages/Inbox";
+import Users from "../pages/Users";
+import Rooms from "../pages/Rooms";
+import axiosClient from "../axios";
+>>>>>>> origin/main
 
 const variants = {
   expanded: { width: "20%" },
@@ -38,9 +47,37 @@ const navItems = [
   },
 ];
 
+const token = localStorage.getItem("auth_token");
+
+const handleLogout = async (e) => {
+  e.preventDefault();
+  console.log(token);
+  try {
+    const res = await axiosClient.post("/admin/logout", null, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (res.status === 200) {
+      localStorage.removeItem("auth_token");
+      location.reload();
+    }
+  } catch (error) {
+    console.log("Error Logout: ", error);
+  }
+};
+
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true);
+<<<<<<< HEAD
   const location = useLocation();
+=======
+  const [isActive, setIsActive] = useState(null);
+
+  const handleNavItemClick = (index) => {
+    setIsActive(index);
+  };
+>>>>>>> origin/main
 
   useEffect(() => {
     const handleResize = () => {
@@ -91,6 +128,9 @@ const Sidebar = () => {
                 (isExpanded ? "px-6 py-1" : "p-1") +
                 (location.pathname === item.path ? " font-bold" : "")
               }
+              onClick={(e) => {
+                handleNavItemClick(e);
+              }}
             >
               <div className="bg-cirlce p-2 rounded-full">
                 <item.icon className="md:w-6 w-4 h-4 md:h-6" />
@@ -116,6 +156,7 @@ const Sidebar = () => {
       <div
         id="logout-box"
         className="w-full flex flex-col justify-start items-center gap-3 cursor-pointer"
+        onClick={handleLogout}
       >
         <div className="bg-mainBorder w-full h-[1px]"></div>
         <div className="flex justify-center items-center gap-2">

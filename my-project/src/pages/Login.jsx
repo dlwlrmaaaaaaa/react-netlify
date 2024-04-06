@@ -15,7 +15,7 @@ const Login = () => {
   const [url, setUrl] = useState(null);
   const toggleSignIn = () => setSignIn(!signIn);
   const [isLoading, setLodaing] = useState(false);
-  const {setToken, setUser, token} = useStateContext();
+  const {setToken, setUser} = useStateContext();
   const navigate = useNavigate()
   const googleLogin = () => {
     axiosClient
@@ -46,7 +46,7 @@ const Login = () => {
         password: password,
       };
       
-      axiosClient.post("/admin_login", data)
+      axiosClient.post("/login", data)
       .then(res => {
         return res.data;
       })
@@ -54,17 +54,15 @@ const Login = () => {
         return res.data
       })
       .then(res => {
-        setToken(res.auth_token);
-        setUser(res.admin);
-        if(token){
+        setToken(res.token);
+        setUser(res.user);
+        if(res.token_type === 'admin_token'){
           navigate("/dashboard");
+        }else{
+          navigate('/home')
         }
       })
       .catch(err => {throw err});
-
-     
- 
-
   };
 
   const handleSignup = (e) => {
@@ -86,8 +84,8 @@ const Login = () => {
       })
       .then((data) => {
         setToken(data.token);
-        setUser(data.email);
-        window.location.href = "/email/verify";
+        setUser({email: data.email});
+        navigate('/email/verify');
       })
       .catch((error) => {
         const response = error.response;

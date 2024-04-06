@@ -10,8 +10,8 @@ import rooms from "../JSON/Room.json";
 import { useStateContext } from "../contexts/contextProvider";
 
 const Home = () => {
-  const {user, token} = useStateContext();
-  if(token){
+  const {token} = useStateContext();
+  if(!token){
     return <Navigate to="/login"/>
   }
   // Mapping identifiers to actual image imports
@@ -19,9 +19,7 @@ const Home = () => {
     br1: br1,
     br2: br2,
   };
-  useEffect(() => {
-    console.log(token);
-  }, token)
+
   return (
     <>
       <Header />

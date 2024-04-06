@@ -18,7 +18,7 @@ const Rooms = () => {
     //pag hindi ko gagamitin yung config na yun magiging ganto yung codes niya
     //axios.get("http://localhost:8000/api/admin/rooms", {headers: {Authorization: `Bearer token`}})
     axiosClient
-      .get("/rooms")
+      .get("/admin/rooms")
       .then((res) => {
         return res.data;
       })

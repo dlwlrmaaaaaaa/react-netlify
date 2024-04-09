@@ -15,6 +15,7 @@
   import BookRoom from "./pages/BookRoom";
   import EmailVerify from "./pages/EmailVerify";
   import Feedbacks from "./pages/Feedbacks";
+  import Profile from "./pages/Profile";
   import { useStateContext } from "./contexts/contextProvider";
 
   const App = () => {
@@ -23,16 +24,17 @@
     return (
       <>
         <Routes>
-          <Route  path="/google/callback" element={<GoogleCallBack />} />
+          <Route path="/google/callback" element={<GoogleCallBack />} />
+          <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/email/verify" element={<EmailVerify />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/book/payment" element={<Payment />} />
           <Route path="/book" element={<BookRoom />} />
-          <Route path="/email/verify" element={<EmailVerify />} />    
-          <Route path="/login" element={ <Login />} />
+          <Route path="/reviews" element={<Feedbacks />} />    
+          <Route path="/login" element={ <Login />} /> 
         </Routes>
-        <main className={token ? "w-full bg-slate-200 h-screen flex justify-between items-start" : "hidden"} >
+        <main className={token ? "w-full bg-slate-200 h-screen flex justify-between items-start" : "hidden"} > 
             {token ? <Sidebar /> : null}
             <Routes>
               <Route

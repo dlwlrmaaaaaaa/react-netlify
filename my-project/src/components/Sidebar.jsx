@@ -114,23 +114,23 @@ const Sidebar = () => {
         >
           {navItems.map((item, index) => (
             <NavLink
-              key={item.name}
-              to={item.path}
-              className={
-                "flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl hover:bg-actNav hover:shadow-xl hover:font-bold hover:text-actText " +
-                (isExpanded ? "px-6 py-1" : "p-1")
-              }
-              onClick={(e) => {
-                handleNavItemClick(e);
-              }}
-            >
-              <div className="bg-cirlce p-2 rounded-full">
-                <item.icon className="md:w-6 w-4 h-4 md:h-6" />
-              </div>
-              <span className={"text-lg " + (isExpanded ? "flex" : "hidden")}>
-                {item.name}
-              </span>
-            </NavLink>
+            key={item.name}
+            to={item.path}
+            className={({ isActive }) => 
+              "flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl " +
+              (isActive ? "bg-actNav shadow-xl font-bold text-actText " : "hover:bg-actNav hover:shadow-xl hover:font-bold hover:text-actText ") +
+              (isExpanded ? "px-6 py-1" : "p-1")
+            }
+            onClick={() => handleNavItemClick(index)}
+          >
+            <div className="bg-cirlce p-2 rounded-full">
+              <item.icon className="md:w-6 w-4 h-4 md:h-6" />
+            </div>
+            <span className={"text-lg " + (isExpanded ? "flex" : "hidden")}>
+              {item.name}
+            </span>
+          </NavLink>
+          
           ))}
         </div>
       </div>
@@ -152,10 +152,10 @@ const Sidebar = () => {
       >
         <div className="bg-mainBorder w-full h-[1px]"></div>
         <div className="flex justify-center items-center gap-2">
-          <MdLogout className="text-darkText h-6 w-6" />
+          <MdLogout className="text-darkText h-6 w-6 hover:text-actText" />
           <span
             className={
-              "text-darkText text-lg " + (isExpanded ? "flex" : "hidden")
+              "text-darkText text-lg " + (isExpanded ? "flex hover:text-actText font-bold" : "hidden")
             }
           >
             Logout

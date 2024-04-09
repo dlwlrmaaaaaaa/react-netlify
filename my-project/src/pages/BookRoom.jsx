@@ -10,7 +10,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 import { FaCalendar, FaUsers, FaPlus, FaMinus, FaShieldAlt } from "react-icons/fa";
 import { MdOutlineAccessTimeFilled, MdOutlineAccessTime, MdPlaylistAdd } from "react-icons/md";
 import { IoCloseCircleSharp } from "react-icons/io5";
-// import Payment from './Payment';
+import { Link } from "react-router-dom";
 
 const BookRoom = () => {
     {/* Calendar */}
@@ -154,8 +154,9 @@ const BookRoom = () => {
                                     <h1 className='text-sm font-semibold'>₱ {pricePortion()}</h1>
                                 </div>
                             </div>
-
-                            <button className='bg-actNav text-sm text-actText py-3 px-8 md:ml-8 rounded-full transition duration-75 ease-in-out transform hover:scale-95'>Continue Booking</button>
+                            <Link to="/book/payment">
+                                <button className='bg-actNav text-sm text-actText py-3 px-8 md:ml-8 rounded-full transition duration-75 ease-in-out transform hover:scale-95'>Continue Booking</button>
+                            </Link>
                             <h1 className='text-sm mt-[-10px]'>When you continue booking this room, it will not automatically reserve until you finish with the payment</h1>
                         </div>
                     </div>

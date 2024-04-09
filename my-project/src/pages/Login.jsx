@@ -129,10 +129,13 @@ const Login = () => {
         setUser({email: data.email});
         navigate('/email/verify');
       })
-      .catch((errors) => {
+      .catch((error) => {
         const response = error.response;
-        if(response && response.status === 422){
-          console.log(response.data.errors);
+        if(response && response.status === 422 && response.data.errors.email) {
+          // Email is already taken
+          setErrors({ ...errors, _Html: "This email is already taken. Please choose a different one." });
+        } else {
+          console.log("Error during signup:", error);
         }
       });
   };
@@ -142,12 +145,6 @@ const Login = () => {
       <div className="flex justify-center items-center min-h-screen bg-mainBg">
         <div className="bg-white rounded-lg shadow-lg relative overflow-hidden w-full lg:max-w-2xl md:max-w-xl max-w-md min-h-[550px] mx-auto border border-cirlce">
           {/* Sign Up form */}
-          {error._Html ? (
-            <span className="text-white font-bold bg-red-400 w-full p-2 text-sm">
-              <i className="fa-solid fa-triangle-exclamation"></i>
-              {error._Html}
-            </span>
-          ) : null}
           <div
             className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 ${
               signIn ? "opacity-0 z-0" : "opacity-100 z-10"

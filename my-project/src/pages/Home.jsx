@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Carousel from "../components/Carousel";
 import br1 from "../assets/br1.jpg";
 import br2 from "../assets/br2.jpg";
+import { Link } from "react-router-dom";
 
 import rooms from "../JSON/Room.json";
 import { useStateContext } from "../contexts/contextProvider";
@@ -58,17 +59,19 @@ const Home = () => {
                 className="w-5/6 h-5/6 relative bg-white rounded-xl Rounded-xl gap-4 
                         border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl"
               >
-                <img
-                  src={imageMap[room.src]}
-                  className="object-cover w-full h-3/4 rounded-xl"
-                  alt={room.title}
-                ></img>
-                <h1 className="m-1 g-2 text-actText lg:text-lg md:text-md font-semibold ">
-                  {room.title}
-                </h1>
-                <h2 className="m-1 g-2 text-darkText font-medium">
-                  ₱ {room.price}
-                </h2>
+                <Link to="/book">
+                  <img
+                    src={imageMap[room.src]}
+                    className="object-cover w-full h-3/4 rounded-xl"
+                    alt={room.title}
+                  ></img>
+                  <h1 className="m-1 g-2 text-actText lg:text-lg md:text-md font-semibold ">
+                    {room.title}
+                  </h1>
+                  <h2 className="m-1 g-2 text-darkText font-medium">
+                    ₱ {room.price}
+                  </h2>
+                </Link>
               </div>
             </div>
           ))}

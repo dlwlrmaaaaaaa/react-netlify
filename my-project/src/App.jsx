@@ -9,6 +9,7 @@ import Reservation from "./pages/Reservation";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import GoogleCallBack from "./pages/GoogleCallBack";
+import Loading from "./components/Loading";
 import Payment from "./pages/Payments";
 import Contact from "./pages/Contact";
 import BookRoom from "./pages/BookRoom";
@@ -17,7 +18,8 @@ import Feedbacks from "./pages/Feedbacks";
 
 const App = () => {
   const token = localStorage.getItem("auth_token");
-  const token_type = localStorage.getItem("auth_type", "admin");
+  const token_type = "admin";
+
   return (
     <>
       <Routes>
@@ -40,7 +42,6 @@ const App = () => {
         >
           <Sidebar />
           <Routes>
-            <Route path="/" element={<NotFound />} />
             <Route
               path="/dashboard"
               element={

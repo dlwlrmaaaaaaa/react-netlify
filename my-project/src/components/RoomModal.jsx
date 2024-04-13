@@ -52,10 +52,6 @@ const RoomModal = ({
     // }
   };
 
-  useEffect(() => {
-    console.log(files);
-  }, [files]);
-
   const roomAmenities = [
     { Amenities: "Air-Condition" },
     { Amenities: "Unlimited Wifi" },

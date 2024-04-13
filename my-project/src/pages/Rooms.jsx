@@ -4,14 +4,25 @@ import { FaPlus } from "react-icons/fa";
 import RoomModal from "../components/RoomModal";
 import axiosClient from "../axios";
 import Loading from "../components/Loading";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useStateContext } from "../contexts/contextProvider";
 
 const Rooms = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomToEdit, setRoomToEdit] = useState(null);
   const [data, setData] = useState([]);
+  const [datos, setDatos] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [updateRoom, setUpdateRoom] = useState(null);
   const [id, setId] = useState(null);
+
+  const navigate = useNavigate();
+
+  const { token } = useStateContext();
+
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
 
   const getRooms = () => {
     //itong axiosClient ang reference ay ayung nasa axios.js naka default na siya
@@ -47,6 +58,9 @@ const Rooms = () => {
     }
     setIsModalOpen(true);
   };
+  const handleAddRoom = () => {
+    setIsModalOpen();
+  };
   // const updateRoom = (roomId, updatedRoomData) => {
   //   // Update the room data in the state
   //   setData(
@@ -55,23 +69,18 @@ const Rooms = () => {
   //     )
   //   );
   // };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axiosClient.get("/admin/rooms", {
-          headers: {
-            Authorization:
-              "Bearer 3|M2nvVPm4KMEJZtKveDMoMaLPsWnRNoupjiUMoaYpc798d068",
-          },
-        });
-        const data = res.data;
-        setDatos(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [setDatos]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await axiosClient.get("/admin/rooms");
+  //       const data = res.data;
+  //       setDatos(data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [setDatos]);
 
   useEffect(() => {
     if (!isLoading) {

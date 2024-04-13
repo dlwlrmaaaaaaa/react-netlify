@@ -19,9 +19,9 @@ const Header = () => {
   };
 
   const logout = () => {
-    localStorage.removeItem("userData");
-    window.location.href = "/";  
-  }
+    localStorage.removeItem("ACCESS_TOKEN");
+    window.location.href = "/login";
+  };
 
   return (
     <header className="bg-white shadow-md border-b-2 border-bordColor z-50">
@@ -46,8 +46,10 @@ const Header = () => {
             <li key={index} className="font-bold my-7 md:my-0 md:ml-8">
               <NavLink
                 to={link.path}
-                className={({ isActive }) => 
-                  isActive ? "text-actText" : "text-notActText hover:text-actText"
+                className={({ isActive }) =>
+                  isActive
+                    ? "text-actText"
+                    : "text-notActText hover:text-actText"
                 } // Dynamically set the class
               >
                 {link.name}

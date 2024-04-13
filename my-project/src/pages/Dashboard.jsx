@@ -1,16 +1,15 @@
 import React from "react";
 import { FaUser } from "react-icons/fa";
 import { FaHouse, FaRegCalendarCheck } from "react-icons/fa6";
-import { Navigate  } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Rooms from "./Rooms";
 import { useStateContext } from "../contexts/contextProvider";
 
 const Dashboard = () => {
-  const {user, token } = useStateContext();
-  if(!token){
-    return <Navigate to="/login"/>
+  const { token } = useStateContext();
+  if (!token) {
+    return <Navigate to="/login" />;
   }
-
   const tableData = [
     {
       id: "0001",

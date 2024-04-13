@@ -1,22 +1,44 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../axios";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import EmailVerify from "./EmailVerify";
 import { useStateContext } from "../contexts/contextProvider";
+import { FaExclamationTriangle } from "react-icons/fa";
+import { IoMdEye } from "react-icons/io";
+
 const Login = () => {
+  const { token } = useStateContext();
+
   const [signIn, setSignIn] = useState(true);
   const [name, setName] = useState("");
   // const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [showPassword1, setShowPassword1] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
+  const [showPassword3, setShowPassword3] = useState(false);
+  const togglePasswordVisibility = (inputField) => {
+    if (inputField === 1) {
+      setShowPassword1(!showPassword1);
+    } else if (inputField === 2) {
+      setShowPassword2(!showPassword2);
+    } else if (inputField === 3) {
+      setShowPassword3(!showPassword3);
+    }
+  };
+
   const [contactNumber, setContactNumber] = useState("");
+
   const [error, setError] = useState({ _Html: "" });
+  const [errors, setErrors] = useState({ _Html: "" });
   const [url, setUrl] = useState(null);
   const toggleSignIn = () => setSignIn(!signIn);
   const [isLoading, setLodaing] = useState(false);
-  const {setToken, setUser, token} = useStateContext();
-  const navigate = useNavigate()
+  const { setToken, setUser } = useStateContext();
+  const navigate = useNavigate();
+
   const googleLogin = () => {
     axiosClient
       .get("http://localhost:8000/api/auth")
@@ -41,34 +63,65 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-      const data = {
-        email: email,
-        password: password,
-      };
-      
-      axiosClient.post("/admin_login", data)
-      .then(res => {
+    const data = {
+      email: email,
+      password: password,
+    };
+
+    axiosClient
+      .post("/login", data)
+      .then((res) => {
         return res.data;
       })
-      .then(res => {
-        return res.data
+      .then((res) => {
+        return res.data;
       })
-      .then(res => {
-        setToken(res.auth_token);
-        setUser(res.admin);
-        if(token){
+      .then((res) => {
+        setToken(res.token);
+        setUser(res.user);
+        if (res.token_type === "admin-token") {
           navigate("/dashboard");
+        } else if (res.token_type === "user-token") {
+          navigate("/home");
+        } else {
+          localStorage.removeItem("ACCESS_TOKEN");
+          navigate("/home");
         }
       })
-      .catch(err => {throw err});
-
-     
- 
-
+      .catch((err) => {
+        // Assuming the API responds with a status code of 401 or similar for unauthorized access
+        if (err.response && err.response.status === 401) {
+          setError({
+            _Html:
+              "Password or Email did not match. Please re-check your details.",
+          });
+        } else {
+          // For any other error, you might want to display a generic error message
+          setError({ _Html: "An error occurred. Please try again later." });
+        }
+      });
   };
 
   const handleSignup = (e) => {
     e.preventDefault();
+
+    // at least 8 characters long and contains at least one number and one symbol
+    const passwordPattern =
+      /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+
+    if (password !== passwordConfirmation) {
+      setErrors({ ...errors, _Html: "Password does not match" });
+      return;
+    }
+    if (!passwordPattern.test(password)) {
+      setErrors({
+        ...errors,
+        _Html:
+          "Password must be at least 8 characters long, include at least one symbol and one number.",
+      });
+      return;
+    }
+
     const userData = {
       name: name,
       email: email,
@@ -86,27 +139,29 @@ const Login = () => {
       })
       .then((data) => {
         setToken(data.token);
-        setUser(data.email);
-        window.location.href = "/email/verify";
+        setUser({ email: data.email });
+        navigate("/email/verify");
       })
       .catch((error) => {
         const response = error.response;
-        if(response && response.status === 422){
-          console.log(response.data.errors);
+        if (response && response.status === 422 && response.data.errors.email) {
+          // Email is already taken
+          setErrors({
+            ...errors,
+            _Html:
+              "This email is already taken. Please choose a different one.",
+          });
+        } else {
+          console.log("Error during signup:", error);
         }
       });
   };
+
   return (
     <>
       <div className="flex justify-center items-center min-h-screen bg-mainBg">
-        <div className="bg-white rounded-lg shadow-lg relative overflow-hidden w-full max-w-2xl min-h-[550px] mx-auto border border-cirlce">
+        <div className="bg-white rounded-lg shadow-lg relative overflow-hidden w-full lg:max-w-2xl md:max-w-xl max-w-md min-h-[550px] mx-auto border border-cirlce">
           {/* Sign Up form */}
-          {error._Html ? (
-            <span className="text-white font-bold bg-red-400 w-full p-2 text-sm">
-              <i className="fa-solid fa-triangle-exclamation"></i>
-              {error._Html}
-            </span>
-          ) : null}
           <div
             className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 ${
               signIn ? "opacity-0 z-0" : "opacity-100 z-10"
@@ -126,29 +181,47 @@ const Login = () => {
                 className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
               />
               <input
-                type="text"
+                type="email"
                 name="email"
                 required
                 placeholder="Email Address"
                 className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <input
-                type="password"
-                required
-                placeholder="Password"
-                name="password"
-                className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <input
-                type="password"
-                required
-                name="password_confirmation"
-                placeholder="Confirm Password"
-                className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
-                onChange={(e) => setPasswordConfirmation(e.target.value)}
-              />
+              <div className="flex gap-2">
+                <input
+                  type={showPassword1 ? "text" : "password"}
+                  required
+                  placeholder="Password"
+                  name="password"
+                  className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => togglePasswordVisibility(1)}
+                  className="text-sm text-notActText hover:text-actText"
+                >
+                  <IoMdEye size={20} />
+                </button>
+              </div>
+              <div className="flex gap-2">
+                <input
+                  type={showPassword2 ? "text" : "password"}
+                  required
+                  name="password_confirmation"
+                  placeholder="Confirm Password"
+                  className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                  onChange={(e) => setPasswordConfirmation(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={() => togglePasswordVisibility(2)}
+                  className="text-sm text-notActText hover:text-actText"
+                >
+                  <IoMdEye size={20} />
+                </button>
+              </div>
               <input
                 type="text"
                 placeholder="Phone Number"
@@ -156,7 +229,14 @@ const Login = () => {
                 className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
                 onChange={(e) => setContactNumber(e.target.value)}
               />
-
+              {errors._Html ? (
+                <span className="text-white font-semibold rounded-lg bg-red-400 w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
+                  <i className="text-white">
+                    <FaExclamationTriangle size={20} />
+                  </i>
+                  {errors._Html}
+                </span>
+              ) : null}
               <button
                 type="submit"
                 className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none"
@@ -177,12 +257,6 @@ const Login = () => {
               onSubmit={handleSubmit}
             >
               <h1 className="font-bold text-actText mb-3">Sign In</h1>
-              {error._Html ? (
-                <span className="text-white font-bold bg-red-400 w-full p-2 text-sm">
-                  <i className="fa-solid fa-triangle-exclamation"></i>
-                  {error._Html}
-                </span>
-              ) : null}
               <input
                 type="email"
                 placeholder="Email"
@@ -191,18 +265,45 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
               />
-              <input
-                type="password"
-                placeholder="Password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
-              />
-              <a href="#" className="text-gray-800 text-sm my-4">
+              <div className="flex gap-2">
+                <input
+                  type={showPassword3 ? "text" : "password"}
+                  placeholder="Password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => togglePasswordVisibility(3)}
+                  className="text-sm text-notActText hover:text-actText"
+                >
+                  <IoMdEye size={20} />
+                </button>
+              </div>
+              {error._Html ? (
+                <span className="text-white font-semibold rounded-lg bg-red-400 w-full p-1 m-1 text-sm flex items-center justify-center">
+                  <i className="text-white">
+                    <FaExclamationTriangle size={20} />{" "}
+                  </i>
+                  {error._Html}
+                </span>
+              ) : null}
+              <a
+                href="#"
+                className="text-notActText text-sm font-semibold my-4 hover:text-actText hover:font-semibold"
+              >
                 Forgot your password?
               </a>
-              {url != null && <a href={url}>Google Sign In</a>}
+              {url != null && (
+                <a
+                  href={url}
+                  className="font-bold text-actText my-2 hover:text-blue-700"
+                >
+                  Google Sign In
+                </a>
+              )}
               <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
                 Sign In
               </button>

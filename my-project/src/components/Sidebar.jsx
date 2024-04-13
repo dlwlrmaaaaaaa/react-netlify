@@ -12,6 +12,10 @@ import Inbox from "../pages/Inbox";
 import Users from "../pages/Users";
 import Rooms from "../pages/Rooms";
 import axiosClient from "../axios";
+<<<<<<< HEAD
+>>>>>>> origin/main
+=======
+import { useStateContext } from "../contexts/contextProvider";
 >>>>>>> origin/main
 
 const variants = {
@@ -47,19 +51,12 @@ const navItems = [
   },
 ];
 
-const token = localStorage.getItem("auth_token");
-
 const handleLogout = async (e) => {
   e.preventDefault();
-  console.log(token);
   try {
-    const res = await axiosClient.post("/admin/logout", null, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axiosClient.post("/admin/logout");
     if (res.status === 200) {
-      localStorage.removeItem("auth_token");
+      localStorage.removeItem("ACCESS_TOKEN");
       location.reload();
     }
   } catch (error) {
@@ -123,14 +120,21 @@ const Sidebar = () => {
             <NavLink
               key={item.name}
               to={item.path}
+<<<<<<< HEAD
               className={
                 "flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl hover:bg-actNav hover:shadow-xl hover:text-actText " +
                 (isExpanded ? "px-6 py-1" : "p-1") +
                 (location.pathname === item.path ? " font-bold" : "")
+=======
+              className={({ isActive }) =>
+                "flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl " +
+                (isActive
+                  ? "bg-actNav shadow-xl font-bold text-actText "
+                  : "hover:bg-actNav hover:shadow-xl hover:font-bold hover:text-actText ") +
+                (isExpanded ? "px-6 py-1" : "p-1")
+>>>>>>> origin/main
               }
-              onClick={(e) => {
-                handleNavItemClick(e);
-              }}
+              onClick={() => handleNavItemClick(index)}
             >
               <div className="bg-cirlce p-2 rounded-full">
                 <item.icon className="md:w-6 w-4 h-4 md:h-6" />
@@ -160,10 +164,11 @@ const Sidebar = () => {
       >
         <div className="bg-mainBorder w-full h-[1px]"></div>
         <div className="flex justify-center items-center gap-2">
-          <MdLogout className="text-darkText h-6 w-6" />
+          <MdLogout className="text-darkText h-6 w-6 hover:text-actText" />
           <span
             className={
-              "text-darkText text-lg " + (isExpanded ? "flex" : "hidden")
+              "text-darkText text-lg " +
+              (isExpanded ? "flex hover:text-actText font-bold" : "hidden")
             }
           >
             Logout

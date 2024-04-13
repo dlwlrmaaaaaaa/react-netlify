@@ -1,39 +1,47 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../axios";
+import { useStateContext } from "../contexts/contextProvider";
+import {useNavigate} from 'react-router-dom';
+import { MdEmail } from "react-icons/md";
 
-const EmailVerify = () => {
+const EmailVerify = (email) => {
   const [pin, setPin] = useState(0);
   const [countdown, setCountdown] = useState(0); // Countdown in seconds
   const [isResending, setIsResending] = useState(false);
   const [error, setError] = useState(null);
+  const {user} = useStateContext();
+  const navigate = useNavigate();
 
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  const email = userData ? userData.email : null;
   const sendPin = (e) => {
     e.preventDefault();
+
     const data = {
-      email: email,
+      email: user.email,
       pin: pin,
     };
 
-    if(data.pin.length !== 6){
-      setError("It should be 6-digit-code. Please kindly check your email.")
+    if (pin.length !== 6) {
+      setError("It should be a 6-digit code. Please kindly check your email.");
       setTimeout(() => {
-        setError(null)
-      }, 3000);
+        setError(null);
+      }, 30000);
+      return; // Prevent further execution
     }
-
-    axiosClient
-      .post("/email/verify", data)
-      .then((res) => {
-        if (res.status === 200) {
-          window.location.href = "/home";
-        }
+    
+    axiosClient.post("/email/verify", data)
+      .then(() => {
+        navigate('/home');
       })
-      .catch((err) => console.log("Error in sending pin: ", err));
+      .catch((err) => {
+        console.log("Error in sending pin: ", err);
+        setError("Incorrect code. Please try again.");
+        setTimeout(() => {
+          setError(null);
+        }, 30000);
+      });
   };
 
-  const handleResendCodeClick =()=> {
+  const handleResendCodeClick = () => {
     // Start the 5-minute countdown
     setCountdown(300); // 5 minutes in seconds
     setIsResending(true);
@@ -41,8 +49,8 @@ const EmailVerify = () => {
 
   const sendError = (irror) => {
     return (
-      <span className="text-white bg-red-600 px-1 py-2 m-1 rounded-l-lg rounded-r-lg">{irror}</span>
-      )  
+      <span className="text-white font-semibold rounded-lg bg-red-400 p-2 py-3 m-1 text-sm flex items-center justify-center">{irror}</span>
+    )
   }
 
   useEffect(() => {
@@ -59,7 +67,7 @@ const EmailVerify = () => {
         });
       }, 1000); // Update countdown every second
     }
-    
+
     // Clean up the interval when component unmounts or countdown is stopped
     return () => clearInterval(intervalId);
   }, [isResending, countdown]);
@@ -71,35 +79,39 @@ const EmailVerify = () => {
 
   return (
     <>
-    <div className="bg-yellow-100 h-screen ">
+    <div className="bg-yellow-100 h-screen flex flex-col over">
       <form onSubmit={sendPin}>
-        <div className="flex flex-col items-center">
-        <h3 className='font-bold text-neutral-950 text-6xl ztext-center'>Please Verify Your Account</h3>
-        <h6 className="font-sans text-neutral-950 text-2xl">Enter the 6-digit-code we sent through your e-mail address to verify your account</h6>
-        {error !== null ? sendError(error) : null}
-       <input
-          type="text"
-          value={pin === 0 ? "" : pin}
-          required
-          onChange={(e) => {
-            const inputVal = e.target.value;
-            if(inputVal.length <= 6){
-              setPin(inputVal)
-            }
-          }} // Call handleChange function on change
-          className="border border-gray-500 rounded-lg px-4 py-2 w-96 text-lg focus:outline-none focus:border-blue-500 text-center"
-          placeholder="Enter the 6-digit code"
-        />
-        <div className="mt-6">
-          {isResending ? (
-            <span className=" ">Resend the code: {formattedTime}</span>
-          ) : (
-            <a href="#" className={` ${countdown > 0 ? 'pointer-events-none' : 'underline'}`} onClick={countdown === 0 ? handleResendCodeClick : undefined}>
-              Resend Code
-            </a>
-          )}
-        </div>
-        <button className="bg-[#918151] mt-10 text-white font-bold w-96 h-10 rounded-lg">VERIFY</button>
+        <div className="flex flex-col items-center m-10">
+          <div className="rounded-full bg-notActText mt-5 p-5 shadow-2xl">
+            <MdEmail size={50} className="text-mainBg"/>
+          </div>
+          <h3 className='font-bold text-neutral-950 text-4xl mt-10 mb-5 text-center'>Please Verify Your Account</h3>
+          <h6 className="font-sans text-neutral-950 text-lg text-center mb-5">Enter the 6 digit code we sent through your e-mail address to verify your account</h6>
+          <input
+            type="text"
+            value={pin === 0 ? "" : pin}
+            required
+            onChange={(e) => {
+              const inputVal = e.target.value;
+              if(inputVal.length <= 6){
+                setPin(inputVal)
+              }
+            }} // Call handleChange function on change
+            className="border border-gray-500 rounded-lg px-4 py-2 w-96 text-lg focus:outline-none focus:border-blue-500 text-center text-actText my-5"
+            placeholder="Enter the 6-digit code"
+          />
+          {error !== null ? sendError(error) : null}
+          <h6 className="font-sans text-neutral-950 text-lg text-center mt-5">Didn't got got an email? No Problem.</h6>
+          <div className="mt-3">
+            {isResending ? (
+              <span className="font-semibold text-actText">Resend the code: {formattedTime}</span>
+            ) : (
+              <a href="#" className={` ${countdown > 0 ? 'pointer-events-none font-bold text-xl' : 'font-bold text-xl text-notActText hover:text-actText'}`} onClick={countdown === 0 ? handleResendCodeClick : undefined}>
+                Resend Code
+              </a>
+            )}
+          </div>
+          <button className="bg-notActText mt-10 text-white font-bold w-96 h-12 rounded-lg transition duration-75 ease-in-out transform hover:scale-95" type="submit">VERIFY</button>
         </div>
        
       </form>

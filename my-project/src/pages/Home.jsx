@@ -1,19 +1,18 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Carousel from "../components/Carousel";
 import br1 from "../assets/br1.jpg";
 import br2 from "../assets/br2.jpg";
+import { Link } from "react-router-dom";
 
 import rooms from "../JSON/Room.json";
 import { useStateContext } from "../contexts/contextProvider";
 
 const Home = () => {
-  const {user, token} = useStateContext();
-  if(token){
-    return <Navigate to="/login"/>
-  }
+  const { token } = useStateContext();
+
   // Mapping identifiers to actual image imports
   const imageMap = {
     br1: br1,
@@ -21,7 +20,19 @@ const Home = () => {
   };
   useEffect(() => {
     console.log(token);
-  }, token)
+  }, token);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
   return (
     <>
       <Header />
@@ -31,7 +42,10 @@ const Home = () => {
           <Carousel />
         </div>
 
-        <div className="flex items-center justify-center border-actNav">
+        <div
+          id="availableRooms"
+          className="flex items-center justify-center border-actNav"
+        >
           <h1 className="text-actText text-4xl font-bold m-5">
             Available Rooms
           </h1>
@@ -46,17 +60,19 @@ const Home = () => {
                 className="w-5/6 h-5/6 relative bg-white rounded-xl Rounded-xl gap-4 
                         border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl"
               >
-                <img
-                  src={imageMap[room.src]}
-                  className="object-cover w-full h-3/4 rounded-xl"
-                  alt={room.title}
-                ></img>
-                <h1 className="m-1 g-2 text-actText lg:text-lg md:text-md font-semibold ">
-                  {room.title}
-                </h1>
-                <h2 className="m-1 g-2 text-darkText font-medium">
-                  ₱ {room.price}
-                </h2>
+                <Link to="/book">
+                  <img
+                    src={imageMap[room.src]}
+                    className="object-cover w-full h-3/4 rounded-xl"
+                    alt={room.title}
+                  ></img>
+                  <h1 className="m-1 g-2 text-actText lg:text-lg md:text-md font-semibold ">
+                    {room.title}
+                  </h1>
+                  <h2 className="m-1 g-2 text-darkText font-medium">
+                    ₱ {room.price}
+                  </h2>
+                </Link>
               </div>
             </div>
           ))}

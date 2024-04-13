@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -11,10 +11,8 @@ import rooms from "../JSON/Room.json";
 import { useStateContext } from "../contexts/contextProvider";
 
 const Home = () => {
-  const {token} = useStateContext();
-  if(!token){
-    return <Navigate to="/login"/>
-  }
+  const { token } = useStateContext();
+
   // Mapping identifiers to actual image imports
   const imageMap = {
     br1: br1,
@@ -22,7 +20,7 @@ const Home = () => {
   };
   useEffect(() => {
     console.log(token);
-  }, token)
+  }, token);
 
   const location = useLocation();
 
@@ -31,7 +29,7 @@ const Home = () => {
       const id = location.hash.replace("#", "");
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+        element.scrollIntoView({ behavior: "smooth" });
       }
     }
   }, [location]);
@@ -44,7 +42,10 @@ const Home = () => {
           <Carousel />
         </div>
 
-        <div id="availableRooms" className="flex items-center justify-center border-actNav">
+        <div
+          id="availableRooms"
+          className="flex items-center justify-center border-actNav"
+        >
           <h1 className="text-actText text-4xl font-bold m-5">
             Available Rooms
           </h1>

@@ -10,6 +10,7 @@ import Inbox from "../pages/Inbox";
 import Users from "../pages/Users";
 import Rooms from "../pages/Rooms";
 import axiosClient from "../axios";
+import { useStateContext } from "../contexts/contextProvider";
 
 const variants = {
   expanded: { width: "20%" },
@@ -44,19 +45,12 @@ const navItems = [
   },
 ];
 
-const token = localStorage.getItem("auth_token");
-
 const handleLogout = async (e) => {
   e.preventDefault();
-  console.log(token);
   try {
-    const res = await axiosClient.post("/admin/logout", null, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await axiosClient.post("/admin/logout");
     if (res.status === 200) {
-      localStorage.removeItem("auth_token");
+      localStorage.removeItem("ACCESS_TOKEN");
       location.reload();
     }
   } catch (error) {
@@ -114,23 +108,24 @@ const Sidebar = () => {
         >
           {navItems.map((item, index) => (
             <NavLink
-            key={item.name}
-            to={item.path}
-            className={({ isActive }) => 
-              "flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl " +
-              (isActive ? "bg-actNav shadow-xl font-bold text-actText " : "hover:bg-actNav hover:shadow-xl hover:font-bold hover:text-actText ") +
-              (isExpanded ? "px-6 py-1" : "p-1")
-            }
-            onClick={() => handleNavItemClick(index)}
-          >
-            <div className="bg-cirlce p-2 rounded-full">
-              <item.icon className="md:w-6 w-4 h-4 md:h-6" />
-            </div>
-            <span className={"text-lg " + (isExpanded ? "flex" : "hidden")}>
-              {item.name}
-            </span>
-          </NavLink>
-          
+              key={item.name}
+              to={item.path}
+              className={({ isActive }) =>
+                "flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl " +
+                (isActive
+                  ? "bg-actNav shadow-xl font-bold text-actText "
+                  : "hover:bg-actNav hover:shadow-xl hover:font-bold hover:text-actText ") +
+                (isExpanded ? "px-6 py-1" : "p-1")
+              }
+              onClick={() => handleNavItemClick(index)}
+            >
+              <div className="bg-cirlce p-2 rounded-full">
+                <item.icon className="md:w-6 w-4 h-4 md:h-6" />
+              </div>
+              <span className={"text-lg " + (isExpanded ? "flex" : "hidden")}>
+                {item.name}
+              </span>
+            </NavLink>
           ))}
         </div>
       </div>
@@ -155,7 +150,8 @@ const Sidebar = () => {
           <MdLogout className="text-darkText h-6 w-6 hover:text-actText" />
           <span
             className={
-              "text-darkText text-lg " + (isExpanded ? "flex hover:text-actText font-bold" : "hidden")
+              "text-darkText text-lg " +
+              (isExpanded ? "flex hover:text-actText font-bold" : "hidden")
             }
           >
             Logout

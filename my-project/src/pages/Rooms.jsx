@@ -53,34 +53,12 @@ const Rooms = () => {
     //pag null pang add room
     //check the handleUpdate and handleAddroom functions
     if (id !== null) {
+      setIsModalOpen(true);
       setUpdateRoom(true);
       setId(id);
     }
     setIsModalOpen(true);
   };
-  const handleAddRoom = () => {
-    setIsModalOpen();
-  };
-  // const updateRoom = (roomId, updatedRoomData) => {
-  //   // Update the room data in the state
-  //   setData(
-  //     data.map((room) =>
-  //       room.id === roomId ? { ...room, ...updatedRoomData } : room
-  //     )
-  //   );
-  // };
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const res = await axiosClient.get("/admin/rooms");
-  //       const data = res.data;
-  //       setDatos(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [setDatos]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -131,7 +109,7 @@ const Rooms = () => {
                   id="rooms"
                   className="featured flex justify-center cursor-pointer"
                   key={item.id}
-                  onClick={() => handleUpdate(item.id)}
+                  onClick={() => openModal(item.id)}
                 >
                   <div
                     id="roomEdit"
@@ -150,7 +128,7 @@ const Rooms = () => {
             <div className="flex justify-center">
               <div
                 id="addNew"
-                onClick={() => handleAddRoom()}
+                onClick={() => openModal()}
                 className="w-5/6 h-5/6 relative bg-white rounded-full flex flex-col items-center cursor-pointer justify-center hover:bg-darkText hover:text-white hover:opacity-75 "
               >
                 <FaPlus size={50} />

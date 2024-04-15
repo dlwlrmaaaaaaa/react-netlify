@@ -21,7 +21,6 @@ const RoomModal = ({
   const [buildingAmenitiesData, setBuildingAmenitiesData] = useState([]);
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState([]);
-
   const [isLoading, setLoading] = useState(false);
 
   const getData = () => {
@@ -159,7 +158,7 @@ const RoomModal = ({
       axiosClient
         .post("http://localhost:8000/api/admin/add-room", formData)
         .then(() => {
-          location.reload();
+          window.location.reload();
         })
         .catch((err) => {
           console.log(err);
@@ -170,9 +169,8 @@ const RoomModal = ({
   };
 
   const renderImage = (image, index) => {
-    const imageURL = image.startsWith("blob:", 0)
-      ? URL.createObjectURL(image)
-      : `http://localhost:8000/storage/images/${image}`;
+
+    const imageURL = `http://localhost:8000/storage/images/${image}`;
     return (
       <img src={imageURL} className="h-40" alt={`Uploaded Image ${index}`} />
     );
@@ -209,15 +207,12 @@ const RoomModal = ({
           <div className="flex flex-wrap justify-center items-center mt-3 w">
             {image.map((image, index) => (
               <div key={index} className="m-2">
-                {updateRoom ? (
-                  renderImage(image, index)
-                ) : (
-                  <img
-                    src={URL.createObjectURL(image)}
-                    className="h-40"
-                    alt={`Uploaded Image ${index}`}
-                  />
-                )}
+                <img
+                  src={`http://localhost:8000/storage/images/${image}`}
+                  className="h-40"
+                  alt={`Uploaded Image ${index}`}
+                />
+
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
                   onClick={(e) => {
@@ -252,27 +247,14 @@ const RoomModal = ({
                 </label>
                 <input
                   name="price"
-                  value={price}
                   className="shadow appearance-none border rounded w-full py-1 px-1 bg-white text-darkText"
                   // defaultValue={roomToEdit ? roomToEdit.price : ""}
                   onChange={handleChange}
                 />
               </div>
             </div>
-            <div className="flex flex-wrap">
-              <div className="w-1/2 pr-2">
-                <label className="block text-black text-sm font-semibold mt-1">
-                  {" "}
-                  Address:{" "}
-                </label>
-                <input
-                  name="address"
-                  className="shadow appearance-none border rounded w-full py-1 px-1 bg-white text-darkText"
-                  // defaultValue={roomToEdit ? roomToEdit.address : ""}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="w-1/2 pl-2">
+            <div className="flex flex-wrap flex-col">
+              <div className="w-full borer">
                 <label className="block text-black text-sm font-semibold mt-1">
                   {" "}
                   Mini Description:{" "}
@@ -342,44 +324,41 @@ const RoomModal = ({
           </div>
           <div className="flex items-center justify-end p-3 border-t border-solid border-darkText rounded-b">
             <button
-              className="text-darkText background-transparent font-bold uppercase px-4 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
+              className="text-darkText background-transparent active:text-gray-100 font-bold uppercase px-4 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
               type="button"
               onClick={handleModal}
             >
               {" "}
               Close
-            </button>
+          </button>
 
-            {/* {roomId && ( // Render delete button only if roomId exists
-              <button
-                className="text-white bg-red-500 active:bg-red-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                type="button"
-                onClick={handleDelete}
-              >
-                {" "}
-                Delete
-              </button>
-            )} */}
-            {updateRoom === true ? (
-              <button
-                className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleUpdate;
-                }}
-              >
-                {" "}
-                Update
-              </button>
-            ) : (
-              <button
-                className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-                type="submit"
-              >
-                {" "}
-                Submit
-              </button>
-            )}
+        
+           {roomId ? 
+           <>
+            <button
+           className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+           type="submit"
+         >
+           {" "}
+           Update
+         </button>
+         <button
+           className="text-white bg-red-500 active:bg-red-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+          
+         >
+           {" "}
+           Delete
+         </button>
+           </>
+          
+           : <button
+              className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+              type="submit"
+            >
+              {" "}
+              Submit
+            </button>
+            }
           </div>
         </form>
       </div>

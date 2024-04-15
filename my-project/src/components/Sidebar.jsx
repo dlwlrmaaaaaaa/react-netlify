@@ -51,7 +51,7 @@ const handleLogout = async (e) => {
     const res = await axiosClient.post("/admin/logout");
     if (res.status === 200) {
       localStorage.removeItem("ACCESS_TOKEN");
-      location.reload();
+      window.location.reload();
     }
   } catch (error) {
     console.log("Error Logout: ", error);
@@ -146,7 +146,8 @@ const Sidebar = () => {
         onClick={handleLogout}
       >
         <div className="bg-mainBorder w-full h-[1px]"></div>
-        <div className="flex justify-center items-center gap-2">
+        <div className="flex justify-center items-center gap-2"
+        onClick={handleLogout}>
           <MdLogout className="text-darkText h-6 w-6 hover:text-actText" />
           <span
             className={

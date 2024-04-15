@@ -5,7 +5,7 @@ import EmailVerify from "./EmailVerify";
 import { useStateContext } from "../contexts/contextProvider";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { IoMdEye } from "react-icons/io";
-
+import LoadingUI from '../components/Loading'
 const Login = () => {
   const { token } = useStateContext();
 
@@ -13,12 +13,13 @@ const Login = () => {
   const [name, setName] = useState("");
   // const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-
+  const [Loading, userLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
+
   const togglePasswordVisibility = (inputField) => {
     if (inputField === 1) {
       setShowPassword1(!showPassword1);
@@ -35,7 +36,7 @@ const Login = () => {
   const [errors, setErrors] = useState({ _Html: "" });
   const [url, setUrl] = useState(null);
   const toggleSignIn = () => setSignIn(!signIn);
-  const [isLoading, setLodaing] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const { setToken, setUser } = useStateContext();
   const navigate = useNavigate();
 
@@ -52,7 +53,7 @@ const Login = () => {
         setUrl(data.url);
       })
       .catch((error) => console.error("Error: ", error));
-    setLodaing(true);
+    setLoading(true);
   };
 
   useEffect(() => {
@@ -63,6 +64,7 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    userLoading(true)
     const data = {
       email: email,
       password: password,
@@ -79,6 +81,7 @@ const Login = () => {
       .then((res) => {
         setToken(res.token);
         setUser(res.user);
+        userLoading(false);
         if (res.token_type === "admin-token") {
           navigate("/dashboard");
         } else if (res.token_type === "user-token") {
@@ -299,14 +302,16 @@ const Login = () => {
               {url != null && (
                 <a
                   href={url}
-                  className="font-bold text-actText my-2 hover:text-blue-700"
+                  className="font-bold text-actText my-2 hover:text-blue-700 "
                 >
                   Google Sign In
                 </a>
               )}
               <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
-                Sign In
+               {Loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
+               {!Loading && "Sign in"}           
               </button>
+              
             </form>
           </div>
 

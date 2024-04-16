@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"; // Import useState
 import { MultiSelect } from "primereact/multiselect";
-import axios from "axios";
 import axiosClient from "../axios";
 import { useNavigate } from "react-router-dom";
+import { deleteRoom } from "../pages/RoomUtils";
 const RoomModal = ({
   closeModal,
   updateRoom,
@@ -22,35 +22,26 @@ const RoomModal = ({
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState([]);
   const [isLoading, setLoading] = useState(false);
-
+  const [deletedImage, setDeletedImages] = useState([]);
   const getData = () => {
-    data.map((item) => {
-      if (roomId === item.id) {
-        setRoomName(item.room_name);
-        setPrice(item.price);
-        setMiniDes(item.mini_description);
-        setDescription(item.description);
-        setFiles(JSON.parse(item.file_name));
-        setImage(JSON.parse(item.file_name));
+    const selectedRoom = data.find(room => roomId === room.id);
+
+   if (selectedRoom) {
+        setRoomName(selectedRoom.room_name);
+        setPrice(selectedRoom.price);
+        setMiniDes(selectedRoom.mini_description);
+        setDescription(selectedRoom.description);
+        // setFiles(JSON.parse(selectedRoom.file_name));
+        setImage(JSON.parse(selectedRoom.file_name));
+        setRoomAmenitiesData(JSON.parse(JSON.parse(selectedRoom.room_amenities)))
+        setBuildingAmenitiesData(JSON.parse(JSON.parse(selectedRoom.building_amenities)))
       }
-    });
     setLoading(true);
   };
 
   useEffect(() => {
-    if (!isLoading) {
       getData();
-    }
   }, [isLoading]);
-
-  const handleUpdate = () => {
-    // const formData = new FormData();
-    // var datas = e.target[0].files;
-    // for (let i = 0; i < datas.length; i++) {
-    //   formData.append("file_name[]", datas[i]);
-    // }
-  };
-
   const roomAmenities = [
     { Amenities: "Air-Condition" },
     { Amenities: "Unlimited Wifi" },
@@ -70,8 +61,6 @@ const RoomModal = ({
     { Amenities: "Netflix and Karaoke" },
     { Amenities: "Game Cards" },
   ];
-  // const [roomOptions] = useState(roomAmenities);
-
   const buildingAmenities = [
     ,
     { Amenities: "🏊🏻‍♂️ Swimming Pool (adult & kids)" },
@@ -122,17 +111,30 @@ const RoomModal = ({
 
   const handleDeleteImage = (index) => {
     if (updateRoom) {
+      const deletedImage = image[index];
       setImage([...image.slice(0, index), ...image.slice(index + 1)]);
+      setDeletedImages((prev) => [...prev, deletedImage]);
     } else {
       setImage([...files.slice(0, index), ...files.slice(index + 1)]);
     }
   };
 
+  
   const handleModal = () => {
     setUpdateRoom(null);
     setId(null);
     closeModal();
   };
+  
+  const handleDeleteRoom = () => {
+      deleteRoom(roomId)
+      .then(() => {
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('Error deleting room:', error);
+    });
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -152,29 +154,52 @@ const RoomModal = ({
       "building_amenities",
       JSON.stringify(buildingAmenitiesData)
     );
-    formData.append("file_name", files);
 
-    try {
-      axiosClient
-        .post("http://localhost:8000/api/admin/add-room", formData)
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (error) {
-      console.log("Error: ", error);
-    }
+    formData.append("file_name", files);
+   if(roomId){
+    axiosClient.post(`/admin/room/${roomId}`, formData)
+    .then(() => {
+      window.location.reload()
+    }).catch((err) => {
+      for (const entry of formData.entries()) {
+        console.log(entry);
+      }
+      console.log(err);
+    });
+  }else{
+    axiosClient
+    .post("/admin/add-room", formData)
+    .then(() => {
+      window.location.reload();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+      
+    
   };
+
+
 
   const renderImage = (image, index) => {
-
-    const imageURL = `http://localhost:8000/storage/images/${image}`;
-    return (
-      <img src={imageURL} className="h-40" alt={`Uploaded Image ${index}`} />
-    );
+    if (image instanceof File || (image instanceof Blob && image.type.startsWith('image/'))) {
+      const imageURL = URL.createObjectURL(image);
+      return (
+          <img src={imageURL} className="h-40" alt={`Uploaded Image ${index}`} />
+      );
+  }  else{
+      const imageURL = `http://localhost:8000/storage/images/${image}`;
+      return (
+        <img src={imageURL} className="h-40" alt={`Uploaded Image ${index}`} />
+      );
+    } 
   };
+
+
+  
+
+  
 
   return (
     <div
@@ -188,7 +213,7 @@ const RoomModal = ({
         id="modal"
         className="rounded-md p-3 bg-actNav w-5/6 h-5/6 overflow-auto scrollbar-thin scrollbar-webkit"
       >
-        <h1 className="text-2xl font-bold mt-2">Edit Room</h1>
+        <h1 className="text-2xl font-bold mt-2">{roomId ? "Edit Room" : "Add Room"}</h1>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <label className="flex flex-col justify-center items-center">
             <div className="flex flex-col justify-center items-center bg-white text-darkText rounded-xl border border-solid p-3 aspect-square w-40 cursor-pointer">
@@ -207,12 +232,7 @@ const RoomModal = ({
           <div className="flex flex-wrap justify-center items-center mt-3 w">
             {image.map((image, index) => (
               <div key={index} className="m-2">
-                <img
-                  src={`http://localhost:8000/storage/images/${image}`}
-                  className="h-40"
-                  alt={`Uploaded Image ${index}`}
-                />
-
+                {renderImage(image, index)}
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
                   onClick={(e) => {
@@ -248,7 +268,7 @@ const RoomModal = ({
                 <input
                   name="price"
                   className="shadow appearance-none border rounded w-full py-1 px-1 bg-white text-darkText"
-                  // defaultValue={roomToEdit ? roomToEdit.price : ""}
+                  value={roomId && price}
                   onChange={handleChange}
                 />
               </div>
@@ -294,26 +314,26 @@ const RoomModal = ({
                   Room Amenities:{" "}
                 </label>
                 <MultiSelect
-                  name="roomAmenitiesData"
-                  value={roomAmenitiesData}
-                  onChange={handleChange}
-                  options={roomAmenities}
-                  optionLabel="Amenities"
-                  filter
-                  placeholder="Select Amenities"
-                  className="shadow appearance-none border rounded w-full bg-white text-darkText"
-                />
+                    name="roomAmenitiesData"
+                    onChange={handleChange} // Make sure handleChange is defined
+                    value={roomAmenitiesData}
+                    options={roomAmenities}
+                    optionLabel="Amenities"
+                    filter
+                    placeholder="Select Amenities"
+                    className="shadow appearance-none border rounded w-full bg-white text-darkText" // Ensure CSS class is defined
+                  />
               </div>
               <div className="w-1/2 pl-2">
                 <label className="block text-black text-sm font-semibold mt-1">
                   {" "}
                   Building Amenities:{" "}
                 </label>
-                <MultiSelect
-                  value={buildingAmenitiesData}
+                <MultiSelect      
                   onChange={handleChange}
                   name="buildingAmenitiesData"
                   options={buildingAmenities}
+                  value={buildingAmenitiesData}
                   optionLabel="Amenities"
                   filter
                   placeholder="Select Amenities"
@@ -338,13 +358,18 @@ const RoomModal = ({
             <button
            className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
            type="submit"
-         >
+        >
            {" "}
            Update
          </button>
          <button
            className="text-white bg-red-500 active:bg-red-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-          
+           type="button" 
+           onClick={ (e) => {
+            e.preventDefault()
+            handleDeleteRoom()
+          }
+          }
          >
            {" "}
            Delete

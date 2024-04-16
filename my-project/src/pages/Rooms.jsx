@@ -66,12 +66,11 @@ const Rooms = () => {
     }
   }, [isLoading]);
 
+
   const getImage = (item, index) => {
     //dito kinuha ko yung images yung item and index naka set siya sa data.map(item, index) getImage(item, index);
-
     //ginet ko lang yung first index sa array or json na file_name para ayun lang magdisplay sa room
     const fileName = JSON.parse(item.file_name)[0];
-
     //yung item.room_name and all the dots makikita niyo sa response, press f12 then punta kayo sa network refresh niyo yung page
     //makikita niyo dun yung mga request
     return (
@@ -103,7 +102,8 @@ const Rooms = () => {
             </h1>
           </div>
           <div className="grid sm:grid-cols-3 grid-cols-1 w-full h-screen mt-3 overflow-y-auto scrollbar-thin scrollbar-webkit">
-            {isLoading ? (
+            {!isLoading && <Loading height="40  " width="40" loadingHeight="40" loadingWidth="40"/>}
+            {isLoading && (
               data.map((item, index) => (
                 <div
                   id="rooms"
@@ -121,9 +121,7 @@ const Rooms = () => {
                   </div>
                 </div>
               ))
-            ) : (
-              <Loading />
-            )}
+            ) }
 
             <div className="flex justify-center">
               <div

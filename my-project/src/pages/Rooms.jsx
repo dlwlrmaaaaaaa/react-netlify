@@ -103,7 +103,8 @@ const Rooms = () => {
             </h1>
           </div>
           <div className="grid sm:grid-cols-3 grid-cols-1 w-full h-screen mt-3 overflow-y-auto scrollbar-thin scrollbar-webkit">
-            {isLoading ? (
+            {!isLoading && <Loading height="40  " width="40" loadingHeight="40" loadingWidth="40"/>}
+            {isLoading && (
               data.map((item, index) => (
                 <div
                   id="rooms"
@@ -121,9 +122,7 @@ const Rooms = () => {
                   </div>
                 </div>
               ))
-            ) : (
-              <Loading />
-            )}
+            ) }
 
             <div className="flex justify-center">
               <div

@@ -19,6 +19,15 @@ const Login = () => {
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
+  const [contactNumber, setContactNumber] = useState("");
+  const [error, setError] = useState({ _Html: "" });
+  const [errors, setErrors] = useState({ _Html: "" });
+  const [url, setUrl] = useState(null);
+  const toggleSignIn = () => setSignIn(!signIn);
+  const [isLoading, setLoading] = useState(false);
+  const { setToken, setUser } = useStateContext();
+  const navigate = useNavigate();
+
 
   const togglePasswordVisibility = (inputField) => {
     if (inputField === 1) {
@@ -30,15 +39,6 @@ const Login = () => {
     }
   };
 
-  const [contactNumber, setContactNumber] = useState("");
-
-  const [error, setError] = useState({ _Html: "" });
-  const [errors, setErrors] = useState({ _Html: "" });
-  const [url, setUrl] = useState(null);
-  const toggleSignIn = () => setSignIn(!signIn);
-  const [isLoading, setLoading] = useState(false);
-  const { setToken, setUser } = useStateContext();
-  const navigate = useNavigate();
 
   const googleLogin = () => {
     axiosClient

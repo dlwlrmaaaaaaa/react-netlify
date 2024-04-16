@@ -22,7 +22,7 @@ const RoomModal = ({
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState([]);
   const [isLoading, setLoading] = useState(false);
-
+  const [deletedImage, setDeletedImages] = useState([]);
   const getData = () => {
     const selectedRoom = data.find(room => roomId === room.id);
 
@@ -43,18 +43,7 @@ const RoomModal = ({
       getData();
   }, [isLoading]);
 
-  useEffect(() => {
-    console.log(image);
-    console.log(files);
-  }, [image, files])
 
-  const handleUpdate = () => {
-    // const formData = new FormData();
-    // var datas = e.target[0].files;
-    // for (let i = 0; i < datas.length; i++) {
-    //   formData.append("file_name[]", datas[i]);
-    // }
-  };
 
   const roomAmenities = [
     { Amenities: "Air-Condition" },
@@ -75,7 +64,6 @@ const RoomModal = ({
     { Amenities: "Netflix and Karaoke" },
     { Amenities: "Game Cards" },
   ];
-  // const [roomOptions] = useState(roomAmenities);
 
   const buildingAmenities = [
     ,
@@ -127,12 +115,15 @@ const RoomModal = ({
 
   const handleDeleteImage = (index) => {
     if (updateRoom) {
+      const deletedImage = image[index];
       setImage([...image.slice(0, index), ...image.slice(index + 1)]);
+      setDeletedImages((prev) => [...prev, deletedImage]);
     } else {
       setImage([...files.slice(0, index), ...files.slice(index + 1)]);
     }
   };
 
+  
   const handleModal = () => {
     setUpdateRoom(null);
     setId(null);
@@ -183,13 +174,31 @@ const RoomModal = ({
     }
   };
 
-  const renderImage = (image, index) => {
 
-    const imageURL = `http://localhost:8000/storage/images/${image}`;
-    return (
-      <img src={imageURL} className="h-40" alt={`Uploaded Image ${index}`} />
-    );
+  const renderImage = (image, index) => {
+    if (image instanceof File || (image instanceof Blob && image.type.startsWith('image/'))) {
+      const imageURL = URL.createObjectURL(image);
+      return (
+          <img src={imageURL} className="h-40" alt={`Uploaded Image ${index}`} />
+      );
+  }  else{
+      const imageURL = `http://localhost:8000/storage/images/${image}`;
+      return (
+        <img src={imageURL} className="h-40" alt={`Uploaded Image ${index}`} />
+      );
+    } 
   };
+
+  useEffect(() => {
+    console.log(image);
+  }, [image])
+  
+
+
+  
+
+
+  
 
   return (
     <div
@@ -222,12 +231,7 @@ const RoomModal = ({
           <div className="flex flex-wrap justify-center items-center mt-3 w">
             {image.map((image, index) => (
               <div key={index} className="m-2">
-                <img
-                  src={`http://localhost:8000/storage/images/${image}`}
-                  className="h-40"
-                  alt={`Uploaded Image ${index}`}
-                />
-
+                {renderImage(image, index)}
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
                   onClick={(e) => {
@@ -263,7 +267,7 @@ const RoomModal = ({
                 <input
                   name="price"
                   className="shadow appearance-none border rounded w-full py-1 px-1 bg-white text-darkText"
-                  value={roomId ? price : ""}
+                  value={roomId && price}
                   onChange={handleChange}
                 />
               </div>

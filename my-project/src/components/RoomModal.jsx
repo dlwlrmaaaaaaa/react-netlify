@@ -42,9 +42,6 @@ const RoomModal = ({
   useEffect(() => {
       getData();
   }, [isLoading]);
-
-
-
   const roomAmenities = [
     { Amenities: "Air-Condition" },
     { Amenities: "Unlimited Wifi" },
@@ -64,7 +61,6 @@ const RoomModal = ({
     { Amenities: "Netflix and Karaoke" },
     { Amenities: "Game Cards" },
   ];
-
   const buildingAmenities = [
     ,
     { Amenities: "🏊🏻‍♂️ Swimming Pool (adult & kids)" },
@@ -158,21 +154,32 @@ const RoomModal = ({
       "building_amenities",
       JSON.stringify(buildingAmenitiesData)
     );
-    formData.append("file_name", files);
 
-    try {
-      axiosClient
-        .post("http://localhost:8000/api/admin/add-room", formData)
-        .then(() => {
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (error) {
-      console.log("Error: ", error);
-    }
+    formData.append("file_name", files);
+   if(roomId){
+    axiosClient.post(`/admin/room/${roomId}`, formData)
+    .then(() => {
+      window.location.reload()
+    }).catch((err) => {
+      for (const entry of formData.entries()) {
+        console.log(entry);
+      }
+      console.log(err);
+    });
+  }else{
+    axiosClient
+    .post("/admin/add-room", formData)
+    .then(() => {
+      window.location.reload();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+      
+    
   };
+
 
 
   const renderImage = (image, index) => {
@@ -189,14 +196,8 @@ const RoomModal = ({
     } 
   };
 
-  useEffect(() => {
-    console.log(image);
-  }, [image])
-  
-
 
   
-
 
   
 
@@ -356,7 +357,7 @@ const RoomModal = ({
            <>
             <button
            className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
-           type="button"
+           type="submit"
         >
            {" "}
            Update

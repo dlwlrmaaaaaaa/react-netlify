@@ -162,7 +162,7 @@ const Reservation = () => {
             <h2 className='text-3xl text-act-text font-semibold py-2'>Reserve Day:</h2>
             <div className="grid grid-cols-7 gap-2">
               {weekDayNames.map((dayName, index) => (
-                <div key={index} className="text-2xl text-center bg-backColor text-lg border border-bordColor border--300 rounded-xl mt-4">{dayName}</div>
+                <div key={index} className="text-center bg-backColor text-lg border border-bordColor border--300 rounded-xl mt-4">{dayName}</div>
               ))}
               {arrangeDays().map(date => (
                 <button
@@ -203,7 +203,7 @@ const Reservation = () => {
           {/* Date Info if it's reserved */}
           <div key="reservationInfo" className="col-span-1 lg:col-span-2 py-4">
             <div className='bg-mainCol mt-2 border-b-[1px] border-mainBorder p-4 rounded-xl shadow'>
-              <h2 className='text-2xl text-act-text font-semibold py-2 text-3xl'>Reservation Info:</h2>
+              <h2 className='text-act-text font-semibold py-2 text-3xl'>Reservation Info:</h2>
               {/* Render reservation info based on selected date */}
               {reservationInfo && reservationInfo[selectedDate?.getTime()] && (
                 <div className='bg-backColor rounded-md w-full overflow-wrap flex-col justify-start items-center gap-2 mt-2 p-2'>

@@ -1,10 +1,11 @@
 import React from "react";
 import { FaUser } from "react-icons/fa";
 import { FaHouse, FaRegCalendarCheck } from "react-icons/fa6";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Rooms from "./Rooms";
+import { useStateContext } from "../contexts/contextProvider";
 
-const Dashboard = ({ token }) => {
+const Dashboard = () => {
   const tableData = [
     {
       id: "0001",
@@ -43,7 +44,6 @@ const Dashboard = ({ token }) => {
       status: "Closed",
     },
   ];
-
   const reviewsData = [
     {
       name: "Dan Edward Manuel",

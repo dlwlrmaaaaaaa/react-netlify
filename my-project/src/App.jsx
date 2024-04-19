@@ -13,25 +13,31 @@ import Loading from "./components/Loading";
 import Payment from "./pages/Payments";
 import Contact from "./pages/Contact";
 import BookRoom from "./pages/BookRoom";
-
+import EmailVerify from "./pages/EmailVerify";
 import Feedbacks from "./pages/Feedbacks";
+import Profile from "./pages/Profile";
+import { useStateContext } from "./contexts/contextProvider";
 
 const App = () => {
+<<<<<<< HEAD
   const token = localStorage.getItem("auth_token");
   const token_type = "admin";
 
+=======
+  const { auth } = useStateContext();
+>>>>>>> origin/main
   return (
     <>
       <Routes>
+        <Route path="/home" element={<Home />} />
+        <Route path="/email/verify" element={<EmailVerify />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/book/payment" element={<Payment />} />
+        <Route path="/book" element={<BookRoom />} />
+        <Route path="/reviews" element={<Feedbacks />} />
         <Route path="/google/callback" element={<GoogleCallBack />} />
-        <Route
-          path="/login"
-          element={
-            token ? <Navigate to="/dashboard" replace={true} /> : <Login />
-          }
-        />
-      </Routes>
 
+<<<<<<< HEAD
       {token_type === "admin" ? (
         <main
           className={
@@ -83,11 +89,28 @@ const App = () => {
           </Routes>
         </main>
       ) : (
+=======
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+      <main
+        className={
+          auth
+            ? "w-full bg-slate-200 h-screen flex justify-between items-start"
+            : "hidden"
+        }
+      >
+        {auth ? <Sidebar /> : null}
+>>>>>>> origin/main
         <Routes>
-          <Route path="/home" element={<Home />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/inbox" element={<Inbox />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/rooms" element={<Rooms />} />
+          <Route path="/reservation" element={<Reservation />} />
         </Routes>
-      )}
-      {/* <Home /> */}
+      </main>
+      {}
     </>
   );
 };

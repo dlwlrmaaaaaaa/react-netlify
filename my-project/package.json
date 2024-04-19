@@ -12,6 +12,7 @@
   "dependencies": {
     "aios": "^1.0.1",
     "axios": "^1.6.8",
+    "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
     "multiselect-react-dropdown": "^2.0.25",
     "primereact": "^10.5.1",
@@ -19,7 +20,8 @@
     "react-data-table-component": "^7.6.2",
     "react-date-range": "^2.0.0-alpha.4",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.3"
+    "react-router-dom": "^6.22.3",
+    "react-scroll": "^1.9.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",

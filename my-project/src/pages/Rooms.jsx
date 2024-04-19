@@ -4,21 +4,40 @@ import { FaPlus } from "react-icons/fa";
 import RoomModal from "../components/RoomModal";
 import axiosClient from "../axios";
 import Loading from "../components/Loading";
+<<<<<<< HEAD
+=======
+import { useNavigate, Navigate } from "react-router-dom";
+import { useStateContext } from "../contexts/contextProvider";
+>>>>>>> origin/main
 
 const Rooms = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [roomToEdit, setRoomToEdit] = useState(null);
   const [data, setData] = useState([]);
+<<<<<<< HEAD
   const [isLoading, setLoading] = useState(false);
   const [updateRoom, setUpdateRoom] = useState(null);
   const [id, setId] = useState(null);
 
+=======
+  const [datos, setDatos] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const [updateRoom, setUpdateRoom] = useState(null);
+  const [id, setId] = useState(null);
+  const {auth, role, logout} = useStateContext();
+  const navigate = useNavigate();
+
+    // if(!auth || role !== 'admin'){
+    //   logout('/logout');
+    // }
+
+>>>>>>> origin/main
   const getRooms = () => {
     //itong axiosClient ang reference ay ayung nasa axios.js naka default na siya
     //pag hindi ko gagamitin yung config na yun magiging ganto yung codes niya
     //axios.get("http://localhost:8000/api/admin/rooms", {headers: {Authorization: `Bearer token`}})
     axiosClient
-      .get("/rooms")
+      .get("/admin/rooms")
       .then((res) => {
         return res.data;
       })
@@ -42,12 +61,17 @@ const Rooms = () => {
     //pag null pang add room
     //check the handleUpdate and handleAddroom functions
     if (id !== null) {
+<<<<<<< HEAD
+=======
+      setIsModalOpen(true);
+>>>>>>> origin/main
       setUpdateRoom(true);
       setId(id);
     }
     setIsModalOpen(true);
   };
 
+<<<<<<< HEAD
   const handleUpdate = (id) => {
     openModal(id);
   };
@@ -56,18 +80,28 @@ const Rooms = () => {
     openModal(id);
   };
 
+=======
+>>>>>>> origin/main
   useEffect(() => {
     if (!isLoading) {
       getRooms();
     }
   }, [isLoading]);
 
+<<<<<<< HEAD
   const getImage = (item, index) => {
     //dito kinuha ko yung images yung item and index naka set siya sa data.map(item, index) getImage(item, index);
 
     //ginet ko lang yung first index sa array or json na file_name para ayun lang magdisplay sa room
     const fileName = JSON.parse(item.file_name)[0];
 
+=======
+
+  const getImage = (item, index) => {
+    //dito kinuha ko yung images yung item and index naka set siya sa data.map(item, index) getImage(item, index);
+    //ginet ko lang yung first index sa array or json na file_name para ayun lang magdisplay sa room
+    const fileName = JSON.parse(item.file_name)[0];
+>>>>>>> origin/main
     //yung item.room_name and all the dots makikita niyo sa response, press f12 then punta kayo sa network refresh niyo yung page
     //makikita niyo dun yung mga request
     return (
@@ -99,13 +133,22 @@ const Rooms = () => {
             </h1>
           </div>
           <div className="grid sm:grid-cols-3 grid-cols-1 w-full h-screen mt-3 overflow-y-auto scrollbar-thin scrollbar-webkit">
+<<<<<<< HEAD
             {isLoading ? (
+=======
+            {!isLoading && <Loading height="40  " width="40" loadingHeight="40" loadingWidth="40"/>}
+            {isLoading && (
+>>>>>>> origin/main
               data.map((item, index) => (
                 <div
                   id="rooms"
                   className="featured flex justify-center cursor-pointer"
                   key={item.id}
+<<<<<<< HEAD
                   onClick={() => handleUpdate(item.id)}
+=======
+                  onClick={() => openModal(item.id)}
+>>>>>>> origin/main
                 >
                   <div
                     id="roomEdit"
@@ -117,14 +160,22 @@ const Rooms = () => {
                   </div>
                 </div>
               ))
+<<<<<<< HEAD
             ) : (
               <Loading />
             )}
+=======
+            ) }
+>>>>>>> origin/main
 
             <div className="flex justify-center">
               <div
                 id="addNew"
+<<<<<<< HEAD
                 onClick={() => handleAddRoom()}
+=======
+                onClick={() => openModal()}
+>>>>>>> origin/main
                 className="w-5/6 h-5/6 relative bg-white rounded-full flex flex-col items-center cursor-pointer justify-center hover:bg-darkText hover:text-white hover:opacity-75 "
               >
                 <FaPlus size={50} />

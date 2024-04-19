@@ -6,10 +6,6 @@ import Rooms from "./Rooms";
 import { useStateContext } from "../contexts/contextProvider";
 
 const Dashboard = () => {
-  const { token } = useStateContext();
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
   const tableData = [
     {
       id: "0001",
@@ -48,7 +44,6 @@ const Dashboard = () => {
       status: "Closed",
     },
   ];
-
   const reviewsData = [
     {
       name: "Dan Edward Manuel",

@@ -17,6 +17,7 @@ const variants = {
   nonExpanded: { width: "5%" },
 };
 
+
 const navItems = [
   {
     name: "Dashboard",
@@ -45,26 +46,21 @@ const navItems = [
   },
 ];
 
-const handleLogout = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axiosClient.post("/admin/logout");
-    if (res.status === 200) {
-      localStorage.removeItem("ACCESS_TOKEN");
-      window.location.reload();
-    }
-  } catch (error) {
-    console.log("Error Logout: ", error);
-  }
-};
+
+
 
 const Sidebar = () => {
+  const { logout, auth, roles } = useStateContext();
+  
   const [isExpanded, setIsExpanded] = useState(true);
   const [isActive, setIsActive] = useState(null);
 
   const handleNavItemClick = (index) => {
     setIsActive(index);
   };
+  if(!auth || roles !== 'admin'){
+    logout('/logout');
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -81,7 +77,10 @@ const Sidebar = () => {
   }, []);
 
   const logoUrl = "./src/assets/logo.png";
-
+  const handleLogout = () => {
+    e.preventDefault();
+    logout('/logout');
+  };
   return (
     <motion.section
       animate={isExpanded ? "expanded" : "nonExpanded"}

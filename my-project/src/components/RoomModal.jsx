@@ -173,6 +173,9 @@ const RoomModal = ({
       window.location.reload();
     })
     .catch((err) => {
+      for (const entry of formData.entries()) {
+        console.log(entry);
+      }
       console.log(err);
     });
   }

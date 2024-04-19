@@ -19,7 +19,7 @@ import Profile from "./pages/Profile";
 import { useStateContext } from "./contexts/contextProvider";
 
 const App = () => {
-  const { token } = useStateContext();
+  const { auth } = useStateContext();
   return (
     <>
       <Routes>
@@ -36,12 +36,12 @@ const App = () => {
       </Routes>
       <main
         className={
-          token
+          auth
             ? "w-full bg-slate-200 h-screen flex justify-between items-start"
             : "hidden"
         }
       >
-        {token ? <Sidebar /> : null}
+        {auth ? <Sidebar /> : null}
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inbox" element={<Inbox />} />

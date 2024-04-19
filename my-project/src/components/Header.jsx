@@ -11,7 +11,7 @@ const Header = () => {
     { name: "CONTACT US", path: "/contact" },
     { name: "REVIEWS", path: "/reviews" },
   ];
-  const { token } = useStateContext();
+  const { auth, roles, logout } = useStateContext();
 
   const [isOpen, setIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -20,9 +20,11 @@ const Header = () => {
     setShowDropdown(!showDropdown);
   };
 
-  const logout = () => {
-    localStorage.removeItem("ACCESS_TOKEN");
-    window.location.href = "/login";
+  if(!auth || roles !== 'user'){
+    logout('/logout');
+  }
+  const handleLogout = () => {
+    logout('/logout')
   };
 
   return (
@@ -70,25 +72,26 @@ const Header = () => {
             className="font-semibold my-7 md:my-0 md:ml-8 relative"
             onClick={toggleDropdown}
           >
-            {token ? (
+            {auth && roles   === 'user' ? (
               <>
                 <span className="cursor-pointer text-slate-500">
                   <FaCircleUser size={30} />
                 </span>
-                showDropdown && (
+               {showDropdown && (
                 <ul className="absolute top-full left-[-170%] bg-white border border-gray-200 rounded-md mt-1 z-10">
                   <li className="py-2 px-4 hover:bg-gray-100">
                     <NavLink to="/profile" className="text-notActText">
                       Profile
                     </NavLink>
                   </li>
-                  <li className="py-2 px-4 hover:bg-gray-100" onClick={logout}>
+                  <li className="py-2 px-4 hover:bg-gray-100" onClick={handleLogout}>
                     <a href="#" className="text-notActText">
                       Logout
                     </a>
                   </li>
                 </ul>
                 )
+              } 
               </>
             ) : (
               <NavLink

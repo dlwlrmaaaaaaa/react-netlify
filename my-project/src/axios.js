@@ -2,14 +2,19 @@ import axios from "axios";
 
 const axiosClient = axios.create({
   baseURL: "http://localhost:8000/api",
+  withCredentials: true,
+  withXSRFToken: true,
+  headers: {
+    Accept : 'application/json'
+  }
 });
 
 axiosClient.interceptors.request.use(
   (config) => {
-    const auth_token = localStorage.getItem("ACCESS_TOKEN"); 
-    if (auth_token) {
-      config.headers.Authorization = `Bearer ${auth_token}`;
-    }
+    // const auth_token = localStorage.getItem("ACCESS_TOKEN"); 
+    // if (auth_token) {
+    //   config.headers.Authorization = `Bearer ${auth_token}`;
+    // }
     return config;
   },
   (error) => {
@@ -23,9 +28,12 @@ axiosClient.interceptors.response.use(
   },
   (error) => {
     const {response} = error;
-    if(response.status === 401){
-      localStorage.removeItem("ACCESS_TOKEN");
-      window.location.reload()
+    if(response.status === 401 || response.status === 419 || response.status === 500){
+        axiosClient.post('/logout');
+        localStorage.removeItem("user") || null;
+        localStorage.removeItem("auth") || null;
+        localStorage.removeItem("role") || null;
+        window.location.href = '/login'
     }
     throw error;
   }

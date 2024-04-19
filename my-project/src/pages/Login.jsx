@@ -7,7 +7,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 import { IoMdEye } from "react-icons/io";
 import LoadingUI from '../components/Loading'
 const Login = () => {
-  const { token } = useStateContext();
+  const { login, setUser } = useStateContext();
 
   const [signIn, setSignIn] = useState(true);
   const [name, setName] = useState("");
@@ -20,12 +20,11 @@ const Login = () => {
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
   const [contactNumber, setContactNumber] = useState("");
-  const [error, setError] = useState({ _Html: "" });
   const [errors, setErrors] = useState({ _Html: "" });
+  const [error, setError] = useState({ _Html: "" });
   const [url, setUrl] = useState(null);
   const toggleSignIn = () => setSignIn(!signIn);
   const [isLoading, setLoading] = useState(false);
-  const { setToken, setUser } = useStateContext();
   const navigate = useNavigate();
 
 
@@ -42,7 +41,7 @@ const Login = () => {
 
   const googleLogin = () => {
     axiosClient
-      .get("http://localhost:8000/api/auth")
+      .get("/auth")
       .then((response) => {
         if (response) {
           return response.data;
@@ -65,44 +64,13 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     userLoading(true)
-    const data = {
-      email: email,
-      password: password,
-    };
+    // const data = {
+    //   email: email,
+    //   password: password,
+    // };
 
-    axiosClient
-      .post("/login", data)
-      .then((res) => {
-        return res.data;
-      })
-      .then((res) => {
-        return res.data;
-      })
-      .then((res) => {
-        setToken(res.token);
-        setUser(res.user);
-        userLoading(false);
-        if (res.token_type === "admin-token") {
-          navigate("/dashboard");
-        } else if (res.token_type === "user-token") {
-          navigate("/home");
-        } else {
-          localStorage.removeItem("ACCESS_TOKEN");
-          navigate("/home");
-        }
-      })
-      .catch((err) => {
-        // Assuming the API responds with a status code of 401 or similar for unauthorized access
-        if (err.response && err.response.status === 401) {
-          setError({
-            _Html:
-              "Password or Email did not match. Please re-check your details.",
-          });
-        } else {
-          // For any other error, you might want to display a generic error message
-          setError({ _Html: "An error occurred. Please try again later." });
-        }
-      });
+    login({email, password});
+      
   };
 
   const handleSignup = (e) => {

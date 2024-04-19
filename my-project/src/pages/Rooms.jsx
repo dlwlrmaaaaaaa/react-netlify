@@ -15,14 +15,12 @@ const Rooms = () => {
   const [isLoading, setLoading] = useState(false);
   const [updateRoom, setUpdateRoom] = useState(null);
   const [id, setId] = useState(null);
-
+  const {auth, role, logout} = useStateContext();
   const navigate = useNavigate();
 
-  const { token } = useStateContext();
-
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
+    // if(!auth || role !== 'admin'){
+    //   logout('/logout');
+    // }
 
   const getRooms = () => {
     //itong axiosClient ang reference ay ayung nasa axios.js naka default na siya

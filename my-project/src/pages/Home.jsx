@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Navigate, useLocation } from "react-router-dom";
+import {  useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Carousel from "../components/Carousel";
@@ -9,18 +9,20 @@ import { Link } from "react-router-dom";
 
 import rooms from "../JSON/Room.json";
 import { useStateContext } from "../contexts/contextProvider";
+import axiosClient from "../axios";
 
 const Home = () => {
-  const { token } = useStateContext();
-
+  const navigate = useNavigate();
   // Mapping identifiers to actual image imports
   const imageMap = {
     br1: br1,
     br2: br2,
   };
-  useEffect(() => {
-    console.log(token);
-  }, token);
+  const {user, auth, logout, roles} = useStateContext();
+  console.log(auth, roles);
+  if(!auth || roles !== 'user'){
+    logout('/logout');
+  }
 
   const location = useLocation();
 

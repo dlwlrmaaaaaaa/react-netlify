@@ -6,8 +6,8 @@ import { BrowserRouter } from "react-router-dom";
 import { ContextProvider } from "./contexts/contextProvider.jsx";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-  <ContextProvider>
-    <App />
+    <ContextProvider>
+      <App />
     </ContextProvider>
   </BrowserRouter>
 );

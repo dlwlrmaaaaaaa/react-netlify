@@ -16,6 +16,7 @@ const variants = {
   nonExpanded: { width: "5%" },
 };
 
+
 const navItems = [
   {
     name: "Dashboard",
@@ -44,22 +45,25 @@ const navItems = [
   },
 ];
 
-const handleLogout = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axiosClient.post("/admin/logout");
-    if (res.status === 200) {
-      localStorage.removeItem("ACCESS_TOKEN");
-      location.reload();
-    }
-  } catch (error) {
-    console.log("Error Logout: ", error);
-  }
-};
+
+
 
 const Sidebar = () => {
+  const { logout, auth, roles } = useStateContext();
+  
   const [isExpanded, setIsExpanded] = useState(true);
+<<<<<<< HEAD
   const location = useLocation();
+=======
+  const [isActive, setIsActive] = useState(null);
+
+  const handleNavItemClick = (index) => {
+    setIsActive(index);
+  };
+  if(!auth || roles !== 'admin'){
+    logout('/logout');
+  }
+>>>>>>> origin/main
 
   useEffect(() => {
     const handleResize = () => {
@@ -76,7 +80,10 @@ const Sidebar = () => {
   }, []);
 
   const logoUrl = "./src/assets/logo.png";
-
+  const handleLogout = () => {
+    e.preventDefault();
+    logout('/logout');
+  };
   return (
     <motion.section
       animate={isExpanded ? "expanded" : "nonExpanded"}
@@ -139,7 +146,8 @@ const Sidebar = () => {
         onClick={handleLogout}
       >
         <div className="bg-mainBorder w-full h-[1px]"></div>
-        <div className="flex justify-center items-center gap-2">
+        <div className="flex justify-center items-center gap-2"
+        onClick={handleLogout}>
           <MdLogout className="text-darkText h-6 w-6 hover:text-actText" />
           <span
             className={

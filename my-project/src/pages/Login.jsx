@@ -5,20 +5,29 @@ import EmailVerify from "./EmailVerify";
 import { useStateContext } from "../contexts/contextProvider";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { IoMdEye } from "react-icons/io";
-
+import LoadingUI from '../components/Loading'
 const Login = () => {
-  const { token } = useStateContext();
+  const { login, setUser } = useStateContext();
 
   const [signIn, setSignIn] = useState(true);
   const [name, setName] = useState("");
   // const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-
+  const [Loading, userLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [showPassword1, setShowPassword1] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
+  const [contactNumber, setContactNumber] = useState("");
+  const [errors, setErrors] = useState({ _Html: "" });
+  const [error, setError] = useState({ _Html: "" });
+  const [url, setUrl] = useState(null);
+  const toggleSignIn = () => setSignIn(!signIn);
+  const [isLoading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+
   const togglePasswordVisibility = (inputField) => {
     if (inputField === 1) {
       setShowPassword1(!showPassword1);
@@ -29,19 +38,10 @@ const Login = () => {
     }
   };
 
-  const [contactNumber, setContactNumber] = useState("");
-
-  const [error, setError] = useState({ _Html: "" });
-  const [errors, setErrors] = useState({ _Html: "" });
-  const [url, setUrl] = useState(null);
-  const toggleSignIn = () => setSignIn(!signIn);
-  const [isLoading, setLodaing] = useState(false);
-  const { setToken, setUser } = useStateContext();
-  const navigate = useNavigate();
 
   const googleLogin = () => {
     axiosClient
-      .get("http://localhost:8000/api/auth")
+      .get("/auth")
       .then((response) => {
         if (response) {
           return response.data;
@@ -52,7 +52,7 @@ const Login = () => {
         setUrl(data.url);
       })
       .catch((error) => console.error("Error: ", error));
-    setLodaing(true);
+    setLoading(true);
   };
 
   useEffect(() => {
@@ -63,43 +63,14 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {
-      email: email,
-      password: password,
-    };
+    userLoading(true)
+    // const data = {
+    //   email: email,
+    //   password: password,
+    // };
 
-    axiosClient
-      .post("/login", data)
-      .then((res) => {
-        return res.data;
-      })
-      .then((res) => {
-        return res.data;
-      })
-      .then((res) => {
-        setToken(res.token);
-        setUser(res.user);
-        if (res.token_type === "admin-token") {
-          navigate("/dashboard");
-        } else if (res.token_type === "user-token") {
-          navigate("/home");
-        } else {
-          localStorage.removeItem("ACCESS_TOKEN");
-          navigate("/home");
-        }
-      })
-      .catch((err) => {
-        // Assuming the API responds with a status code of 401 or similar for unauthorized access
-        if (err.response && err.response.status === 401) {
-          setError({
-            _Html:
-              "Password or Email did not match. Please re-check your details.",
-          });
-        } else {
-          // For any other error, you might want to display a generic error message
-          setError({ _Html: "An error occurred. Please try again later." });
-        }
-      });
+    login({email, password});
+      
   };
 
   const handleSignup = (e) => {
@@ -299,14 +270,16 @@ const Login = () => {
               {url != null && (
                 <a
                   href={url}
-                  className="font-bold text-actText my-2 hover:text-blue-700"
+                  className="font-bold text-actText my-2 hover:text-blue-700 "
                 >
                   Google Sign In
                 </a>
               )}
               <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
-                Sign In
+               {Loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
+               {!Loading && "Sign in"}           
               </button>
+              
             </form>
           </div>
 

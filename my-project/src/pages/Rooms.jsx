@@ -15,14 +15,12 @@ const Rooms = () => {
   const [isLoading, setLoading] = useState(false);
   const [updateRoom, setUpdateRoom] = useState(null);
   const [id, setId] = useState(null);
-
+  const {auth, role, logout} = useStateContext();
   const navigate = useNavigate();
 
-  const { token } = useStateContext();
-
-  if (!token) {
-    return <Navigate to="/login" />;
-  }
+    // if(!auth || role !== 'admin'){
+    //   logout('/logout');
+    // }
 
   const getRooms = () => {
     //itong axiosClient ang reference ay ayung nasa axios.js naka default na siya
@@ -53,34 +51,12 @@ const Rooms = () => {
     //pag null pang add room
     //check the handleUpdate and handleAddroom functions
     if (id !== null) {
+      setIsModalOpen(true);
       setUpdateRoom(true);
       setId(id);
     }
     setIsModalOpen(true);
   };
-  const handleAddRoom = () => {
-    setIsModalOpen();
-  };
-  // const updateRoom = (roomId, updatedRoomData) => {
-  //   // Update the room data in the state
-  //   setData(
-  //     data.map((room) =>
-  //       room.id === roomId ? { ...room, ...updatedRoomData } : room
-  //     )
-  //   );
-  // };
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const res = await axiosClient.get("/admin/rooms");
-  //       const data = res.data;
-  //       setDatos(data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [setDatos]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -88,12 +64,11 @@ const Rooms = () => {
     }
   }, [isLoading]);
 
+
   const getImage = (item, index) => {
     //dito kinuha ko yung images yung item and index naka set siya sa data.map(item, index) getImage(item, index);
-
     //ginet ko lang yung first index sa array or json na file_name para ayun lang magdisplay sa room
     const fileName = JSON.parse(item.file_name)[0];
-
     //yung item.room_name and all the dots makikita niyo sa response, press f12 then punta kayo sa network refresh niyo yung page
     //makikita niyo dun yung mga request
     return (
@@ -125,13 +100,14 @@ const Rooms = () => {
             </h1>
           </div>
           <div className="grid sm:grid-cols-3 grid-cols-1 w-full h-screen mt-3 overflow-y-auto scrollbar-thin scrollbar-webkit">
-            {isLoading ? (
+            {!isLoading && <Loading height="40  " width="40" loadingHeight="40" loadingWidth="40"/>}
+            {isLoading && (
               data.map((item, index) => (
                 <div
                   id="rooms"
                   className="featured flex justify-center cursor-pointer"
                   key={item.id}
-                  onClick={() => handleUpdate(item.id)}
+                  onClick={() => openModal(item.id)}
                 >
                   <div
                     id="roomEdit"
@@ -143,14 +119,12 @@ const Rooms = () => {
                   </div>
                 </div>
               ))
-            ) : (
-              <Loading />
-            )}
+            ) }
 
             <div className="flex justify-center">
               <div
                 id="addNew"
-                onClick={() => handleAddRoom()}
+                onClick={() => openModal()}
                 className="w-5/6 h-5/6 relative bg-white rounded-full flex flex-col items-center cursor-pointer justify-center hover:bg-darkText hover:text-white hover:opacity-75 "
               >
                 <FaPlus size={50} />

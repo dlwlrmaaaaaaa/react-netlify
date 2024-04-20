@@ -3,6 +3,7 @@ import logo from "../assets/logo.png";
 import { FaBars, FaCircleUser } from "react-icons/fa6";
 import { IoCloseSharp } from "react-icons/io5";
 import { NavLink } from "react-router-dom"; // Import NavLink
+import { useStateContext } from "../contexts/contextProvider";
 
 const Header = () => {
   const Links = [
@@ -10,6 +11,7 @@ const Header = () => {
     { name: "CONTACT US", path: "/contact" },
     { name: "REVIEWS", path: "/reviews" },
   ];
+  const { auth, roles, logout } = useStateContext();
 
   const [isOpen, setIsOpen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -18,9 +20,11 @@ const Header = () => {
     setShowDropdown(!showDropdown);
   };
 
-  const logout = () => {
-    localStorage.removeItem("ACCESS_TOKEN");
-    window.location.href = "/login";
+  if(!auth || roles !== 'user'){
+    logout('/logout');
+  }
+  const handleLogout = () => {
+    logout('/logout')
   };
 
   return (
@@ -68,22 +72,34 @@ const Header = () => {
             className="font-semibold my-7 md:my-0 md:ml-8 relative"
             onClick={toggleDropdown}
           >
-            <span className="cursor-pointer text-slate-500">
-              <FaCircleUser size={30} />
-            </span>
-            {showDropdown && (
-              <ul className="absolute top-full left-[-170%] bg-white border border-gray-200 rounded-md mt-1 z-10">
-                <li className="py-2 px-4 hover:bg-gray-100">
-                  <NavLink to="/profile" className="text-notActText">
-                    Profile
-                  </NavLink>
-                </li>
-                <li className="py-2 px-4 hover:bg-gray-100" onClick={logout}>
-                  <a href="#" className="text-notActText">
-                    Logout
-                  </a>
-                </li>
-              </ul>
+            {auth && roles   === 'user' ? (
+              <>
+                <span className="cursor-pointer text-slate-500">
+                  <FaCircleUser size={30} />
+                </span>
+               {showDropdown && (
+                <ul className="absolute top-full left-[-170%] bg-white border border-gray-200 rounded-md mt-1 z-10">
+                  <li className="py-2 px-4 hover:bg-gray-100">
+                    <NavLink to="/profile" className="text-notActText">
+                      Profile
+                    </NavLink>
+                  </li>
+                  <li className="py-2 px-4 hover:bg-gray-100" onClick={handleLogout}>
+                    <a href="#" className="text-notActText">
+                      Logout
+                    </a>
+                  </li>
+                </ul>
+                )
+              } 
+              </>
+            ) : (
+              <NavLink
+                to="/login"
+                className="bg-actNav text-white px-5 py-1 rounded-l-full rounded-r-full"
+              >
+                Login
+              </NavLink>
             )}
           </li>
         </ul>

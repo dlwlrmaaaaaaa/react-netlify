@@ -18,11 +18,6 @@ const Home = () => {
     br1: br1,
     br2: br2,
   };
-  const {user, auth, logout, roles} = useStateContext();
-  console.log(auth, roles);
-  if(!auth || roles !== 'user'){
-    logout('/logout');
-  }
 
   const location = useLocation();
 

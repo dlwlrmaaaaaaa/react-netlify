@@ -6,6 +6,7 @@ import Rooms from "./Rooms";
 import { useStateContext } from "../contexts/contextProvider";
 
 const Dashboard = () => {
+  
   const tableData = [
     {
       id: "0001",

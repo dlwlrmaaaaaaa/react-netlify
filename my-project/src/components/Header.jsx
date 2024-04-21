@@ -20,9 +20,6 @@ const Header = () => {
     setShowDropdown(!showDropdown);
   };
 
-  if(!auth || roles !== 'user'){
-    logout('/logout');
-  }
   const handleLogout = () => {
     logout('/logout')
   };
@@ -72,8 +69,7 @@ const Header = () => {
             className="font-semibold my-7 md:my-0 md:ml-8 relative"
             onClick={toggleDropdown}
           >
-            {auth && roles   === 'user' ? (
-              <>
+            {auth && roles === 'user' && <>
                 <span className="cursor-pointer text-slate-500">
                   <FaCircleUser size={30} />
                 </span>
@@ -93,14 +89,13 @@ const Header = () => {
                 )
               } 
               </>
-            ) : (
-              <NavLink
+              }
+            {!auth &&  <NavLink
                 to="/login"
                 className="bg-actNav text-white px-5 py-1 rounded-l-full rounded-r-full"
               >
                 Login
-              </NavLink>
-            )}
+              </NavLink>}
           </li>
         </ul>
       </div>

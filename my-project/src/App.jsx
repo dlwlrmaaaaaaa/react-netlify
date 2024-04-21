@@ -17,40 +17,48 @@ import EmailVerify from "./pages/EmailVerify";
 import Feedbacks from "./pages/Feedbacks";
 import Profile from "./pages/Profile";
 import { useStateContext } from "./contexts/contextProvider";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import PrivateRoutes from "./components/PrivateRoutes";
 
 const App = () => {
-  const { auth } = useStateContext();
+  const { user, auth, roles } = useStateContext();
   return (
     <>
       <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/email/verify" element={<EmailVerify />} />
+          <Route path="email/verify" element={<EmailVerify />} />
+   
         <Route path="/contact" element={<Contact />} />
-        <Route path="/book/payment" element={<Payment />} />
-        <Route path="/book" element={<BookRoom />} />
-        <Route path="/reviews" element={<Feedbacks />} />
-        <Route path="/google/callback" element={<GoogleCallBack />} />
+        <Route element={<ProtectedRoutes/>}>
+          <Route path="home" element={<Home />} />
+          <Route path="book/payment" element={<Payment />} />
+          <Route path="book" element={<BookRoom />} />
+          <Route path="reviews" element={<Feedbacks />} />
+        </Route>
 
+        <Route path="/google/callback" element={<GoogleCallBack />} />
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
+
+      {auth && roles === 'admin' && 
       <main
         className={
-          auth
-            ? "w-full bg-slate-200 h-screen flex justify-between items-start"
-            : "hidden"
+          "w-full bg-slate-200 h-screen flex justify-between items-start"
         }
       >
-        {auth ? <Sidebar /> : null}
+      <Sidebar />
         <Routes>
+          <Route element={<PrivateRoutes/>}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/users" element={<Users />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/reservation" element={<Reservation />} />
+          </Route>
         </Routes>
       </main>
-      {}
+      }
     </>
   );
 };

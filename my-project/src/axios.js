@@ -28,12 +28,11 @@ axiosClient.interceptors.response.use(
   },
   (error) => {
     const {response} = error;
-    if(response.status === 401 || response.status === 419 || response.status === 500){
+    if(response.status === 401){
         axiosClient.post('/logout');
         localStorage.removeItem("user") || null;
         localStorage.removeItem("auth") || null;
         localStorage.removeItem("role") || null;
-        window.location.href = '/login'
     }
     throw error;
   }

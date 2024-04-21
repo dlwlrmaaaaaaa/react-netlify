@@ -26,17 +26,17 @@ axiosClient.interceptors.response.use(
   (response) => {
     return response;
   },
-  (error) => {
-    const {response} = error;
-    if(response.status === 401 || response.status === 419 || response.status === 500){
-        axiosClient.post('/logout');
-        localStorage.removeItem("user") || null;
-        localStorage.removeItem("auth") || null;
-        localStorage.removeItem("role") || null;
-        window.location.href = '/login'
-    }
-    throw error;
-  }
+  // (error) => {
+  //   const {response} = error;
+  //   if(response.status === 401 || response.status === 419 || response.status === 500){
+  //       axiosClient.post('/logout');
+  //       localStorage.removeItem("user") || null;
+  //       localStorage.removeItem("auth") || null;
+  //       localStorage.removeItem("role") || null;
+  //       window.location.href = '/login'
+  //   }
+  //   throw error;
+  // }
 )
 
 export default axiosClient;

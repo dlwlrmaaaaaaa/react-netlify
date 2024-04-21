@@ -78,7 +78,6 @@ const Sidebar = () => {
 
   const logoUrl = "./src/assets/logo.png";
   const handleLogout = () => {
-    e.preventDefault();
     logout('/logout');
   };
   return (
@@ -146,7 +145,7 @@ const Sidebar = () => {
       >
         <div className="bg-mainBorder w-full h-[1px]"></div>
         <div className="flex justify-center items-center gap-2"
-        onClick={handleLogout}>
+            >
           <MdLogout className="text-darkText h-6 w-6 hover:text-actText" />
           <span
             className={

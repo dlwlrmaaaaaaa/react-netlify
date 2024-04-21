@@ -20,9 +20,6 @@ const Header = () => {
     setShowDropdown(!showDropdown);
   };
 
-  if (!auth || roles !== 'user') {
-    logout('/logout');
-  }
   const handleLogout = () => {
     logout('/logout')
   };
@@ -42,8 +39,9 @@ const Header = () => {
         </div>
 
         <ul
-          className={`md:flex md:items-center md:pb-0 pb-12 ${isOpen ? "block" : "hidden md:block"
-            }`}
+          className={`md:flex md:items-center md:pb-0 pb-12 ${
+            isOpen ? "block" : "hidden md:block"
+          }`}
         >
           {Links.map((link, index) => (
             <li key={index} className="font-bold my-7 md:my-0 md:ml-8">
@@ -60,48 +58,45 @@ const Header = () => {
             </li>
           ))}
 
-          {auth && roles === 'user' ? (
-            <>
-              <NavLink
-                to="/home#availableRooms"
-                className="bg-actNav text-sm font-bold text-white py-2 px-8 md:ml-8 rounded-full md:static transition duration-75 ease-in-out transform hover:scale-95"
-              >
-                BOOK NOW
-              </NavLink>
+          <NavLink
+            to="/home#availableRooms"
+            className="bg-actNav text-sm font-bold text-white py-2 px-8 md:ml-8 rounded-full md:static transition duration-75 ease-in-out transform hover:scale-95"
+          >
+            BOOK NOW
+          </NavLink>
 
-              <li
-                className="font-semibold my-7 md:my-0 md:ml-8 relative"
-                onClick={toggleDropdown}
-              >
+          <li
+            className="font-semibold my-7 md:my-0 md:ml-8 relative"
+            onClick={toggleDropdown}
+          >
+            {auth && roles === 'user' && <>
                 <span className="cursor-pointer text-slate-500">
                   <FaCircleUser size={30} />
                 </span>
-                {showDropdown && (
-                  <ul className="absolute top-full left-[-170%] bg-white border border-gray-200 rounded-md mt-1 z-10">
-                    <li className="py-2 px-4 hover:bg-gray-100">
-                      <NavLink to="/profile" className="text-notActText">
-                        Profile
-                      </NavLink>
-                    </li>
-                    <li className="py-2 px-4 hover:bg-gray-100" onClick={handleLogout}>
-                      <a href="#" className="text-notActText">
-                        Logout
-                      </a>
-                    </li>
-                  </ul>
+               {showDropdown && (
+                <ul className="absolute top-full left-[-170%] bg-white border border-gray-200 rounded-md mt-1 z-10">
+                  <li className="py-2 px-4 hover:bg-gray-100">
+                    <NavLink to="/profile" className="text-notActText">
+                      Profile
+                    </NavLink>
+                  </li>
+                  <li className="py-2 px-4 hover:bg-gray-100" onClick={handleLogout}>
+                    <a href="#" className="text-notActText">
+                      Logout
+                    </a>
+                  </li>
+                </ul>
                 )
-                }
-
-              </li>
-            </>
-          ) : (
-            <NavLink
-              to="/login"
-              className="bg-actNav text-sm font-bold text-white py-2 px-8 md:ml-8 rounded-full md:static transition duration-75 ease-in-out transform hover:scale-95"
-            >
-              LOGIN
-            </NavLink>
-          )}
+              } 
+              </>
+              }
+            {!auth &&  <NavLink
+                to="/login"
+                className="bg-actNav text-white px-5 py-1 rounded-l-full rounded-r-full"
+              >
+                Login
+              </NavLink>}
+          </li>
         </ul>
       </div>
     </header>

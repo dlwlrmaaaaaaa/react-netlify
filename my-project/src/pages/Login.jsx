@@ -7,7 +7,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 import { IoMdEye } from "react-icons/io";
 import LoadingUI from '../components/Loading'
 const Login = () => {
-  const { login, setUser } = useStateContext();
+  const { login, register, errors , setErrors, loading} = useStateContext();
 
   const [signIn, setSignIn] = useState(true);
   const [name, setName] = useState("");
@@ -20,7 +20,6 @@ const Login = () => {
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
   const [contactNumber, setContactNumber] = useState("");
-  const [errors, setErrors] = useState({ _Html: "" });
   const [error, setError] = useState({ _Html: "" });
   const [url, setUrl] = useState(null);
   const toggleSignIn = () => setSignIn(!signIn);
@@ -38,6 +37,8 @@ const Login = () => {
     }
   };
 
+
+  
 
   const googleLogin = () => {
     axiosClient
@@ -64,13 +65,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     userLoading(true)
-    // const data = {
-    //   email: email,
-    //   password: password,
-    // };
-
-    login({email, password});
-      
+    login({email, password});   
   };
 
   const handleSignup = (e) => {
@@ -81,7 +76,7 @@ const Login = () => {
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
     if (password !== passwordConfirmation) {
-      setErrors({ ...errors, _Html: "Password does not match" });
+      setErrors({ ...error, _Html: "Password does not match" });
       return;
     }
     if (!passwordPattern.test(password)) {
@@ -100,32 +95,9 @@ const Login = () => {
       password_confirmation: passwordConfirmation,
       contact_number: contactNumber,
     };
-    axiosClient
-      .post("/register", userData)
-      .then((res) => {
-        return res.data;
-      })
-      .then((res) => {
-        return res.data;
-      })
-      .then((data) => {
-        setToken(data.token);
-        setUser({ email: data.email });
-        navigate("/email/verify");
-      })
-      .catch((error) => {
-        const response = error.response;
-        if (response && response.status === 422 && response.data.errors.email) {
-          // Email is already taken
-          setErrors({
-            ...errors,
-            _Html:
-              "This email is already taken. Please choose a different one.",
-          });
-        } else {
-          console.log("Error during signup:", error);
-        }
-      });
+
+    register({name, email, password, password_confirmation: passwordConfirmation, contact_number: contactNumber });
+      
   };
 
   return (
@@ -143,6 +115,14 @@ const Login = () => {
               onSubmit={handleSignup}
             >
               <h1 className="font-bold text-actText mb-3">Create Account</h1>
+              {errors._Html ? (
+                <span className="text-red-500 rounded-lg w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
+                  <i className="text-red">
+                    <FaExclamationTriangle size={20} />
+                  </i>
+                  {errors._Html}
+                </span>
+              ) : null}
               <input
                 type="text"
                 placeholder="Name"
@@ -200,19 +180,13 @@ const Login = () => {
                 className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
                 onChange={(e) => setContactNumber(e.target.value)}
               />
-              {errors._Html ? (
-                <span className="text-white font-semibold rounded-lg bg-red-400 w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
-                  <i className="text-white">
-                    <FaExclamationTriangle size={20} />
-                  </i>
-                  {errors._Html}
-                </span>
-              ) : null}
+              
               <button
                 type="submit"
                 className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none"
               >
-                Sign Up
+               {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
+                {!loading && "Sign up"}  
               </button>
             </form>
           </div>
@@ -228,6 +202,14 @@ const Login = () => {
               onSubmit={handleSubmit}
             >
               <h1 className="font-bold text-actText mb-3">Sign In</h1>
+              {errors._Html ? (
+                <span className="text-red-500 rounded-lg w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
+                  <i className="text-red">
+                    <FaExclamationTriangle size={20} />
+                  </i>
+                  {errors._Html}
+                </span>
+              ) : null}
               <input
                 type="email"
                 placeholder="Email"
@@ -253,14 +235,6 @@ const Login = () => {
                   <IoMdEye size={20} />
                 </button>
               </div>
-              {error._Html ? (
-                <span className="text-white font-semibold rounded-lg bg-red-400 w-full p-1 m-1 text-sm flex items-center justify-center">
-                  <i className="text-white">
-                    <FaExclamationTriangle size={20} />{" "}
-                  </i>
-                  {error._Html}
-                </span>
-              ) : null}
               <a
                 href="#"
                 className="text-notActText text-sm font-semibold my-4 hover:text-actText hover:font-semibold"
@@ -276,8 +250,8 @@ const Login = () => {
                 </a>
               )}
               <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
-               {Loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
-               {!Loading && "Sign in"}           
+               {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
+               {!loading && "Sign in"}           
               </button>
               
             </form>

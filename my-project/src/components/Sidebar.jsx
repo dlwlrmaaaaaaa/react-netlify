@@ -52,18 +52,7 @@ const Sidebar = () => {
   const { logout, auth, roles } = useStateContext();
   
   const [isExpanded, setIsExpanded] = useState(true);
-<<<<<<< HEAD
   const location = useLocation();
-=======
-  const [isActive, setIsActive] = useState(null);
-
-  const handleNavItemClick = (index) => {
-    setIsActive(index);
-  };
-  if(!auth || roles !== 'admin'){
-    logout('/logout');
-  }
->>>>>>> origin/main
 
   useEffect(() => {
     const handleResize = () => {

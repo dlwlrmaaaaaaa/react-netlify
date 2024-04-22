@@ -28,12 +28,17 @@ axiosClient.interceptors.response.use(
   },
   (error) => {
     const {response} = error;
-    if(response.status === 401){
-        axiosClient.post('/logout');
-        localStorage.removeItem("user") || null;
-        localStorage.removeItem("auth") || null;
-        localStorage.removeItem("role") || null;
-    }
+    // if(response.status === 401){
+    //     axiosClient.post('/logout');
+    //     localStorage.removeItem("user") || null;
+    //     localStorage.removeItem("auth") || null;
+    //     localStorage.removeItem("role") || null;
+    // }else if(response.status === 419){
+    //     localStorage.removeItem("user") || null;
+    //     localStorage.removeItem("auth") || null;
+    //     localStorage.removeItem("role") || null;
+    //     window.location.href = '/login'
+    // }
     throw error;
   }
 )

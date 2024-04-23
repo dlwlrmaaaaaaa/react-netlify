@@ -3,6 +3,7 @@ import Sidebar from '../components/Sidebar'
 import { FaCaretDown, FaEye } from "react-icons/fa";
 import {  MdDeleteForever } from "react-icons/md";
 import DataTable from 'react-data-table-component';
+import axios from 'axios';
 
 const Inbox = () => {
 

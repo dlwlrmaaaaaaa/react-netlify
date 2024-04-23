@@ -7,7 +7,7 @@ import { useStateContext } from "../contexts/contextProvider";
 const GoogleCallBack = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { setUsers, setAuth } = useStateContext();
+  const { setUsers, setAuth, setRoles } = useStateContext();
   // itong code dito gagawan dapat ng isa pang file hindi ito dapat nandito para to sa GoogleCallBack.jsx
   useEffect(() => {
     axiosClient
@@ -16,9 +16,12 @@ const GoogleCallBack = () => {
         return res.data;
       })
       .then((res) => {
-        localStorage.setItem('auth', true);
-        setUsers(res);
+        setUsers(res.user);
+        setRoles(res.user.role);
         setAuth(true);
+        localStorage.setItem('auth', true);
+        localStorage.setItem('user', JSON.stringify(res.user));
+        localStorage.setItem('role', "user");
         navigate("/home");
       })
       .catch((error) => console.log("ERROR: ", error));

@@ -42,9 +42,6 @@ const EmailVerify = () => {
     setIsResending(true);
   }
 
-
-  
-
   useEffect(() => {
     let intervalId;
     if (isResending && countdown > 0) {

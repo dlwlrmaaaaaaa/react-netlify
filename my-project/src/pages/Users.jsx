@@ -1,40 +1,27 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
 import UserModal from '../components/UserModal'
 import { MdModeEdit, MdDeleteForever } from "react-icons/md";
 import DataTable from 'react-data-table-component';
+import axiosClient from '../axios';
 
 const Users = () => {
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
-  const [data, setData] = useState([
-    {
-      id: 1,
-      name: ' Dan Edward Manuel',
-      address: '1 Bedroom unit with Balcony facing Amenities',
-      emailAdd: 'danedward@gmail.com',
-      cpNum: '0912345678',
-      pass: 'dandandan'
-    },
-    {
-      id: 2,
-      name: ' Dan Edward Manuel',
-      address: '1 Bedroom unit with Balcony facing Amenities',
-      emailAdd: 'danedward@gmail.com',
-      cpNum: '0912345678',
-      pass: 'dandandan',
-    },
-    {
-      id: 3,
-      name: ' Dan Edward Manuel',
-      address: '1 Bedroom unit with Balcony facing Amenities',
-      emailAdd: 'danedward@gmail.com',
-      cpNum: '0912345678',
-      pass: 'dandandan',
-    },
-  ]);
+  const [data, setData] = useState([]);
+  useEffect(() => {
 
+    axiosClient.get('/users')
+    .then((res) => {
+      return res.data;
+    })
+    .then((res) => {
+      setData(res.data)
+    })
+  }, [])
+
+  
   const columns = [
     {
       name: "ID",
@@ -50,28 +37,22 @@ const Users = () => {
       width: '15%'
     },
     {
-      name: "Address",
-      selector: row => row.address,
-      cell: row => <div style={{ wordWrap: "break-word" }}>{row.address}</div>,
-      width: '23%'
-    },
-    {
-      name: "Email Address",
-      selector: row => row.emailAdd,
-      cell: row => <div style={{ wordWrap: "break-word" }}>{row.emailAdd}</div>,
-      width: '20%'
-    },
-    {
-      name: "Phone #",
-      selector: row => row.cpNum,
-      cell: row => <div style={{ wordWrap: "break-word" }}>{row.cpNum}</div>,
+      name: "Role",
+      selector: row => row.role,
+      cell: row => <div style={{ wordWrap: "break-word" }}>{row.role}</div>,
       width: '15%'
     },
     {
-      name: "Password",
-      selector: row => row.pass,
-      cell: row => <div style={{ wordWrap: "break-word" }}>{row.pass}</div>,
-      width: '10%'
+      name: "Email",
+      selector: row => row.email,
+      cell: row => <div style={{ wordWrap: "break-word" }}>{row.email}</div>,
+      width: '23%'
+    },
+    {
+      name: "Phone #",
+      selector: row => row.contact_number,
+      cell: row => <div style={{ wordWrap: "break-word" }}>{row.contact_number}</div>,
+      width: '15%'
     },
     {
       name: "Action",

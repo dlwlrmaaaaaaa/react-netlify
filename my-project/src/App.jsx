@@ -49,6 +49,7 @@ const App = () => {
       >
       <Sidebar />
         <Routes>
+        <Route path="*" element={<NotFound/>} />
           <Route element={<PrivateRoutes/>}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inbox" element={<Inbox />} />

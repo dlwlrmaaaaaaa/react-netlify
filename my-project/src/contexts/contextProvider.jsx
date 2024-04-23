@@ -85,15 +85,10 @@ export const ContextProvider = ({ children }) => {
     .then((res) => {
       setLoading(false);
       setAuth(true);
-<<<<<<< HEAD
       // setUsers({name: res.user.name, email: res.user.email, email_verified_at: res.user.email_verified_at});
       setRole(res.role);
       localStorage.setItem("role", res.role);
       // localStorage.setItem("user", JSON.stringify(res.user));
-=======
-      setRole(res.role);
-      localStorage.setItem("role", res.role);
->>>>>>> origin/main
       localStorage.setItem("auth", true);
       if(res.role === 'admin'){
         localStorage.setItem("user", JSON.stringify(res.user));

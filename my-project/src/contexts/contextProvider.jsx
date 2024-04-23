@@ -89,7 +89,7 @@ export const ContextProvider = ({ children }) => {
       localStorage.setItem("role", res.role);
       localStorage.setItem("auth", true);
       if(res.role === 'admin'){
-        localStorage.setItem("user", res.name);
+        localStorage.setItem("user", JSON.stringify(res.user));
         setUsers({name: res.name, email: res.email});
         navigate("/dashboard"); 
       }else if(res.role === 'user'){

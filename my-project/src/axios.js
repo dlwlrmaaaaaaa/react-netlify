@@ -29,10 +29,15 @@ axiosClient.interceptors.response.use(
   (error) => {
     const {response} = error;
     if(response.status === 401){
-        axiosClient.post('/logout');
+        axiosClient.post('/logout') ||
+        localStorage.removeItem("user")
+        localStorage.removeItem("auth")
+        localStorage.removeItem("role")
+    }else if(response.status === 419){
         localStorage.removeItem("user") || null;
         localStorage.removeItem("auth") || null;
         localStorage.removeItem("role") || null;
+        window.location.href = '/login'
     }
     throw error;
   }

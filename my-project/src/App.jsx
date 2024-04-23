@@ -38,7 +38,7 @@ const App = () => {
         <Route path="/google/callback" element={<GoogleCallBack />} />
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound/>} />
+        
       </Routes>
 
       {auth && roles === 'admin' && 
@@ -49,6 +49,7 @@ const App = () => {
       >
       <Sidebar />
         <Routes>
+        <Route path="*" element={<NotFound/>} />
           <Route element={<PrivateRoutes/>}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inbox" element={<Inbox />} />

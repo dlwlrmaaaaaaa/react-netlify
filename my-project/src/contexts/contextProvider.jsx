@@ -15,14 +15,19 @@ export const ContextProvider = ({ children }) => {
   const getAuth = () => {
     return localStorage.getItem("auth") || false;
   };
+  
   const getRole = () => {
     return localStorage.getItem("role");
   };
+  const [roles, setRoles] = useState(getRole());
   const getUser = () => {
+    if(roles === 'admin'){
+      return localStorage.getItem('user');
+    }
     return JSON.parse(localStorage.getItem('user'));
   };
   const [auth, isAuth] = useState(getAuth());
-  const [roles, setRoles] = useState(getRole());
+ 
   const [user, setUser] = useState(getUser());
   const setUsers = (data) => {
     setUser(data);
@@ -36,6 +41,7 @@ export const ContextProvider = ({ children }) => {
  
   
   const register = ({...data}) => {
+    setLoading(true);
     axiosClient.get('/sanctum/csrf-cookie');
     return axiosClient.post('/register', {...data})
     .then((res) => {
@@ -44,8 +50,13 @@ export const ContextProvider = ({ children }) => {
     .then((res) => {
         return res.data
     })
-    .then(({name, email}) => {
+    .then(({name, email, role}) => {
+      setRole(role)
       setUser({name: name, email: email});
+      setAuth(true);
+      localStorage.setItem("user", JSON.stringify({name: name, email: email}));
+      localStorage.setItem("role", role);
+      localStorage.setItem("auth", true);
       setAuth(true);
       navigate('/email/verify');
     })
@@ -74,15 +85,24 @@ export const ContextProvider = ({ children }) => {
     .then((res) => {
       setLoading(false);
       setAuth(true);
+<<<<<<< HEAD
       // setUsers({name: res.user.name, email: res.user.email, email_verified_at: res.user.email_verified_at});
       setRole(res.role);
       localStorage.setItem("role", res.role);
       // localStorage.setItem("user", JSON.stringify(res.user));
+=======
+      setRole(res.role);
+      localStorage.setItem("role", res.role);
+>>>>>>> origin/main
       localStorage.setItem("auth", true);
       if(res.role === 'admin'){
+        localStorage.setItem("user", JSON.stringify(res.user));
+        setUsers({name: res.name, email: res.email});
         navigate("/dashboard"); 
       }else if(res.role === 'user'){
-          if(res.user.email_verified_at){
+           localStorage.setItem("user", JSON.stringify(res.user));
+           setUsers({name: res.user.name, email: res.user.email, email_verified_at: res.user.email_verified_at});
+          if(res.user.email_verified_at){        
             navigate('/home')
           }else{
             axiosClient.post('/re-send-pin');
@@ -130,7 +150,6 @@ export const ContextProvider = ({ children }) => {
   const resend_pin = () => {
     axiosClient.post('/re-send-pin');
   }
-
   const logout = async (api) => {
     await axiosClient.post(api);
     setUser({});

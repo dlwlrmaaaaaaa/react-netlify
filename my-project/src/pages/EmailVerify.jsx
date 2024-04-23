@@ -1,56 +1,45 @@
 import React, { useState, useEffect } from "react";
-import axiosClient from "../axios";
 import { useStateContext } from "../contexts/contextProvider";
 import {useNavigate} from 'react-router-dom';
 import { MdEmail } from "react-icons/md";
-
-const EmailVerify = (email) => {
+import SimpleLoading from '../components/SimpleLoading'
+import { FaExclamationTriangle } from "react-icons/fa";
+const EmailVerify = () => {
   const [pin, setPin] = useState(0);
   const [countdown, setCountdown] = useState(0); // Countdown in seconds
   const [isResending, setIsResending] = useState(false);
-  const [error, setError] = useState(null);
-  const {user} = useStateContext();
+ 
+  const {user, errors, setErrors, loading, email_verify, resend_pin} = useStateContext();
   const navigate = useNavigate();
+
+  // if(user.isVerified && auth){
+  //   navigate('/home');
+  // }else if(!auth){
+  //   logout('/logout');
+  // }
 
   const sendPin = (e) => {
     e.preventDefault();
-
     const data = {
       email: user.email,
       pin: pin,
     };
 
     if (pin.length !== 6) {
-      setError("It should be a 6-digit code. Please kindly check your email.");
+      setErrors({_Html: 'It should be a 6-digit code. Please kindly check your email.'});
       setTimeout(() => {
-        setError(null);
-      }, 30000);
+        setErrors({_Html: ''});
+      }, 5000);
       return; // Prevent further execution
     }
-    
-    axiosClient.post("/email/verify", data)
-      .then(() => {
-        navigate('/home');
-      })
-      .catch((err) => {
-        console.log("Error in sending pin: ", err);
-        setError("Incorrect code. Please try again.");
-        setTimeout(() => {
-          setError(null);
-        }, 30000);
-      });
+    email_verify({email: user.email, pin: pin});
   };
 
   const handleResendCodeClick = () => {
     // Start the 5-minute countdown
+    resend_pin();
     setCountdown(300); // 5 minutes in seconds
     setIsResending(true);
-  }
-
-  const sendError = (irror) => {
-    return (
-      <span className="text-white font-semibold rounded-lg bg-red-400 p-2 py-3 m-1 text-sm flex items-center justify-center">{irror}</span>
-    )
   }
 
   useEffect(() => {
@@ -87,6 +76,18 @@ const EmailVerify = (email) => {
           </div>
           <h3 className='font-bold text-neutral-950 text-4xl mt-10 mb-5 text-center'>Please Verify Your Account</h3>
           <h6 className="font-sans text-neutral-950 text-lg text-center mb-5">Enter the 6 digit code we sent through your e-mail address to verify your account</h6>
+          {errors._Html && (
+                <span className="text-white font-semibold rounded-lg bg-red-400 w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
+                  <i className="text-white">
+                    <FaExclamationTriangle size={20} />
+                  </i>
+                  {errors._Html}
+                  {setTimeout(() => {
+                    setErrors({_Html: ''})
+                  }, 5000)}
+                </span>
+              )}
+   
           <input
             type="text"
             value={pin === 0 ? "" : pin}
@@ -100,7 +101,6 @@ const EmailVerify = (email) => {
             className="border border-gray-500 rounded-lg px-4 py-2 w-96 text-lg focus:outline-none focus:border-blue-500 text-center text-actText my-5"
             placeholder="Enter the 6-digit code"
           />
-          {error !== null ? sendError(error) : null}
           <h6 className="font-sans text-neutral-950 text-lg text-center mt-5">Didn't got got an email? No Problem.</h6>
           <div className="mt-3">
             {isResending ? (
@@ -111,7 +111,10 @@ const EmailVerify = (email) => {
               </a>
             )}
           </div>
-          <button className="bg-notActText mt-10 text-white font-bold w-96 h-12 rounded-lg transition duration-75 ease-in-out transform hover:scale-95" type="submit">VERIFY</button>
+          <button className="bg-notActText mt-10 text-white font-bold w-96 h-12 rounded-lg transition duration-75 ease-in-out transform hover:scale-95" type="submit">
+          {loading && <SimpleLoading/>}
+             {!loading && "Verify"}    
+            </button>
         </div>
        
       </form>

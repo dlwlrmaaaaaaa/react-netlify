@@ -7,7 +7,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 import { IoMdEye } from "react-icons/io";
 import LoadingUI from '../components/Loading'
 const Login = () => {
-  const { login, setUser } = useStateContext();
+  const { login, register, errors , setErrors, loading} = useStateContext();
 
   const [signIn, setSignIn] = useState(true);
   const [name, setName] = useState("");
@@ -20,7 +20,6 @@ const Login = () => {
   const [showPassword2, setShowPassword2] = useState(false);
   const [showPassword3, setShowPassword3] = useState(false);
   const [contactNumber, setContactNumber] = useState("");
-  const [errors, setErrors] = useState({ _Html: "" });
   const [error, setError] = useState({ _Html: "" });
   const [url, setUrl] = useState(null);
   const toggleSignIn = () => setSignIn(!signIn);
@@ -38,6 +37,8 @@ const Login = () => {
     }
   };
 
+
+  
 
   const googleLogin = () => {
     axiosClient
@@ -64,13 +65,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     userLoading(true)
-    // const data = {
-    //   email: email,
-    //   password: password,
-    // };
-
-    login({email, password});
-      
+    login({email, password});   
   };
 
   const handleSignup = (e) => {
@@ -81,7 +76,7 @@ const Login = () => {
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
     if (password !== passwordConfirmation) {
-      setErrors({ ...errors, _Html: "Password does not match" });
+      setErrors({ ...error, _Html: "Password does not match" });
       return;
     }
     if (!passwordPattern.test(password)) {
@@ -100,38 +95,15 @@ const Login = () => {
       password_confirmation: passwordConfirmation,
       contact_number: contactNumber,
     };
-    axiosClient
-      .post("/register", userData)
-      .then((res) => {
-        return res.data;
-      })
-      .then((res) => {
-        return res.data;
-      })
-      .then((data) => {
-        setToken(data.token);
-        setUser({ email: data.email });
-        navigate("/email/verify");
-      })
-      .catch((error) => {
-        const response = error.response;
-        if (response && response.status === 422 && response.data.errors.email) {
-          // Email is already taken
-          setErrors({
-            ...errors,
-            _Html:
-              "This email is already taken. Please choose a different one.",
-          });
-        } else {
-          console.log("Error during signup:", error);
-        }
-      });
+
+    register({name, email, password, password_confirmation: passwordConfirmation, contact_number: contactNumber });
+      
   };
 
   return (
     <>
       <div className="flex justify-center items-center min-h-screen bg-mainBg">
-        <div className="bg-white rounded-lg shadow-lg relative overflow-hidden w-full lg:max-w-2xl md:max-w-xl max-w-md min-h-[550px] mx-auto border border-cirlce">
+        <div className="bg-white rounded-lg shadow-lg relative overflow-hidden w-full lg:max-w-2xl md:max-w-xl max-w-md min-h-[450px] md:min-h-[550px] mx-auto border border-cirlce">
           {/* Sign Up form */}
           <div
             className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 ${
@@ -139,24 +111,32 @@ const Login = () => {
             }`}
           >
             <form
-              className="bg-white flex items-center justify-center flex-col py-0 px-12 h-full text-center"
+              className="bg-white flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
               onSubmit={handleSignup}
             >
               <h1 className="font-bold text-actText mb-3">Create Account</h1>
+              {errors._Html ? (
+                <span className="text-red-500 rounded-lg w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
+                  <i className="text-red">
+                    <FaExclamationTriangle size={20} />
+                  </i>
+                  {errors._Html}
+                </span>
+              ) : null}
               <input
                 type="text"
                 placeholder="Name"
                 name="name"
                 required
                 onChange={(e) => setName(e.target.value)}
-                className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                className="bg-slate-200 rounded-md border-none md:p-3 p-2  my-2 w-full"
               />
               <input
                 type="email"
                 name="email"
                 required
                 placeholder="Email Address"
-                className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                className="bg-slate-200 rounded-md border-none md:p-3 p-2  my-2 w-full"
                 onChange={(e) => setEmail(e.target.value)}
               />
               <div className="flex gap-2">
@@ -165,7 +145,7 @@ const Login = () => {
                   required
                   placeholder="Password"
                   name="password"
-                  className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                  className="bg-slate-200 rounded-md border-none md:p-3 p-2  my-2 w-full"
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
@@ -182,7 +162,7 @@ const Login = () => {
                   required
                   name="password_confirmation"
                   placeholder="Confirm Password"
-                  className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                  className="bg-slate-200 rounded-md border-none md:p-3 p-2  my-2 w-full"
                   onChange={(e) => setPasswordConfirmation(e.target.value)}
                 />
                 <button
@@ -197,22 +177,16 @@ const Login = () => {
                 type="text"
                 placeholder="Phone Number"
                 name="contact_number"
-                className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                className="bg-slate-200 rounded-md border-none md:p-3 p-2 my-2 w-full"
                 onChange={(e) => setContactNumber(e.target.value)}
               />
-              {errors._Html ? (
-                <span className="text-white font-semibold rounded-lg bg-red-400 w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
-                  <i className="text-white">
-                    <FaExclamationTriangle size={20} />
-                  </i>
-                  {errors._Html}
-                </span>
-              ) : null}
+              
               <button
                 type="submit"
                 className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none"
               >
-                Sign Up
+               {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
+                {!loading && "Sign up"}  
               </button>
             </form>
           </div>
@@ -224,10 +198,18 @@ const Login = () => {
             }`}
           >
             <form
-              className="bg-white flex items-center justify-center flex-col py-0 px-12 h-full text-center"
+              className="bg-white flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
               onSubmit={handleSubmit}
             >
               <h1 className="font-bold text-actText mb-3">Sign In</h1>
+              {errors._Html ? (
+                <span className="text-red-500 rounded-lg w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
+                  <i className="text-red">
+                    <FaExclamationTriangle size={20} />
+                  </i>
+                  {errors._Html}
+                </span>
+              ) : null}
               <input
                 type="email"
                 placeholder="Email"
@@ -253,14 +235,6 @@ const Login = () => {
                   <IoMdEye size={20} />
                 </button>
               </div>
-              {error._Html ? (
-                <span className="text-white font-semibold rounded-lg bg-red-400 w-full p-1 m-1 text-sm flex items-center justify-center">
-                  <i className="text-white">
-                    <FaExclamationTriangle size={20} />{" "}
-                  </i>
-                  {error._Html}
-                </span>
-              ) : null}
               <a
                 href="#"
                 className="text-notActText text-sm font-semibold my-4 hover:text-actText hover:font-semibold"
@@ -276,8 +250,8 @@ const Login = () => {
                 </a>
               )}
               <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
-               {Loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
-               {!Loading && "Sign in"}           
+               {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
+               {!loading && "Sign in"}           
               </button>
               
             </form>

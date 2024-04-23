@@ -6,73 +6,159 @@ const stateContext = createContext({});
 
 export const ContextProvider = ({ children }) => {
  
-  const [user, setUser] = useState({});
-  const [error, setError] = useState({_Html: ''});
+  
+  const [errors, setErrors] = useState({_Html: ''});
+  const [loading, setLoading] = useState(false);
   
   const navigate = useNavigate()
 
   const getAuth = () => {
     return localStorage.getItem("auth") || false;
   };
+  
   const getRole = () => {
-    return localStorage.getItem("role") || null;
+    return localStorage.getItem("role");
+  };
+  const [roles, setRoles] = useState(getRole());
+
+  const getUser = () => {
+    return JSON.parse(localStorage.getItem('user'));
   };
   const [auth, isAuth] = useState(getAuth());
-  const [roles, setRoles] = useState(getRole());
+ 
+  const [user, setUser] = useState(getUser());
+  const setUsers = (data) => {
+    setUser(data);
+};
   const setAuth = (data) => {
       isAuth(data);
   };
   const setRole = (data) => {
       setRoles(data);
   };
-
-  const login = ({...data}) =>  {
+ 
+  
+  const register = ({...data}) => {
+    setLoading(true);
     axiosClient.get('/sanctum/csrf-cookie');
-    return axiosClient.post('/login', {...data})
-    .then(({data}) => {
-      return data.data;
+    return axiosClient.post('/register', {...data})
+    .then((res) => {
+      return res.data;
     })
-    .then(({role, email, name}) => {
-      setAuth(true);
+    .then((res) => {
+        return res.data
+    })
+    .then(({name, email, role}) => {
+      setRole(role)
       setUser({name: name, email: email});
-      setRole(role);
+      setAuth(true);
+      localStorage.setItem("user", JSON.stringify({name: name, email: email}));
       localStorage.setItem("role", role);
-      localStorage.setItem("user", name);
       localStorage.setItem("auth", true);
-      if(role === 'admin'){
-        navigate("/dashboard"); 
-      }else if(role === 'user'){
-        navigate("/home"); 
-      }else{
-        navigate("/login"); 
-      }
+
+      navigate('/email/verify');
     })
-    .catch((err) => {
-      // Assuming the API responds with a status code of 401 or similar for unauthorized access
-      if (err.response && err.response.status === 401) {
-        setError({
+    .catch((error) => {
+      const response = error.response;
+      if (response) {
+        // Email is already taken
+        setErrors({
+          ...errors,
           _Html:
-            "Password or Email did not match. Please re-check your details.",
+            "This email is already taken. Please choose a different one.",
         });
       } else {
-        // For any other error, you might want to display a generic error message
-        setError({ _Html: "An error occurred. Please try again later." });
+        console.log("Error during signup:", error);
       }
     });
   }
 
-  const logout = async (api) => {
-    await axiosClient.post(api);
-    setUser({});
-    isAuth(false);
-    localStorage.removeItem("user");
-    localStorage.removeItem("auth");
-    localStorage.removeItem("role");
-    navigate("/login");
-  };
+  const login = ({...data}) =>  {
+    setLoading(true);
+    axiosClient.get('/sanctum/csrf-cookie');
+    return axiosClient.post('/login', {...data})
+    .then(({data}) => {
+      return data.data
+    })
+    .then((res) => {
+      setLoading(false);
+      setAuth(true);
+      setRole(res.role);
+      localStorage.setItem("role", res.role);
+      localStorage.setItem("auth", true);
+      if(res.role === 'admin'){
+        localStorage.setItem("user", JSON.stringify(res.user));
+        setUsers({name: res.name, email: res.email});
+        navigate("/dashboard"); 
+      }else if(res.role === 'user'){
+           localStorage.setItem("user", JSON.stringify(res.user));
+           setUsers({name: res.user.name, email: res.user.email, email_verified_at: res.user.email_verified_at});
+          if(res.user.email_verified_at){        
+            navigate('/home')
+          }else{
+            axiosClient.post('/re-send-pin');
+            navigate('/email/verify')
+          }
+      }else{
+        navigate('/login');
+      }
 
+    })
+    .catch((err) => {
+      // Assuming the API responds with a status code of 401 or similar for unauthorized access
+      setLoading(false);
+      if (err.response && err.response.status === 403) {
+        setErrors({
+          _Html: err.response.data.message,
+        });
+      } else {
+        // For any other error, you might want to display a generic error message
+        setErrors({ _Html: "An error occurred. Please try again later." });
+      }
+    });
+  }
+
+  const email_verify = ({...email_and_pin}) => {
+    setLoading(true);
+    return axiosClient.post('/email/verify', {...email_and_pin})
+    .then(() => {
+        navigate('/home');
+    })
+    .catch((err) => {
+      setLoading(false);
+      if (err.response && err.response.status === 403) {  
+        setErrors({
+          _Html: err.response.data.message,
+        });
+      } else {
+        // For any other error, you might want to display a generic error message
+        setErrors({ _Html: "An error occurred. Please try again later." });
+      }
+    })
+
+  }
+
+  const resend_pin = () => {
+    axiosClient.post('/re-send-pin');
+  }
+  const logout =  (api) => {
+    axiosClient.post(api)
+    .then(() => {
+      setUser({});
+      isAuth(false);
+      localStorage.removeItem("user");
+      localStorage.removeItem("auth");
+      localStorage.removeItem("role");
+      navigate("/login");
+    })
+    .catch(() => {
+      navigate('/login');
+    });
+    
+  };
+  // 
   return (
-    <stateContext.Provider value={{ user, auth, logout, login, setUser, isAuth, roles}}>
+    <stateContext.Provider value={{ user, auth,  roles,errors, loading, login,logout, setUsers, setAuth, register, setRoles,  setErrors, email_verify, resend_pin}}>
       {children}
     </stateContext.Provider>
   );

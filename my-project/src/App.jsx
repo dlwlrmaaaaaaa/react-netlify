@@ -17,100 +17,49 @@ import EmailVerify from "./pages/EmailVerify";
 import Feedbacks from "./pages/Feedbacks";
 import Profile from "./pages/Profile";
 import { useStateContext } from "./contexts/contextProvider";
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import PrivateRoutes from "./components/PrivateRoutes";
 
 const App = () => {
-<<<<<<< HEAD
-  const token = localStorage.getItem("auth_token");
-  const token_type = "admin";
-
-=======
-  const { auth } = useStateContext();
->>>>>>> origin/main
+  const { user, auth, roles } = useStateContext();
   return (
     <>
       <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/email/verify" element={<EmailVerify />} />
+          
         <Route path="/contact" element={<Contact />} />
-        <Route path="/book/payment" element={<Payment />} />
-        <Route path="/book" element={<BookRoom />} />
-        <Route path="/reviews" element={<Feedbacks />} />
+        <Route element={<ProtectedRoutes/>}>
+          <Route path="home" element={<Home />} />
+          <Route path="book/payment" element={<Payment />} />
+          <Route path="email/verify" element={<EmailVerify />} /> 
+          <Route path="book" element={<BookRoom />} />
+          <Route path="reviews" element={<Feedbacks />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
         <Route path="/google/callback" element={<GoogleCallBack />} />
-
-<<<<<<< HEAD
-      {token_type === "admin" ? (
-        <main
-          className={
-            token
-              ? "w-full bg-slate-200 h-screen flex justify-between items-start"
-              : "hidden"
-          }
-        >
-          <Sidebar />
-          <Routes>
-            <Route
-              path="/dashboard"
-              element={
-                token ? (
-                  <Dashboard token={token} />
-                ) : (
-                  <Navigate to="/login" replace={true} />
-                )
-              }
-            />
-            <Route
-              path="/inbox"
-              element={
-                token ? <Inbox /> : <Navigate to="/login" replace={true} />
-              }
-            />
-            <Route
-              path="/users"
-              element={
-                token ? <Users /> : <Navigate to="/login" replace={true} />
-              }
-            />
-            <Route
-              path="/rooms"
-              element={
-                token ? <Rooms /> : <Navigate to="/login" replace={true} />
-              }
-            />
-            <Route
-              path="/reservation"
-              element={
-                token ? (
-                  <Reservation />
-                ) : (
-                  <Navigate to="/login" replace={true} />
-                )
-              }
-            />
-          </Routes>
-        </main>
-      ) : (
-=======
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />       
+
       </Routes>
+      {auth && roles === 'admin' && 
       <main
         className={
-          auth
-            ? "w-full bg-slate-200 h-screen flex justify-between items-start"
-            : "hidden"
+          "w-full bg-slate-200 h-screen flex justify-between items-start"
         }
       >
-        {auth ? <Sidebar /> : null}
->>>>>>> origin/main
+
+      <Sidebar />
         <Routes>
+        <Route path="*" element={<NotFound/>} />
+          <Route element={<PrivateRoutes/>}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/users" element={<Users />} />
           <Route path="/rooms" element={<Rooms />} />
           <Route path="/reservation" element={<Reservation />} />
+          </Route>
         </Routes>
       </main>
-      {}
+      }
     </>
   );
 };

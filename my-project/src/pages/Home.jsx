@@ -18,11 +18,6 @@ const Home = () => {
     br1: br1,
     br2: br2,
   };
-  const {user, auth, logout, roles} = useStateContext();
-  console.log(auth, roles);
-  if(!auth || roles !== 'user'){
-    logout('/logout');
-  }
 
   const location = useLocation();
 
@@ -54,12 +49,12 @@ const Home = () => {
         </div>
 
         {/* room map tiles */}
-        <div className="grid lg:grid-cols-3 grid-cols-2 mt-3 justify-center">
+        <div className="grid lg:grid-cols-3 grid-cols-2 mt-3 p-3 justify-center">
           {rooms.map((room) => (
             <div id="rooms" className="flex justify-center" key={room.id}>
               <div
                 id="roomEdit"
-                className="w-5/6 h-5/6 relative bg-white rounded-xl Rounded-xl gap-4 
+                className="lg:w-5/6 w-full lg:h-5/6 h-full  relative bg-white rounded-xl Rounded-xl gap-4 
                         border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl"
               >
                 <Link to="/book">
@@ -68,10 +63,10 @@ const Home = () => {
                     className="object-cover w-full h-3/4 rounded-xl"
                     alt={room.title}
                   ></img>
-                  <h1 className="m-1 g-2 text-actText lg:text-lg md:text-md font-semibold ">
+                  <h1 className="m-1 g-2 text-actText lg:text-xl md:text-xl text-sm font-semibold ">
                     {room.title}
                   </h1>
-                  <h2 className="m-1 g-2 text-darkText font-medium">
+                  <h2 className="m-1 g-2 text-darkText lg:text-xl md:text-xl text-sm">
                     ₱ {room.price}
                   </h2>
                 </Link>

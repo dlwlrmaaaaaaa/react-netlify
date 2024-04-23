@@ -103,7 +103,7 @@ const Login = () => {
   return (
     <>
       <div className="flex justify-center items-center min-h-screen bg-mainBg">
-        <div className="bg-white rounded-lg shadow-lg relative overflow-hidden w-full lg:max-w-2xl md:max-w-xl max-w-md min-h-[550px] mx-auto border border-cirlce">
+        <div className="bg-white rounded-lg shadow-lg relative overflow-hidden w-full lg:max-w-2xl md:max-w-xl max-w-md min-h-[450px] md:min-h-[550px] mx-auto border border-cirlce">
           {/* Sign Up form */}
           <div
             className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 ${
@@ -111,7 +111,7 @@ const Login = () => {
             }`}
           >
             <form
-              className="bg-white flex items-center justify-center flex-col py-0 px-12 h-full text-center"
+              className="bg-white flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
               onSubmit={handleSignup}
             >
               <h1 className="font-bold text-actText mb-3">Create Account</h1>
@@ -129,14 +129,14 @@ const Login = () => {
                 name="name"
                 required
                 onChange={(e) => setName(e.target.value)}
-                className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                className="bg-slate-200 rounded-md border-none md:p-3 p-2  my-2 w-full"
               />
               <input
                 type="email"
                 name="email"
                 required
                 placeholder="Email Address"
-                className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                className="bg-slate-200 rounded-md border-none md:p-3 p-2  my-2 w-full"
                 onChange={(e) => setEmail(e.target.value)}
               />
               <div className="flex gap-2">
@@ -145,7 +145,7 @@ const Login = () => {
                   required
                   placeholder="Password"
                   name="password"
-                  className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                  className="bg-slate-200 rounded-md border-none md:p-3 p-2  my-2 w-full"
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
@@ -162,7 +162,7 @@ const Login = () => {
                   required
                   name="password_confirmation"
                   placeholder="Confirm Password"
-                  className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                  className="bg-slate-200 rounded-md border-none md:p-3 p-2  my-2 w-full"
                   onChange={(e) => setPasswordConfirmation(e.target.value)}
                 />
                 <button
@@ -177,7 +177,7 @@ const Login = () => {
                 type="text"
                 placeholder="Phone Number"
                 name="contact_number"
-                className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
+                className="bg-slate-200 rounded-md border-none md:p-3 p-2 my-2 w-full"
                 onChange={(e) => setContactNumber(e.target.value)}
               />
               
@@ -198,7 +198,7 @@ const Login = () => {
             }`}
           >
             <form
-              className="bg-white flex items-center justify-center flex-col py-0 px-12 h-full text-center"
+              className="bg-white flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
               onSubmit={handleSubmit}
             >
               <h1 className="font-bold text-actText mb-3">Sign In</h1>

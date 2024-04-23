@@ -21,9 +21,6 @@ export const ContextProvider = ({ children }) => {
   };
   const [roles, setRoles] = useState(getRole());
   const getUser = () => {
-    if(roles === 'admin'){
-      return localStorage.getItem('user');
-    }
     return JSON.parse(localStorage.getItem('user'));
   };
   const [auth, isAuth] = useState(getAuth());

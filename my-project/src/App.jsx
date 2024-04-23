@@ -46,6 +46,7 @@ const App = () => {
           "w-full bg-slate-200 h-screen flex justify-between items-start"
         }
       >
+
       <Sidebar />
         <Routes>
         <Route path="*" element={<NotFound/>} />

@@ -208,7 +208,7 @@ const Dashboard = () => {
                           </td>
                           <td className="p-3 text-sm text-gray-700">{item.room_name}</td>
                           <td className="p-3 text-sm text-gray-700">{item.starting_date}</td>
-                          <td className="p-3 text-sm justify-center items-center text-gray-700 rounded-full flex font-bold" style={{ backgroundColor: statusColors[`status-${item.status.toLowerCase()}`] }}>
+                          <td className="p-3 text-sm justify-center items-center text-gray-700 rounded-full flex font-bold mt-2" style={{ backgroundColor: statusColors[`status-${item.status.toLowerCase()}`] }}>
                             {item.status}
                           </td>
                         </tr>

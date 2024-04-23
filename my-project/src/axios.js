@@ -29,10 +29,13 @@ axiosClient.interceptors.response.use(
   (error) => {
     const {response} = error;
     if(response.status === 401){
-        axiosClient.post('/logout') ||
-        localStorage.removeItem("user")
-        localStorage.removeItem("auth")
-        localStorage.removeItem("role")
+      axiosClient.post('/logout').then(() => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("auth");
+        localStorage.removeItem("role");
+    }).catch(() => {
+        window.location.href = '/login';
+    });
     }else if(response.status === 419){
         localStorage.removeItem("user") || null;
         localStorage.removeItem("auth") || null;

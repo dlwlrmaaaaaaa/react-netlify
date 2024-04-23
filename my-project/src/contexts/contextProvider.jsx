@@ -20,6 +20,7 @@ export const ContextProvider = ({ children }) => {
     return localStorage.getItem("role");
   };
   const [roles, setRoles] = useState(getRole());
+
   const getUser = () => {
     return JSON.parse(localStorage.getItem('user'));
   };
@@ -54,7 +55,7 @@ export const ContextProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify({name: name, email: email}));
       localStorage.setItem("role", role);
       localStorage.setItem("auth", true);
-      setAuth(true);
+
       navigate('/email/verify');
     })
     .catch((error) => {
@@ -140,18 +141,24 @@ export const ContextProvider = ({ children }) => {
   const resend_pin = () => {
     axiosClient.post('/re-send-pin');
   }
-  const logout = async (api) => {
-    await axiosClient.post(api);
-    setUser({});
-    isAuth(false);
-    localStorage.removeItem("user");
-    localStorage.removeItem("auth");
-    localStorage.removeItem("role");
-    navigate("/login");
+  const logout =  (api) => {
+    axiosClient.post(api)
+    .then(() => {
+      setUser({});
+      isAuth(false);
+      localStorage.removeItem("user");
+      localStorage.removeItem("auth");
+      localStorage.removeItem("role");
+      navigate("/login");
+    })
+    .catch(() => {
+      navigate('/login');
+    });
+    
   };
   // 
   return (
-    <stateContext.Provider value={{ user, auth,  roles,errors, loading, login,logout, setUsers, setAuth, register,  setErrors, email_verify, resend_pin}}>
+    <stateContext.Provider value={{ user, auth,  roles,errors, loading, login,logout, setUsers, setAuth, register, setRoles,  setErrors, email_verify, resend_pin}}>
       {children}
     </stateContext.Provider>
   );

@@ -11,6 +11,7 @@ const ProtectedRoutes = () => {
       <>
       {auth && roles === 'admin' ? <Navigate to={'/dashboard'}/> : auth && roles === 'user'? <Outlet/> : logout('/logout')}
       </>
+
     )
 }
 

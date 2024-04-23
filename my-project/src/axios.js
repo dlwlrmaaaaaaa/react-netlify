@@ -11,17 +11,10 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
-<<<<<<< HEAD
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      config.headers.Authorization = `Bearer 40|SprYHJhJIYSidPZEuK0lbPLmDljbbphJJEGKQmat144618f7`;
-    }
-=======
     // const auth_token = localStorage.getItem("ACCESS_TOKEN"); 
     // if (auth_token) {
     //   config.headers.Authorization = `Bearer ${auth_token}`;
     // }
->>>>>>> origin/main
     return config;
   },
   (error) => {

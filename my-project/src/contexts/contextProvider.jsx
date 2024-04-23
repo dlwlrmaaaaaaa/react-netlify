@@ -19,7 +19,7 @@ export const ContextProvider = ({ children }) => {
     return localStorage.getItem("role");
   };
   const getUser = () => {
-    return JSON.parse(localStorage.getItem('user'));
+    return localStorage.getItem('user');
   };
   const [auth, isAuth] = useState(getAuth());
   const [roles, setRoles] = useState(getRole());
@@ -74,12 +74,12 @@ export const ContextProvider = ({ children }) => {
     .then((res) => {
       setLoading(false);
       setAuth(true);
-      setUsers({name: res.user.name, email: res.user.email, email_verified_at: res.user.email_verified_at});
+      setUsers({name: res.name});
       setRole(res.role);
       localStorage.setItem("role", res.role);
-      localStorage.setItem("user", JSON.stringify(res.user));
+      localStorage.setItem("user", res.name);
       localStorage.setItem("auth", true);
-      if(res.role === 'admin'){
+      if(res.role ===  'admin'){
         navigate("/dashboard"); 
       }else if(res.role === 'user'){
           if(res.user.email_verified_at){

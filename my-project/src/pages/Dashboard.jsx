@@ -206,7 +206,7 @@ const Dashboard = () => {
                               {item.id}
                             </a>
                           </td>
-                          <td className="p-3 text-sm text-gray-700">{item.room_id}</td>
+                          <td className="p-3 text-sm text-gray-700">{item.room_name}</td>
                           <td className="p-3 text-sm text-gray-700">{item.starting_date}</td>
                           <td className="p-3 text-sm justify-center items-center text-gray-700 rounded-full flex font-bold" style={{ backgroundColor: statusColors[`status-${item.status.toLowerCase()}`] }}>
                             {item.status}
@@ -249,7 +249,7 @@ const Dashboard = () => {
                       className="bg-backColor hover:bg-actNav rounded-md w-full overflow-wrap flex-col justify-start items-center gap-2 mt-2 p-2"
                     >
                       <h1 className="text-xl text-darkText font-semibold">
-                        {item.user_id}
+                        {item.name}
                       </h1>
                       <div className='grid grid-cols-5 mt-2 gap-3'>
                         {[item.rating].map((value) => (

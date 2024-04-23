@@ -8,7 +8,10 @@ const ProtectedRoutes = () => {
     const { user, auth, roles, logout } = useStateContext();
 
   return (
-      auth  ? <Outlet/> : logout('/logout')
+      <>
+      {auth && roles === 'admin' ? <Navigate to={'/dashboard'}/> : auth && roles === 'user'? <Outlet/> : logout('/logout')}
+      </>
+
     )
 }
 

@@ -11,10 +11,17 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
+<<<<<<< HEAD
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      config.headers.Authorization = `Bearer 40|SprYHJhJIYSidPZEuK0lbPLmDljbbphJJEGKQmat144618f7`;
+    }
+=======
     // const auth_token = localStorage.getItem("ACCESS_TOKEN"); 
     // if (auth_token) {
     //   config.headers.Authorization = `Bearer ${auth_token}`;
     // }
+>>>>>>> origin/main
     return config;
   },
   (error) => {
@@ -29,10 +36,13 @@ axiosClient.interceptors.response.use(
   (error) => {
     const {response} = error;
     if(response.status === 401){
-        axiosClient.post('/logout') ||
-        localStorage.removeItem("user")
-        localStorage.removeItem("auth")
-        localStorage.removeItem("role")
+      axiosClient.post('/logout').then(() => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("auth");
+        localStorage.removeItem("role");
+    }).catch(() => {
+        window.location.href = '/login';
+    });
     }else if(response.status === 419){
         localStorage.removeItem("user") || null;
         localStorage.removeItem("auth") || null;

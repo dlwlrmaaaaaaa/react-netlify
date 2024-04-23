@@ -25,28 +25,28 @@ const App = () => {
   return (
     <>
       <Routes>
-          <Route path="email/verify" element={<EmailVerify />} />
-   
+          
         <Route path="/contact" element={<Contact />} />
         <Route element={<ProtectedRoutes/>}>
           <Route path="home" element={<Home />} />
           <Route path="book/payment" element={<Payment />} />
+          <Route path="email/verify" element={<EmailVerify />} /> 
           <Route path="book" element={<BookRoom />} />
           <Route path="reviews" element={<Feedbacks />} />
           <Route path="profile" element={<Profile />} />
         </Route>
-
         <Route path="/google/callback" element={<GoogleCallBack />} />
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
+        <Route path="/login" element={<Login />} />       
 
+      </Routes>
       {auth && roles === 'admin' && 
       <main
         className={
           "w-full bg-slate-200 h-screen flex justify-between items-start"
         }
       >
+
       <Sidebar />
         <Routes>
         <Route path="*" element={<NotFound/>} />

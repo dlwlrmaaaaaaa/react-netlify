@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react"; // Import useState
 import { MultiSelect } from "primereact/multiselect";
 import axiosClient from "../axios";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
+=======
 import { deleteRoom } from "../pages/RoomUtils";
+>>>>>>> origin/main
 const RoomModal = ({
   closeModal,
   updateRoom,
@@ -21,6 +24,22 @@ const RoomModal = ({
   const [buildingAmenitiesData, setBuildingAmenitiesData] = useState([]);
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState([]);
+<<<<<<< HEAD
+
+  const [isLoading, setLoading] = useState(false);
+
+  const getData = () => {
+    data.map((item) => {
+      if (roomId === item.id) {
+        setRoomName(item.room_name);
+        setPrice(item.price);
+        setMiniDes(item.mini_description);
+        setDescription(item.description);
+        setFiles(JSON.parse(item.file_name));
+        setImage(JSON.parse(item.file_name));
+      }
+    });
+=======
   const [isLoading, setLoading] = useState(false);
   const [deletedImage, setDeletedImages] = useState([]);
   const getData = () => {
@@ -36,12 +55,33 @@ const RoomModal = ({
         setRoomAmenitiesData(JSON.parse(JSON.parse(selectedRoom.room_amenities)))
         setBuildingAmenitiesData(JSON.parse(JSON.parse(selectedRoom.building_amenities)))
       }
+>>>>>>> origin/main
     setLoading(true);
   };
 
   useEffect(() => {
+<<<<<<< HEAD
+    if (!isLoading) {
+      getData();
+    }
+  }, [isLoading]);
+
+  const handleUpdate = () => {
+    // const formData = new FormData();
+    // var datas = e.target[0].files;
+    // for (let i = 0; i < datas.length; i++) {
+    //   formData.append("file_name[]", datas[i]);
+    // }
+  };
+
+  useEffect(() => {
+    console.log(files);
+  }, [files]);
+
+=======
       getData();
   }, [isLoading]);
+>>>>>>> origin/main
   const roomAmenities = [
     { Amenities: "Air-Condition" },
     { Amenities: "Unlimited Wifi" },
@@ -111,9 +151,13 @@ const RoomModal = ({
 
   const handleDeleteImage = (index) => {
     if (updateRoom) {
+<<<<<<< HEAD
+      setImage([...image.slice(0, index), ...image.slice(index + 1)]);
+=======
       const deletedImage = image[index];
       setImage([...image.slice(0, index), ...image.slice(index + 1)]);
       setDeletedImages((prev) => [...prev, deletedImage]);
+>>>>>>> origin/main
     } else {
       setImage([...files.slice(0, index), ...files.slice(index + 1)]);
     }
@@ -183,6 +227,17 @@ const RoomModal = ({
     
   };
 
+<<<<<<< HEAD
+  const renderImage = (image, index) => {
+    const imageURL = image.startsWith("blob:", 0)
+      ? URL.createObjectURL(image)
+      : `http://localhost:8000/storage/images/${image}`;
+    return (
+      <img src={imageURL} className="h-40" alt={`Uploaded Image ${index}`} />
+    );
+  };
+
+=======
 
 
   const renderImage = (image, index) => {
@@ -204,6 +259,7 @@ const RoomModal = ({
 
   
 
+>>>>>>> origin/main
   return (
     <div
       id="container"
@@ -235,7 +291,19 @@ const RoomModal = ({
           <div className="flex flex-wrap justify-center items-center mt-3 w">
             {image.map((image, index) => (
               <div key={index} className="m-2">
+<<<<<<< HEAD
+                {updateRoom ? (
+                  renderImage(image, index)
+                ) : (
+                  <img
+                    src={URL.createObjectURL(image)}
+                    className="h-40"
+                    alt={`Uploaded Image ${index}`}
+                  />
+                )}
+=======
                 {renderImage(image, index)}
+>>>>>>> origin/main
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
                   onClick={(e) => {
@@ -270,6 +338,7 @@ const RoomModal = ({
                 </label>
                 <input
                   name="price"
+                  value={price}
                   className="shadow appearance-none border rounded w-full py-1 px-1 bg-white text-darkText"
                   value={roomId && price}
                   onChange={handleChange}
@@ -355,6 +424,38 @@ const RoomModal = ({
               Close
           </button>
 
+<<<<<<< HEAD
+            {/* {roomId && ( // Render delete button only if roomId exists
+              <button
+                className="text-white bg-red-500 active:bg-red-600 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                type="button"
+                onClick={handleDelete}
+              >
+                {" "}
+                Delete
+              </button>
+            )} */}
+            {updateRoom === true ? (
+              <button
+                className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleUpdate;
+                }}
+              >
+                {" "}
+                Update
+              </button>
+            ) : (
+              <button
+                className="text-white bg-notActText active:bg-yellow-700 font-bold uppercase text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                type="submit"
+              >
+                {" "}
+                Submit
+              </button>
+            )}
+=======
         
            {roomId ? 
            <>
@@ -387,6 +488,7 @@ const RoomModal = ({
               Submit
             </button>
             }
+>>>>>>> origin/main
           </div>
         </form>
       </div>

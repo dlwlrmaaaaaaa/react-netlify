@@ -28,26 +28,31 @@ const Inbox = () => {
     fetchOptions();
   }, []);
 
-    const sendMessage = async () => {
-      try {
-        const response = await axiosClient.post("/inbox/message", {
+  const sendMessage = async () => {
+    try {
+      const response = await axiosClient.post("/inbox/message", {
+        receiver_name: selectedOption,
+        message: message,
+      });
+
+      console.log("Message sent successfully", response.data);
+
+      setData([
+        ...data,
+        {
+          id: data.length + 1,
           name: selectedOption,
-          message: message,
-        });
-    
-        console.log("Message sent successfully", response.data);
-    
-        // Add the new message to the data array
-        setData([...data, { id: data.length + 1, name: selectedOption, message, date: new Date().toISOString().slice(0, 10) }]);
-    
-        // Clear the message input field
-        setMessage("");
-      } catch (error) {
-        console.error("Error sending message", error);
-      }
-    };
- 
-  
+          message,
+          date: new Date().toISOString().slice(0, 10),
+        },
+      ]);
+
+      setMessage("");
+      setSelectedOption("Choose a User");
+    } catch (error) {
+      console.error("Error sending message", error);
+    }
+  };
 
   const handleOptionSelect = (option) => {
     setSelected(option.name);

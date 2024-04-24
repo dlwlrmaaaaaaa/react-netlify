@@ -196,8 +196,9 @@ const Dashboard = () => {
                       </th>
                     </tr>
                   </thead>
+              
                   <tbody className="divide-y divide-hoverCirlce">
-                    {!isLoading && <Loading height="40  " width="40" loadingHeight="40" loadingWidth="40" />}
+                  
                     {isLoading && (
                       data.map((item, index) => (
                         <tr key={index} className="border-b-[1px] border-hoverCircle hover:bg-actNav cursor-pointer">

@@ -22,7 +22,7 @@ export const ContextProvider = ({ children }) => {
   const [roles, setRoles] = useState(getRole());
 
   const getUser = () => {
-    return JSON.parse(localStorage.getItem('user'));
+    return localStorage.getItem('user');
   };
   const [auth, isAuth] = useState(getAuth());
  

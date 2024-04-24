@@ -8,7 +8,7 @@ import { IoMdEye } from "react-icons/io";
 import LoadingUI from '../components/Loading'
 import Google from '../assets/google.png'
 const Login = () => {
-  const { login, register, errors , setErrors, loading} = useStateContext();
+  const { login, register, errors, setErrors, loading } = useStateContext();
 
   const [signIn, setSignIn] = useState(true);
   const [name, setName] = useState("");
@@ -66,7 +66,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     userLoading(true)
-    login({email, password});   
+    login({ email, password });
   };
 
   const handleSignup = (e) => {
@@ -97,8 +97,8 @@ const Login = () => {
       contact_number: contactNumber,
     };
 
-    register({name, email, password, password_confirmation: passwordConfirmation, contact_number: contactNumber });
-      
+    register({ name, email, password, password_confirmation: passwordConfirmation, contact_number: contactNumber });
+
   };
 
   return (
@@ -107,9 +107,8 @@ const Login = () => {
         <div className="bg-white rounded-lg shadow-lg relative overflow-hidden w-full lg:max-w-2xl md:max-w-xl max-w-md min-h-[450px] md:min-h-[550px] mx-auto border border-cirlce">
           {/* Sign Up form */}
           <div
-            className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 ${
-              signIn ? "opacity-0 z-0" : "opacity-100 z-10"
-            }`}
+            className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 ${signIn ? "opacity-0 z-0" : "opacity-100 z-10"
+              }`}
           >
             <form
               className="bg-white flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
@@ -141,38 +140,44 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
               <div className="flex gap-2">
-                <input
-                  type={showPassword1 ? "text" : "password"}
-                  required
-                  placeholder="Password"
-                  name="password"
-                  className="bg-slate-200 rounded-md border-none md:p-3 p-2  my-2 w-full"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => togglePasswordVisibility(1)}
-                  className="text-sm text-notActText hover:text-actText"
-                >
-                  <IoMdEye size={20} />
-                </button>
+                <div className="relative">
+                  <input
+                    type={showPassword1 ? "text" : "password"}
+                    required
+                    placeholder="Password"
+                    name="password"
+                    className="bg-slate-200 rounded-md border-none p-3  my-2 w-full pr-10" 
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility(1)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-notActText hover:text-actText"
+                  >
+                    <IoMdEye size={20} />
+                  </button>
+                </div>
+
               </div>
               <div className="flex gap-2">
-                <input
-                  type={showPassword2 ? "text" : "password"}
-                  required
-                  name="password_confirmation"
-                  placeholder="Confirm Password"
-                  className="bg-slate-200 rounded-md border-none md:p-3 p-2  my-2 w-full"
-                  onChange={(e) => setPasswordConfirmation(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={() => togglePasswordVisibility(2)}
-                  className="text-sm text-notActText hover:text-actText"
-                >
-                  <IoMdEye size={20} />
-                </button>
+                <div className="relative">
+                  <input
+                    type={showPassword2 ? "text" : "password"}
+                    required
+                    placeholder="Password"
+                    name="password"
+                    className="bg-slate-200 rounded-md border-none p-3  my-2 w-full pr-10" 
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => togglePasswordVisibility(2)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-notActText hover:text-actText"
+                  >
+                    <IoMdEye size={20} />
+                  </button>
+                </div>
+
               </div>
               <input
                 type="text"
@@ -181,22 +186,21 @@ const Login = () => {
                 className="bg-slate-200 rounded-md border-none md:p-3 p-2 my-2 w-full"
                 onChange={(e) => setContactNumber(e.target.value)}
               />
-              
+
               <button
                 type="submit"
                 className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none"
               >
-               {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
-                {!loading && "Sign up"}  
+                {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12" />}
+                {!loading && "Sign up"}
               </button>
             </form>
           </div>
 
           {/* Sign In form */}
           <div
-            className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 z-20 ${
-              !signIn ? "translate-x-full" : "translate-x-0"
-            }`}
+            className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 z-20 ${!signIn ? "translate-x-full" : "translate-x-0"
+              }`}
           >
             <form
               className="bg-white flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
@@ -219,19 +223,19 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
               />
-              <div className="flex gap-2">
+              <div className="relative">
                 <input
                   type={showPassword3 ? "text" : "password"}
-                  placeholder="Password"
                   required
-                  value={password}
+                  placeholder="Password"
+                  name="password"
+                  className="bg-slate-200 rounded-md border-none p-3  my-2 w-full pr-10" 
                   onChange={(e) => setPassword(e.target.value)}
-                  className="bg-slate-200 rounded-md border-none p-3 my-2 w-full"
                 />
                 <button
                   type="button"
                   onClick={() => togglePasswordVisibility(3)}
-                  className="text-sm text-notActText hover:text-actText"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-notActText hover:text-actText"
                 >
                   <IoMdEye size={20} />
                 </button>
@@ -249,10 +253,10 @@ const Login = () => {
            
              
               <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
-               {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
-               {!loading && "Sign in"}           
+                {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12" />}
+                {!loading && "Sign in"}
               </button>
-              
+
             </form>
           </div>
 
@@ -265,9 +269,8 @@ const Login = () => {
             >
               {/* Left Overlay Panel */}
               <div
-                className={`absolute flex items-center justify-center flex-col px-10 text-center h-full w-full transition-transform duration-600 ease-in-out ${
-                  !signIn ? "translate-x-20%" : "-translate-x-full"
-                }`}
+                className={`absolute flex items-center justify-center flex-col px-10 text-center h-full w-full transition-transform duration-600 ease-in-out ${!signIn ? "translate-x-20%" : "-translate-x-full"
+                  }`}
               >
                 <h1 className="font-bold">Already have an Account?</h1>
                 <p className="mt-5 mb-8">
@@ -283,9 +286,8 @@ const Login = () => {
 
               {/* Right Overlay Panel */}
               <div
-                className={`absolute right-0 flex items-center justify-center flex-col px-10 text-center h-full w-full transition-transform duration-600 ease-in-out ${
-                  signIn ? "translate-x-20%" : "translate-x-full"
-                }`}
+                className={`absolute right-0 flex items-center justify-center flex-col px-10 text-center h-full w-full transition-transform duration-600 ease-in-out ${signIn ? "translate-x-20%" : "translate-x-full"
+                  }`}
               >
                 <h1 className="font-bold">Don't have an Account yet?</h1>
                 <p className="mt-5 mb-8">

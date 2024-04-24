@@ -192,13 +192,16 @@ const Dashboard = () => {
                         Start Date
                       </th>
                       <th className="p-3 text-sm font-semibold tracking-wide text-left">
+                        End Date
+                      </th>
+                      <th className="p-3 text-sm font-semibold tracking-wide text-left">
                         Status
                       </th>
                     </tr>
                   </thead>
               
                   <tbody className="divide-y divide-hoverCirlce">
-                  
+
                     {isLoading && (
                       data.map((item, index) => (
                         <tr key={index} className="border-b-[1px] border-hoverCircle hover:bg-actNav cursor-pointer">
@@ -209,7 +212,8 @@ const Dashboard = () => {
                           </td>
                           <td className="p-3 text-sm text-gray-700">{item.room_name}</td>
                           <td className="p-3 text-sm text-gray-700">{item.starting_date}</td>
-                          <td className="p-3 text-sm justify-center items-center text-gray-700 rounded-full flex font-bold" style={{ backgroundColor: statusColors[`status-${item.status.toLowerCase()}`] }}>
+                          <td className="p-3 text-sm text-gray-700">{item.ending_date}</td>
+                          <td className="p-3 text-sm justify-center items-center text-gray-700 rounded-full flex font-bold mt-2" style={{ backgroundColor: statusColors[`status-${item.status.toLowerCase()}`] }}>
                             {item.status}
                           </td>
                         </tr>

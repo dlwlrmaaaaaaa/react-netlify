@@ -1,11 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import { FaMapLocationDot } from "react-icons/fa6";
 import { MdOutlineMail } from "react-icons/md";
 import { FiSmartphone } from "react-icons/fi";
+import axiosClient from "../axios";
 
 const Contact = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [messages, setMessage] = useState("");
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    axiosClient.post('/contacts', {
+      name,
+      email,
+      messages,
+    })
+      .then(response => {
+        console.log('Message sent successfully:', response.data);
+        // Optionally reset form here
+        setName('');
+        setEmail('');
+        setMessage('');
+      })
+      .catch((error) => console.error("Error: ", error));
+  };
+
   return (
     <>
       <Header />
@@ -38,7 +60,7 @@ const Contact = () => {
                 </div>
               </div>
               <div className='mx-4 lg:mx-7 my-3 lg:my-5 flex items-start'>
-                <MdOutlineMail className='text-notActText' size={30}/>
+                <MdOutlineMail className='text-notActText' size={30} />
                 <div className="ml-3">
                   <h1 className='text-actText text-2xl font-semibold'>Email:</h1>
                   <p className='text-sm text-notActText'>
@@ -47,7 +69,7 @@ const Contact = () => {
                 </div>
               </div>
               <div className='mx-4 lg:mx-7 my-3 lg:my-5 flex items-start'>
-                <FiSmartphone className='text-notActText' size={30}/>
+                <FiSmartphone className='text-notActText' size={30} />
                 <div className="ml-3">
                   <h1 className='text-actText text-2xl font-semibold'>Call:</h1>
                   <p className='text-sm text-notActText'>
@@ -58,26 +80,28 @@ const Contact = () => {
             </div>
 
             <div id='message' className='w-full flex justify-center items-center rounded-xl shadow-xl p-4 mb-10 bg-white'>
-              <div className="relative w-full p-6 flex-auto">
+              <form className="relative w-full p-6 flex-auto"
+                onSubmit={handleSend}
+              >
                 <div className="flex flex-wrap mb-5">
                   <div className="w-1/2 pr-2">
-                    <input type="text" placeholder='Name' className="shadow appearance-none border rounded w-full py-1 px-1 text-notActText" />
+                    <input type="text" placeholder='Name' className="shadow appearance-none border rounded w-full py-1 px-1 text-notActText"
+                      value={name} onChange={(e) => setName(e.target.value)} />
                   </div>
                   <div className="w-1/2 ">
-                    <input type="text" placeholder='Email' className="shadow appearance-none border rounded w-full py-1 px-1 text-notActText"/>
+                    <input type="text" placeholder='Email' className="shadow appearance-none border rounded w-full py-1 px-1 text-notActText"
+                      value={email} onChange={(e) => setEmail(e.target.value)} />
                   </div>
-                </div>
-                <div className="flex flex-wrap mb-5">
-                  <input type="text" placeholder='Subject' className="shadow appearance-none border rounded w-full py-1 px-1 text-notActText"/>
                 </div>
                 <div className="flex flex-wrap mb-5">
                   <textarea type="text" placeholder='Message' className="shadow appearance-none border rounded w-full py-1 px-1 text-notActText resize-none"
-                  style={{width: "100%", height: "120px", wordWrap: "break-word"}}/>
+                    style={{ width: "100%", height: "120px", wordWrap: "break-word" }}
+                    value={messages} onChange={(e) => setMessage(e.target.value)} />
                 </div>
                 <button id='sendMessage'
                   className='mt-2 bg-notActText hover:bg-cirlce transition duration-75 ease-in-out transform hover:scale-95 text-white font-bold py-2 px-7 rounded-full'>Send
                 </button>
-              </div>
+              </form>
             </div>
           </div>
         </div>

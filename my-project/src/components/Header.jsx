@@ -27,9 +27,9 @@ const Header = () => {
   return (
     <header className="bg-white shadow-md border-b-2 border-bordColor z-50">
       <div className="md:px-10 py-3 px-6 md:flex justify-between items-center relative">
-        <div className="flex text-2xl cursor-pointer items-center gap-2">
+        <NavLink to="/home" path="/home" className="flex text-2xl cursor-pointer items-center gap-2">
           <img src={logo} className="object-contain w-12" alt="Logo" />
-        </div>
+        </NavLink>
 
         <div
           onClick={() => setIsOpen(!isOpen)}

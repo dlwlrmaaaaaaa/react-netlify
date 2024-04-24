@@ -83,7 +83,7 @@ const Rooms = () => {
         <h2 className="m-1 g-2 text-darkText font-medium">
           {parseFloat(item.price)}
         </h2>
-        <p className="text-gray-300 m-1 g-2 text-clip">
+        <p className="text-gray-450 m-1 g-2 text-clip text-xs">
           {item.mini_description}
         </p>
       </>

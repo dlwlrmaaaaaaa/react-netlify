@@ -49,7 +49,7 @@ const Home = () => {
         </div>
 
         {/* room map tiles */}
-        <div className="grid lg:grid-cols-3 grid-cols-2 mt-3 p-3 justify-center">
+        <div className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-2 mt-3 p-3 justify-center">
           {rooms.map((room) => (
             <div id="rooms" className="flex justify-center" key={room.id}>
               <div
@@ -63,10 +63,10 @@ const Home = () => {
                     className="object-cover w-full h-3/4 rounded-xl"
                     alt={room.title}
                   ></img>
-                  <h1 className="m-1 g-2 text-actText lg:text-xl md:text-xl text-sm font-semibold ">
+                  <h1 className="m-1 g-2 text-actText lg:text-xl md:text-xl text-xs font-semibold ">
                     {room.title}
                   </h1>
-                  <h2 className="m-1 g-2 text-darkText lg:text-xl md:text-xl text-sm">
+                  <h2 className="m-1 g-2 text-darkText lg:text-xl md:text-lg text-xs">
                     ₱ {room.price}
                   </h2>
                 </Link>

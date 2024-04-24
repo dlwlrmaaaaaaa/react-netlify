@@ -87,7 +87,7 @@ const Profile = () => {
                                         disabled={!user.isEditing}
                                     />
                                 </div>
-                                <div className='flex flex-row gap-3 justify-end items-center'>
+                                <div className='relative flex flex-row gap-3 justify-end items-center'>
                                     <h1 className='lg:text-lg text-md font-semibold text-notActText'>Password:</h1>
                                     <input
                                         type={showPassword ? "text" : "password"}
@@ -102,7 +102,7 @@ const Profile = () => {
                                     <button
                                         type="button"
                                         onClick={() => togglePasswordVisibility(1)}
-                                        className="text-sm text-notActText hover:text-actText"
+                                        className="text-sm text-notActText hover:text-actText absolute inset-y-0 right-0 pr-3"
                                         disabled={!user.isEditing}
                                     >
                                         <IoMdEye size={20} />

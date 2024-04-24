@@ -19,6 +19,8 @@ import Profile from "./pages/Profile";
 import { useStateContext } from "./contexts/contextProvider";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import PrivateRoutes from "./components/PrivateRoutes";
+import Redirecting from "./components/Redirecting";
+
 
 const App = () => {
   const { user, auth, roles } = useStateContext();
@@ -37,7 +39,8 @@ const App = () => {
         </Route>
         <Route path="/google/callback" element={<GoogleCallBack />} />
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />       
+        <Route path="/login" element={<Login />} />  
+       
 
       </Routes>
       {auth && roles === 'admin' && 
@@ -59,6 +62,8 @@ const App = () => {
         </Routes>
       </main>
       }
+
+      
     </>
   );
 };

@@ -6,6 +6,7 @@ import { useStateContext } from "../contexts/contextProvider";
 import { FaExclamationTriangle } from "react-icons/fa";
 import { IoMdEye } from "react-icons/io";
 import LoadingUI from '../components/Loading'
+import Google from '../assets/google.png'
 const Login = () => {
   const { login, register, errors, setErrors, loading } = useStateContext();
 
@@ -205,7 +206,7 @@ const Login = () => {
               className="bg-white flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
               onSubmit={handleSubmit}
             >
-              <h1 className="font-bold text-actText mb-3">Sign In</h1>
+              <h1 className="font-bold text-actText mb-4">Sign In</h1>
               {errors._Html ? (
                 <span className="text-red-500 rounded-lg w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
                   <i className="text-red">
@@ -245,14 +246,12 @@ const Login = () => {
               >
                 Forgot your password?
               </a>
-              {url != null && (
-                <a
-                  href={url}
-                  className="font-bold text-actText my-2 hover:text-blue-700 "
-                >
-                  Google Sign In
-                </a>
-              )}
+
+              {url && <a className="rounded-full bg-white border flex border-gray-950 text-sm px-2 mb-2 py-1 text-center items-center" href={url}>
+                  <img src={Google} className="w-4 h-4 mr-2" />Sign in with Google
+              </a> }
+           
+             
               <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
                 {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12" />}
                 {!loading && "Sign in"}

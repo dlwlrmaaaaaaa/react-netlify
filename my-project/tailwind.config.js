@@ -8,6 +8,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
+        oswald: ['Oswald', 'sans-serif']
       },
       colors: {
         'actText': '#422D01',
@@ -19,6 +20,7 @@ export default {
         'hoverCirlce' : '#a18d68', 
         'darkText' : '#4a4130', 
         'actNav': '#CCB27D',
+        'processDiv': '#E1EBFF',
         'bordColor': '#CCB27D',
         'mainBg': '#FFF5E1',
       },

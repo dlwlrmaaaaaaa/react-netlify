@@ -199,7 +199,9 @@ const Dashboard = () => {
                       </th>
                     </tr>
                   </thead>
+              
                   <tbody className="divide-y divide-hoverCirlce">
+
                     {isLoading && (
                       data.map((item, index) => (
                         <tr key={index} className="border-b-[1px] border-hoverCircle hover:bg-actNav cursor-pointer">

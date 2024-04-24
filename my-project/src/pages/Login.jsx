@@ -243,9 +243,9 @@ const Login = () => {
                 Forgot your password?
               </a>
 
-              <button className="rounded-full bg-white border flex border-gray-950 text-sm px-2 mb-2 py-1 text-center items-center">
+              {url && <a className="rounded-full bg-white border flex border-gray-950 text-sm px-2 mb-2 py-1 text-center items-center" href={url}>
                   <img src={Google} className="w-4 h-4 mr-2" />Sign in with Google
-              </button>
+              </a> }
            
              
               <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">

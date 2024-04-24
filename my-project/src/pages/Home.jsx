@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {  useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import rooms from "../JSON/Room.json";
 import { useStateContext } from "../contexts/contextProvider";
 import axiosClient from "../axios";
+import getRooms from "./axios/getRoom";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -18,9 +19,35 @@ const Home = () => {
     br1: br1,
     br2: br2,
   };
-
+  const [rooms, setRooms] = useState([])
+  const [image, setImage] = useState([])
   const location = useLocation();
 
+  useEffect(() => {
+    getRooms().then(res => {
+      return res.data;
+    })
+    .then((res) => {
+      setRooms(res.data);
+    })
+  }, [])
+  
+  useEffect(() => {
+    console.log(rooms);
+    console.log(image);
+  }, [rooms, image])
+
+  const renderImage = (room) => {
+    const file_name = JSON.parse(room.file_name)[0];
+      return (
+        <img
+           src={`http://localhost:8000/storage/images/${file_name}`}
+                className="object-cover w-full h-3/4 rounded-xl"
+                alt={room.room_name}
+        ></img>
+      )
+  }
+  
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace("#", "");
@@ -48,31 +75,28 @@ const Home = () => {
           </h1>
         </div>
 
-        {/* room map tiles */}
+     
         <div className="grid lg:grid-cols-3 grid-cols-2 mt-3 p-3 justify-center">
-          {rooms.map((room) => (
-            <div id="rooms" className="flex justify-center" key={room.id}>
-              <div
-                id="roomEdit"
-                className="lg:w-5/6 w-full lg:h-5/6 h-full  relative bg-white rounded-xl Rounded-xl gap-4 
-                        border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl"
-              >
-                <Link to="/book">
-                  <img
-                    src={imageMap[room.src]}
-                    className="object-cover w-full h-3/4 rounded-xl"
-                    alt={room.title}
-                  ></img>
-                  <h1 className="m-1 g-2 text-actText lg:text-xl md:text-xl text-sm font-semibold ">
-                    {room.title}
-                  </h1>
-                  <h2 className="m-1 g-2 text-darkText lg:text-xl md:text-xl text-sm">
-                    ₱ {room.price}
-                  </h2>
-                </Link>
-              </div>
-            </div>
-          ))}
+       {rooms.map((room) => (
+          <div id="rooms" className="flex justify-center" key={room.id}>
+          <div
+            id="roomEdit"
+            className="lg:w-4/5 w-full lg:h-[100%]  h-full  relative bg-white rounded-xl Rounded-xl gap-4 
+                    border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl"
+          >
+            <Link to="/book">
+             {renderImage(room)}
+              <h1 className="m-1 g-2 text-actText lg:text-xl md:text-xl text-sm font-semibold ">
+                {room.room_name}
+              </h1>
+              <h2 className="m-1 g-2 text-darkText lg:text-xl md:text-xl text-sm">
+              ₱ {room.price}
+              </h2>
+  
+            </Link>
+          </div>
+        </div>
+        ))}
         </div>
       </div>
       <Footer />

@@ -7,6 +7,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 import { IoMdEye } from "react-icons/io";
 import LoadingUI from '../components/Loading'
 import Google from '../assets/google.png'
+import background from '../assets/images/hdroom8.png'
 const Login = () => {
   const { login, register, errors, setErrors, loading } = useStateContext();
 
@@ -102,19 +103,20 @@ const Login = () => {
   };
 
   return (
-    <>
-      <div className="flex justify-center items-center min-h-screen bg-mainBg">
-        <div className="bg-white rounded-lg shadow-lg relative overflow-hidden w-full lg:max-w-2xl md:max-w-xl max-w-md min-h-[450px] md:min-h-[550px] mx-auto border border-cirlce">
+    <>  
+      
+        <div className="flex justify-center items-center min-h-screen bg-cover" style={{backgroundImage: `url(${background})`, backgroundBlendMode:".1"}}>
+        <div className="bg-[#949494]/50 rounded-lg shadow-lg relative overflow-hidden w-full lg:max-w-2xl md:max-w-xl max-w-md min-h-[450px] md:min-h-[550px] mx-auto border-red">
           {/* Sign Up form */}
           <div
             className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 ${signIn ? "opacity-0 z-0" : "opacity-100 z-10"
               }`}
           >
             <form
-              className="bg-white flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
+              className="bg-white/10 flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
               onSubmit={handleSignup}
             >
-              <h1 className="font-bold text-actText mb-3">Create Account</h1>
+              <h1 className="font-bold text-black mb-3 uppercase">Create Account</h1>
               {errors._Html ? (
                 <span className="text-red-500 rounded-lg w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
                   <i className="text-red">
@@ -152,7 +154,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => togglePasswordVisibility(1)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-notActText hover:text-actText"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-black hover:text-actText"
                   >
                     <IoMdEye size={20} />
                   </button>
@@ -172,7 +174,7 @@ const Login = () => {
                   <button
                     type="button"
                     onClick={() => togglePasswordVisibility(2)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-notActText hover:text-actText"
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-black hover:text-actText"
                   >
                     <IoMdEye size={20} />
                   </button>
@@ -189,7 +191,7 @@ const Login = () => {
 
               <button
                 type="submit"
-                className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none"
+                className="rounded-full border border-white bg-transparent  text-black hover:text-white hover:bg-black text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none"
               >
                 {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12" />}
                 {!loading && "Sign up"}
@@ -197,16 +199,16 @@ const Login = () => {
             </form>
           </div>
 
-          {/* Sign In form */}
+          {/* Sign In form */}    
           <div
-            className={`absolute top-0 h-full transition-all duration-600 ease-in-out left-0 w-1/2 z-20 ${!signIn ? "translate-x-full" : "translate-x-0"
+            className={`absolute bg-white/10 top-0 h-full  transition-all duration-600 ease-in-out left-0 w-1/2 z-20 ${!signIn ? "translate-x-full opacity-0" : "translate-x-0 opacity-100"
               }`}
           >
             <form
-              className="bg-white flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
+              className="flex items-center justify-center flex-col py-0 lg:px-12 px-8 h-full text-center"
               onSubmit={handleSubmit}
             >
-              <h1 className="font-bold text-actText mb-4">Sign In</h1>
+              <h1 className="font-bold text-actText mb-4 uppercase">Sign In</h1>
               {errors._Html ? (
                 <span className="text-red-500 rounded-lg w-full p-1 m-1 text-sm gap-2 flex items-center justify-center">
                   <i className="text-red">
@@ -242,7 +244,7 @@ const Login = () => {
               </div>
               <a
                 href="#"
-                className="text-notActText text-sm font-semibold my-4 hover:text-actText hover:font-semibold"
+                className="text-black text-bold text-md  my-4 hover:text-actText hover:font-semibold"
               >
                 Forgot your password?
               </a>
@@ -252,7 +254,7 @@ const Login = () => {
               </a> }
            
              
-              <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
+              <button className="rounded-full border border-bordColor bg-black  text-white hover:text-black hover:bg-transparent text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
                 {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12" />}
                 {!loading && "Sign in"}
               </button>
@@ -265,20 +267,20 @@ const Login = () => {
             className={`absolute top-0 left-1/2 w-1/2 h-full overflow-hidden transition-transform duration-600 ease-in-out z-40`}
           >
             <div
-              className={`bg-bordColor bg-gradient-to-r from-bordColor to-cirlce text-white h-full w-double transition-transform duration-600 ease-in-out`}
+              className={`bg-white/10  text-white h-full w-double transition-transform duration-600 ease-in-out`}
             >
               {/* Left Overlay Panel */}
               <div
                 className={`absolute flex items-center justify-center flex-col px-10 text-center h-full w-full transition-transform duration-600 ease-in-out ${!signIn ? "translate-x-20%" : "-translate-x-full"
                   }`}
               >
-                <h1 className="font-bold">Already have an Account?</h1>
-                <p className="mt-5 mb-8">
+                <h1 className="font-bold text-black">Already have an Account?</h1>
+                <p className="mt-5 mb-8 text-black">
                   To keep connected with us please login with your personal info
                 </p>
                 <button
                   onClick={toggleSignIn}
-                  className="rounded-full border border-white bg-transparent text-white text-sm font-bold py-3 px-9 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none"
+                  className="rounded-full border border-white bg-black text-white hover:bg-transparent hover:text-black text-sm font-bold py-3 px-9 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none"
                 >
                   Sign In
                 </button>
@@ -289,13 +291,13 @@ const Login = () => {
                 className={`absolute right-0 flex items-center justify-center flex-col px-10 text-center h-full w-full transition-transform duration-600 ease-in-out ${signIn ? "translate-x-20%" : "translate-x-full"
                   }`}
               >
-                <h1 className="font-bold">Don't have an Account yet?</h1>
-                <p className="mt-5 mb-8">
+                <h1 className="font-bold text-black">Don't have an Account yet?</h1>
+                <p className="mt-5 mb-8 text-black">
                   Enter your personal details and start journey with us
                 </p>
                 <button
                   onClick={toggleSignIn}
-                  className="rounded-full border border-white bg-transparent text-white text-sm font-bold py-3 px-9 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none"
+                  className="rounded-full border border-white bg-transparent text-black text-sm font-bold py-3 px-9 uppercase transition duration-75 ease-in-out transform hover:scale-95 hover:bg-black hover:text-white focus:outline-none"
                   type="submit"
                 >
                   Sign Up

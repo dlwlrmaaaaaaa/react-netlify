@@ -40,8 +40,6 @@ const App = () => {
         <Route path="/google/callback" element={<GoogleCallBack />} />
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />  
-       
-
       </Routes>
       {auth && roles === 'admin' && 
       <main

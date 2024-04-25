@@ -22,7 +22,7 @@ const Footer = () => {
 
   return (
     <div className="bg-white w-full h-auto border-t-2 border-actNav overflow-hidden">
-      <div className="grid grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:lg:grid-cols-4 lg:grid-cols-4">
         <img src={logo} className="object-contain lg:w-48 md:w-45 w-38 lg:m-7 p-3 lg:mt-1 mt-4" alt="Logo" />
 
         {/* 1st column */}

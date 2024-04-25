@@ -9,18 +9,18 @@ const Reservation = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedTime, setSelectedTime] = useState('');
   const [reservationInfo, setReservationInfo] = useState({});
   const [dates, setDates] = useState([]);
+  const [roomNum, setRoomNum] = useState('Room 1'); // Initialize with 'Room 1'
+
+  const roomOptions = ['Room 1', 'Room 2']; // Array of room options
+
   const years = Array.from({ length: 10 }, (_, index) => currentYear - 5 + index);
 
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
-  const roomNum = [
-    'Room #1',  'Room #2'
   ];
 
   const weekDayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -267,13 +267,14 @@ const Reservation = () => {
           {/* Reservation Part diko pa lang alam gagawin hehe */}
           <div className="bg-mainCol mt-4 pt-1 border-b-[1px] border-mainBorder p-4 rounded-xl shadow">
             {/* Add your content for the new grid here */}
-            <h2 className='py-2 text-3xl'>Room Information:</h2>
+            <h2 className='py-2 text-3xl text-center'>- Room Number -</h2>
             <div className="bg-mainCol py-2 flex justify-center items-center">
-              <div className='bg-backColor rounded-md w-full overflow-wrap flex-col justify-center items-center gap-2 mt-2 p-2'>
+              <div className='bg-backColor rounded-md w- overflow-wrap flex-col justify-center items-center gap-2 mt-2 p-2'>
               <select 
                 value={roomNum}
-                onChange={(e) => setRoomNum(e.target.value)}>
-                {roomNum.map((room, index) => (
+                onChange={(e) => setRoomNum(e.target.value)}
+              >
+                {roomOptions.map((room, index) => (
                   <option key={index} value={room}>{room}</option>
                 ))}
               </select>
@@ -282,7 +283,7 @@ const Reservation = () => {
             </div>
             <div className="flex justify-center">
               <button className="bg-notActText hover:bg-cirlce text-white font-bold py-2 px-4 rounded mt-4">
-                Reserve
+                Extra Button
               </button>
             </div>
           </div>

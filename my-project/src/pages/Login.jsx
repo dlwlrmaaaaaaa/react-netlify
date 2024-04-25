@@ -9,10 +9,8 @@ import LoadingUI from '../components/Loading'
 import Google from '../assets/google.png'
 const Login = () => {
   const { login, register, errors , setErrors, loading} = useStateContext();
-
   const [signIn, setSignIn] = useState(true);
   const [name, setName] = useState("");
-  // const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [Loading, userLoading] = useState(false);
   const [password, setPassword] = useState("");
@@ -242,20 +240,15 @@ const Login = () => {
               >
                 Forgot your password?
               </a>
-
               {url && <a className="rounded-full bg-white border flex border-gray-950 text-sm px-2 mb-2 py-1 text-center items-center" href={url}>
                   <img src={Google} className="w-4 h-4 mr-2" />Sign in with Google
               </a> }
-           
-             
               <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
                {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12"/>}
                {!loading && "Sign in"}           
               </button>
-              
             </form>
           </div>
-
           {/* Overlay Container starts here */}
           <div
             className={`absolute top-0 left-1/2 w-1/2 h-full overflow-hidden transition-transform duration-600 ease-in-out z-40`}

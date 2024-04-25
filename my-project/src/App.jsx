@@ -29,6 +29,7 @@ const App = () => {
       <Routes>
           
         <Route path="/contact" element={<Contact />} />
+        
         <Route element={<ProtectedRoutes/>}>
           <Route path="home" element={<Home />} />
           <Route path="book/payment" element={<Payment />} />
@@ -40,6 +41,7 @@ const App = () => {
         <Route path="/google/callback" element={<GoogleCallBack />} />
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />  
+        <Route path="*" element={<NotFound/>} />
       </Routes>
       {auth && roles === 'admin' && 
       <main
@@ -47,7 +49,7 @@ const App = () => {
           "w-full bg-slate-200 h-screen flex justify-between items-start"
         }
       >
-      <Sidebar />
+   <Sidebar /> 
         <Routes>
         <Route path="*" element={<NotFound/>} />
           <Route element={<PrivateRoutes/>}>

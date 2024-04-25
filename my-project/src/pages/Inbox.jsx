@@ -31,7 +31,7 @@ const Inbox = () => {
   const sendMessage = async () => {
     try {
       const response = await axiosClient.post("/inbox/message", {
-        receiver_name: selectedOption,
+        receiver_email: selectedOption,
         message: message,
       });
 

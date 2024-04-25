@@ -194,7 +194,7 @@ const Login = () => {
                 className="rounded-full border border-white bg-transparent  text-black hover:text-white hover:bg-black text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none"
               >
                 {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12" />}
-                {!loading && "Sign up"}
+                {!loading && "SIGN UP"}
               </button>
             </form>
           </div>

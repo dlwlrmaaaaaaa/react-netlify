@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { MdDashboard, MdLogout } from "react-icons/md";
-//import { FaHouse } from 'react-icons/fa';
 import { FaHouse, FaMessage } from "react-icons/fa6";
 import { FaArrowRight, FaUser, FaRegCalendarCheck } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import Inbox from "../pages/Inbox";
 import Users from "../pages/Users";
@@ -53,14 +52,7 @@ const Sidebar = () => {
   const { logout, auth, roles } = useStateContext();
   
   const [isExpanded, setIsExpanded] = useState(true);
-  const [isActive, setIsActive] = useState(null);
-
-  const handleNavItemClick = (index) => {
-    setIsActive(index);
-  };
-  if(!auth || roles !== 'admin'){
-    logout('/logout');
-  }
+  const location = useLocation();
 
   useEffect(() => {
     const handleResize = () => {
@@ -108,12 +100,10 @@ const Sidebar = () => {
             <NavLink
               key={item.name}
               to={item.path}
-              className={({ isActive }) =>
-                "flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl " +
-                (isActive
-                  ? "bg-actNav shadow-xl font-bold text-actText "
-                  : "hover:bg-actNav hover:shadow-xl hover:font-bold hover:text-actText ") +
-                (isExpanded ? "px-6 py-1" : "p-1")
+              className={
+                "flex justify-start items-center gap-4 w-full cursor-pointer rounded-xl hover:bg-actNav hover:shadow-xl hover:text-actText " +
+                (isExpanded ? "px-6 py-1" : "p-1") +
+                (location.pathname === item.path ? " font-bold" : "")
               }
               onClick={() => handleNavItemClick(index)}
             >

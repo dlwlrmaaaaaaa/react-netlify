@@ -251,14 +251,10 @@ const Login = () => {
               {url && <a className="rounded-full bg-white border flex border-gray-950 text-sm px-2 mb-2 py-1 text-center items-center" href={url}>
                   <img src={Google} className="w-4 h-4 mr-2" />Sign in with Google
               </a> }
-
-              </form>
-              <button className="rounded-full border border-bordColor bg-bordColor text-notActText text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
-
+              <button className="rounded-full border border-white bg-black text-white hover:text-black hover:bg-transparent text-sm font-bold py-3 px-9 my-2 uppercase transition duration-75 ease-in-out transform hover:scale-95 focus:outline-none">
                 {loading && <LoadingUI height="8" width="8" loadingHeight="12" loadingWidth="12" />}
                 {!loading && "Sign in"}
               </button>
-              
             </form>
           </div>
           {/* Overlay Container starts here */}

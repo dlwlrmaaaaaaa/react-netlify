@@ -9,6 +9,12 @@ const Profile = () => {
     // State to manage the users data and editing mode
     const [users, setUsers] = useState(usersData.map(user => ({ ...user, isEditing: false })));
 
+    // const [name, setName] = useState();
+    // const [email, setEmail] = useState();
+    // const [phoneNum, setPhoneNum] = useState();
+    // const [password, set] = useState();
+
+
     const [showPassword, setShowPassword] = useState(false);
 
     // Function to handle toggling editing mode for a specific user
@@ -36,6 +42,23 @@ const Profile = () => {
             setShowPassword(!showPassword);
         }
     };
+
+    
+  const getData = () => {
+    const selectedRoom = data.find(room => roomId === room.id);
+
+   if (selectedRoom) {
+        setRoomName(selectedRoom.room_name);
+        setPrice(selectedRoom.price);
+        setMiniDes(selectedRoom.mini_description);
+        setDescription(selectedRoom.description);
+        // setFiles(JSON.parse(selectedRoom.file_name));
+        setImage(JSON.parse(selectedRoom.file_name));
+        setRoomAmenitiesData(JSON.parse(JSON.parse(selectedRoom.room_amenities)))
+        setBuildingAmenitiesData(JSON.parse(JSON.parse(selectedRoom.building_amenities)))
+      }
+    setLoading(true);
+  };
 
     return (
         <>
@@ -95,8 +118,8 @@ const Profile = () => {
                                         value={user.password}
                                         name="password"
                                         className='border-2 h-10 w-3/4 text-actText rounded-lg'
-                                        onChange1={(e) => setPassword(e.target.value)}
                                         onChange={(event) => handleChange(index, event)}
+                                        onChange1={(e) => setPassword(e.target.value)}
                                         disabled={!user.isEditing}
                                     />
                                     <button

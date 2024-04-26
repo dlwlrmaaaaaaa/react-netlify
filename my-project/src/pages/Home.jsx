@@ -31,11 +31,6 @@ const Home = () => {
       setRooms(res.data);
     })
   }, [])
-  
-  useEffect(() => {
-    console.log(rooms);
-    console.log(image);
-  }, [rooms, image])
 
   const renderImage = (room) => {
     const file_name = JSON.parse(room.file_name)[0];

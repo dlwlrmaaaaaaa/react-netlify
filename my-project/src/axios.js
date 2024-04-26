@@ -32,7 +32,7 @@ axiosClient.interceptors.response.use(
       axiosClient.post('/logout').then(() => {
         localStorage.removeItem("user");
         localStorage.removeItem("auth");
-        localStorage.removeItem("role");
+        localStorage.removeItem("roles");
     }).catch(() => {
         window.location.href = '/login';
     });

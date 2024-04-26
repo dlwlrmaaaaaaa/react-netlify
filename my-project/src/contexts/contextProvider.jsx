@@ -11,7 +11,7 @@ export const ContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   
   const navigate = useNavigate()
-
+  
   const getAuth = () => {
     return localStorage.getItem("auth") || false;
   };

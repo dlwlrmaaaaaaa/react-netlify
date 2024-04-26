@@ -25,13 +25,30 @@ const Inbox = () => {
         console.error("Error fetching options:", error);
       }
     };
+
+    const fetchData = async () => {
+      try {
+        const response = await axiosClient.get("/inbox/messages");
+        const messages = response.data.map((message) => ({
+          id: message.id,
+          name: message.name,
+          message: message.messages,
+          date: message.date,
+        }));
+        setData(messages);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
     fetchOptions();
+    fetchData();
   }, []);
 
   const sendMessage = async () => {
     try {
       const response = await axiosClient.post("/inbox/message", {
-        receiver_name: selectedOption,
+        receiver_email: selectedOption,
         message: message,
       });
 
@@ -60,13 +77,23 @@ const Inbox = () => {
     setIsActive(false);
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axiosClient.delete(`/inbox/messages/${id}`);
+      setData(data.filter((item) => item.id !== id));
+      window.location.reload(); // Remove the deleted message from the frontend
+    } catch (error) {
+      console.error("Error deleting message:", error);
+    }
+  };
+
   const columns = [
-    {
-      name: "ID",
-      selector: (row) => row.id,
-      cell: (row) => <div style={{ wordWrap: "break-word" }}>{row.id}</div>,
-      width: "7%",
-    },
+    // {
+    //   name: "ID",
+    //   selector: (row) => row.id,
+    //   cell: (row) => <div style={{ wordWrap: "break-word" }}>{row.id}</div>,
+    //   width: "7%",
+    // },
     {
       name: "Name",
       selector: (row) => row.name,
@@ -104,92 +131,8 @@ const Inbox = () => {
       ),
     },
   ];
-  const [data, setData] = useState([
-    {
-      id: 1,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 2,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 3,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 4,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 5,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 6,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 7,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 8,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 9,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 10,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 11,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-    {
-      id: 12,
-      name: " Dan Edward Manuel",
-      message:
-        "1 Bedroom unit with Balcony facing Amenities 1 Bedroom unit with Balcony facing Amenities",
-      date: "April 18, 2024",
-    },
-  ]);
+
+  const [data, setData] = useState([{}]);
 
   const customStyles = {
     headRow: {
@@ -239,10 +182,6 @@ const Inbox = () => {
     },
   };
 
-  const handleDelete = (id) => {
-    setData(data.filter((row) => row.id !== id));
-  };
-
   return (
     <>
       <section className="w-4/5 grow bg-backColor h-screen overflow-y-auto flex flex-col justify-start items-center gap-2 p-4 scrollbar-thin scrollbar-webkit">
@@ -263,7 +202,7 @@ const Inbox = () => {
               </div>
               <div
                 id="tableContainer"
-                className="flex flex-col flex-grow p-2 mt-1 overflow-hidden"
+                className="flex flex-col w-full flex-grow p-2 mt-1 overflow-hidden"
               >
                 <div
                   id="table"

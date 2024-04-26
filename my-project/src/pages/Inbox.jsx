@@ -30,10 +30,10 @@ const Inbox = () => {
       try {
         const response = await axiosClient.get("/inbox/messages");
         const messages = response.data.map((message) => ({
-          id: message.id, 
+          id: message.id,
           name: message.name,
           message: message.messages,
-          date: message.date, 
+          date: message.date,
         }));
         setData(messages);
       } catch (error) {
@@ -80,20 +80,20 @@ const Inbox = () => {
   const handleDelete = async (id) => {
     try {
       await axiosClient.delete(`/inbox/messages/${id}`);
-      setData(data.filter((item) => item.id !== id)); // Remove the deleted message from the frontend
+      setData(data.filter((item) => item.id !== id));
+      window.location.reload(); // Remove the deleted message from the frontend
     } catch (error) {
       console.error("Error deleting message:", error);
     }
   };
 
-
   const columns = [
-    {
-      name: "ID",
-      selector: (row) => row.id,
-      cell: (row) => <div style={{ wordWrap: "break-word" }}>{row.id}</div>,
-      width: "7%",
-    },
+    // {
+    //   name: "ID",
+    //   selector: (row) => row.id,
+    //   cell: (row) => <div style={{ wordWrap: "break-word" }}>{row.id}</div>,
+    //   width: "7%",
+    // },
     {
       name: "Name",
       selector: (row) => row.name,
@@ -131,7 +131,7 @@ const Inbox = () => {
       ),
     },
   ];
-  
+
   const [data, setData] = useState([{}]);
 
   const customStyles = {
@@ -182,9 +182,6 @@ const Inbox = () => {
     },
   };
 
-  
-  
-  
   return (
     <>
       <section className="w-4/5 grow bg-backColor h-screen overflow-y-auto flex flex-col justify-start items-center gap-2 p-4 scrollbar-thin scrollbar-webkit">

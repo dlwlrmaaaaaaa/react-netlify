@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { useStateContext } from '../contexts/contextProvider';
+import axiosClient from '../axios';
 
 const UserModal = ({ closeModal, handleAddUser, handleDelete, editMode, selectedUser, data, setData }) => {
     const [userInfo, setUserInfo] = useState({
-      id: '',
       name: '',
-      address: '',
-      emailAdd: '',
-      cpNum: '',
-      pass: '',
+      email: '',
+      contact_number: '',
+      password: '',
+      password_confirmation: '',
     });
-  
+    const {register} = useStateContext();
     useEffect(() => {
       if (editMode && selectedUser) {
         setUserInfo(selectedUser);
@@ -23,18 +24,19 @@ const UserModal = ({ closeModal, handleAddUser, handleDelete, editMode, selected
             return; 
         }
         
-        let capitalizedValue = value;
-        if (name !== 'cpNum' && name !== 'emailAdd' && name !== 'pass' && value.length > 0) {
-          capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
-        }
+        // let capitalizedValue = value;
+        // if (name !== 'cpNum' && name !== 'emailAdd' && name !== 'pass' && value.length > 0) {
+        //   capitalizedValue = value.charAt(0).toUpperCase() + value.slice(1);
+        // }
       
         setUserInfo((prevState) => ({
           ...prevState,
-          [name]: capitalizedValue,
+          [name]: value,
         }));
     };
-
+    
     const handleSubmit = (e) => {
+
         e.preventDefault();
         const isAnyFieldEmpty = Object.values(userInfo).some(value => value === '');
 
@@ -45,16 +47,21 @@ const UserModal = ({ closeModal, handleAddUser, handleDelete, editMode, selected
         if (editMode) {
           handleUpdateUser(userInfo);
         } else {
-          handleAddUser(userInfo);
+          axiosClient.post('/admin/add_user', userInfo)
+          .then(() => {
+            location.reload();
+          })
+          .catch(err => console.log(err)) ;
+        
         }
         closeModal();
       };
   
-      const handleUpdateUser = (updatedUser) => {
-        const updatedData = data.map((user) => (user.id === updatedUser.id ? updatedUser : user));
-        setData(updatedData);
-        closeModal();
-      };
+      // const handleUpdateUser = (updatedUser) => {
+      //   const updatedData = data.map((user) => (user.id === updatedUser.id ? updatedUser : user));
+      //   setData(updatedData);
+      //   closeModal();
+      // };
 
   return (
     <div id='container' className='fixed w-full h-full bg-slate-300 bg-opacity-40 items-center justify-center flex' onClick={(e) => { if(e.target.id === "container") closeModal();}}>
@@ -63,34 +70,33 @@ const UserModal = ({ closeModal, handleAddUser, handleDelete, editMode, selected
         <form onSubmit={handleSubmit}>
           <div className="relative p-6 flex-auto">
             <div className="flex flex-wrap">
-              <div className="w-1/2 pr-2">
-                <label className="block text-black text-sm font-semibold mt-1"> ID: </label>
-                <input id="id" value={userInfo.id} onChange={handleChange} className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
-              </div>
               <div className="w-1/2 pl-2">
                 <label className="block text-black text-sm font-semibold mt-1"> Name: </label>
-                <input id="name" value={userInfo.name} onChange={handleChange} className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
+                <input id="name" value={userInfo.name} onChange={handleChange} name='name' className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
               </div>
-            </div>
-            <div className="flex flex-wrap">
-                <div className="w-1/2 pr-2">
-                    <label className="block text-black text-sm font-semibold mt-1"> Address: </label>
-                <input id="address" value={userInfo.address} onChange={handleChange} className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
-                </div>
-                <div className="w-1/2 pl-2">
+                           
+              <div className="w-1/2 pl-2">
                     <label className="block text-black text-sm font-semibold mt-1"> Email Address: </label>
-                <input id="emailAdd" value={userInfo.emailAdd} onChange={handleChange} className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
+                <input id="emailAdd" value={userInfo.emailAdd} onChange={handleChange} name='email' className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
                 </div>
             </div>
             <div className="flex flex-wrap">
-                <div className="w-1/2 pr-2">
-                    <label className="block text-black text-sm font-semibold mt-1"> Cellphone Number: </label>
-                <input id="cpNum" value={userInfo.cpNum} onChange={handleChange} className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
-                </div>
+  
                 <div className="w-1/2 pl-2">
                     <label className="block text-black text-sm font-semibold mt-1"> Password: </label>
-                <input id="pass" value={userInfo.pass} onChange={handleChange} className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
+                <input id="pass" value={userInfo.pass} onChange={handleChange} name='password' className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
                 </div>
+                <div className="w-1/2 pl-2">
+                    <label className="block text-black text-sm font-semibold mt-1" > Confirm Password: </label>
+                <input id="passConf" value={userInfo.cpNum} onChange={handleChange} name='password_confirmation' className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
+                </div>   
+            </div>
+            <div className="flex flex-wrap">
+                <div className="w-1/2 pl-2">
+                    <label className="block text-black text-sm font-semibold mt-1" > Cellphone Number: </label>
+                <input id="cpNum" value={userInfo.cpNum} onChange={handleChange} name='contact_number' className="shadow appearance-none border rounded w-full py-1 px-1 text-black" />
+                </div>       
+    
             </div>
           </div>
           <div className="flex items-center justify-end p-3 border-t border-solid border-darkText rounded-b">

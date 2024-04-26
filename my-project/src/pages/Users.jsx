@@ -56,7 +56,6 @@ const Users = () => {
     },
     {
       name: "Action",
-      button: true,
       cell: (row) => (
         <div>
           <button className='hover:text-slate-500' onClick={() => handleEdit(row.id)}><MdModeEdit size={18} /></button>
@@ -78,7 +77,11 @@ const Users = () => {
   };
 
   const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
+    // setData(data.filter((item) => item.id !== id));
+    axiosClient.delete('/delete/user/' + id)
+    .then(() => {
+      setData(data.filter((item) => item.id !== id));
+    });
   };
 
   const customStyles = {
@@ -142,7 +145,6 @@ const Users = () => {
           </div>
           <div className="w-full flex flex-col sm:flex-row items-end justify-end gap-2">
             <button
-              id='addUser'
               className='mt-2 justify-end items-end bg-notActText hover:bg-cirlce text-white font-bold py-2 px-4 rounded-full'
               onClick={() => {
                 setSelectedUser(null);
@@ -155,8 +157,8 @@ const Users = () => {
             {showModal && (
               <UserModal
                 closeModal={() => setShowModal(false)}
-                handleAddUser={handleAddUser}
-                handleDelete={handleDelete}
+                // handleAddUser={handleAddUser}
+                // handleDelete={handleDelete}
                 editMode={editMode}
                 selectedUser={selectedUser ? data.find(user => user.id === selectedUser) : {}}
                 data={data}

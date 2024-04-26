@@ -17,7 +17,7 @@ export const ContextProvider = ({ children }) => {
   };
   
   const getRole = () => {
-    return localStorage.getItem("role");
+    return localStorage.getItem("roles");
   };
   const [roles, setRoles] = useState(getRole());
 
@@ -53,19 +53,19 @@ export const ContextProvider = ({ children }) => {
       setUser({name: name, email: email});
       setAuth(true);
       localStorage.setItem("user", JSON.stringify({name: name, email: email}));
-      localStorage.setItem("role", role);
+      localStorage.setItem("roles", role);
       localStorage.setItem("auth", true);
-
       navigate('/email/verify');
     })
     .catch((error) => {
       const response = error.response;
       if (response) {
         // Email is already taken
+        setLoading(false);
         setErrors({
           ...errors,
           _Html:
-            "This email is already taken. Please choose a different one.",
+            response.data.message,
         });
       } else {
         console.log("Error during signup:", error);
@@ -84,7 +84,7 @@ export const ContextProvider = ({ children }) => {
       setLoading(false);
       setAuth(true);
       setRole(res.role);
-      localStorage.setItem("role", res.role);
+      localStorage.setItem("roles", res.role);
       localStorage.setItem("auth", true);
       if(res.role === 'admin'){
         localStorage.setItem("user", JSON.stringify(res.user));
@@ -148,7 +148,7 @@ export const ContextProvider = ({ children }) => {
       isAuth(false);
       localStorage.removeItem("user");
       localStorage.removeItem("auth");
-      localStorage.removeItem("role");
+      localStorage.removeItem("roles");
       navigate("/login");
     })
     .catch(() => {

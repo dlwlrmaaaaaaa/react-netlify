@@ -9,7 +9,7 @@ const ProtectedRoutes = () => {
 
   return (
       <>
-      {auth && roles === 'admin' ? <Navigate to={'/dashboard'}/> : auth && roles === 'user'? <Outlet/> : logout('/logout')}
+      {auth && roles === 'user'? <Outlet/> : auth && roles === 'admin' ? <Navigate to={'/dashboard'}/> : logout('/logout')}
       </>
     )
 }

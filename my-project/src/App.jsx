@@ -26,10 +26,8 @@ const App = () => {
   const { user, auth, roles } = useStateContext();
   return (
     <>
-      <Routes>
-          
-        <Route path="/contact" element={<Contact />} />
-        
+      <Routes>      
+        <Route path="/contact" element={<Contact />} />       
         <Route element={<ProtectedRoutes/>}>
           <Route path="home" element={<Home />} />
           <Route path="book/payment" element={<Payment />} />
@@ -40,28 +38,30 @@ const App = () => {
         </Route>
         <Route path="/google/callback" element={<GoogleCallBack />} />
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />  
-        <Route path="*" element={<NotFound/>} />
+        <Route path="/login" element={<Login />} />    
       </Routes>
-      {auth && roles === 'admin' && 
-      <main
+
+      
+      {auth && roles === "admin" && user &&
+        <main
         className={
           "w-full bg-slate-200 h-screen flex justify-between items-start"
         }
       >
-<Sidebar />
-        <Routes>
-        <Route path="*" element={<NotFound/>} />
-          <Route element={<PrivateRoutes/>}> 
+      <Sidebar />
+        <Routes>        
+          <Route element={<PrivateRoutes/>}>   
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/users" element={<Users />} />
           <Route path="/rooms" element={<Rooms />} />
-          <Route path="/reservation" element={<Reservation />} />
-          </Route>
+          <Route path="/reservation" element={<Reservation />} />     
+          </Route>   
         </Routes>
-      </main>
+      
+        </main>
       }
+     
 
       
     </>

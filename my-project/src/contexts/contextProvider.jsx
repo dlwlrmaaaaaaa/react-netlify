@@ -55,6 +55,7 @@ export const ContextProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify({name: name, email: email}));
       localStorage.setItem("roles", role);
       localStorage.setItem("auth", true);
+      setLoading(false);
       navigate('/email/verify');
     })
     .catch((error) => {

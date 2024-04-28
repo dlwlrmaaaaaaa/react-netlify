@@ -3,7 +3,7 @@ import { MdDashboard, MdLogout } from "react-icons/md";
 import { FaHouse, FaMessage } from "react-icons/fa6";
 import { FaArrowRight, FaUser, FaRegCalendarCheck } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import Inbox from "../pages/Inbox";
 import Users from "../pages/Users";
@@ -45,15 +45,14 @@ const navItems = [
   },
 ];
 
-
-
-
 const Sidebar = () => {
   const { logout, auth, roles } = useStateContext();
-  
   const [isExpanded, setIsExpanded] = useState(true);
   const location = useLocation();
-
+  const navigate = useNavigate();
+  if(!auth && roles !== "admin"){
+      navigate('/');
+  }
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -73,6 +72,7 @@ const Sidebar = () => {
     logout('/logout');
   };
   return (
+  
     <motion.section
       animate={isExpanded ? "expanded" : "nonExpanded"}
       variants={variants}
@@ -148,6 +148,7 @@ const Sidebar = () => {
         </div>
       </div>
     </motion.section>
+    
   );
 };
 

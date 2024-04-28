@@ -68,6 +68,7 @@ const Login = () => {
     e.preventDefault();
     userLoading(true)
     login({ email, password });
+    userLoading(false)
   };
 
   const handleSignup = (e) => {

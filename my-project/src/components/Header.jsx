@@ -91,7 +91,7 @@ const Header = () => {
 
           </>
           }
-          {!auth && <NavLink
+          {!auth && roles !== "user" && <NavLink
             to="/login"
             className="bg-actNav text-sm font-bold text-white py-2 px-8 md:ml-8 rounded-full md:static transition duration-75 ease-in-out transform hover:scale-95"
           >

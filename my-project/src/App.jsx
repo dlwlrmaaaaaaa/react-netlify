@@ -49,11 +49,10 @@ const App = () => {
           "w-full bg-slate-200 h-screen flex justify-between items-start"
         }
       >
-
+<Sidebar />
         <Routes>
         <Route path="*" element={<NotFound/>} />
-          <Route element={<PrivateRoutes/>}>
-          <Sidebar /> 
+          <Route element={<PrivateRoutes/>}> 
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/users" element={<Users />} />

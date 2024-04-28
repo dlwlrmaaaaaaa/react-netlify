@@ -9,14 +9,14 @@ import axiosClient from "../axios";
 const Contact = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [messages, setMessage] = useState("");
+  const [user_messages, setUserMessage] = useState("");
 
   const handleSend = (e) => {
     e.preventDefault();
     axiosClient.post('/contacts', {
       name,
       email,
-      messages,
+      user_messages,
     })
       .then(response => {
         console.log('Message sent successfully:', response.data);
@@ -96,7 +96,7 @@ const Contact = () => {
                 <div className="flex flex-wrap mb-5">
                   <textarea type="text" placeholder='Message' className="shadow appearance-none border rounded w-full py-1 px-1 text-notActText resize-none"
                     style={{ width: "100%", height: "120px", wordWrap: "break-word" }}
-                    value={messages} onChange={(e) => setMessage(e.target.value)} />
+                    value={user_messages} onChange={(e) => setUserMessage(e.target.value)} />
                 </div>
                 <button id='sendMessage'
                   className='mt-2 bg-notActText hover:bg-cirlce transition duration-75 ease-in-out transform hover:scale-95 text-white font-bold py-2 px-7 rounded-full'>Send

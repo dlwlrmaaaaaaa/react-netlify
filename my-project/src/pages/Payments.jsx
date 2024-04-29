@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  usePayPalScriptReducer
+} from "@paypal/react-paypal-js";
+
 import Footer from "../components/Footer";
 import room from "../JSON/Room.json";
 import br1 from "../assets/br1.jpg";
@@ -16,7 +22,11 @@ import {
   MdPlaylistAdd,
 } from "react-icons/md";
 import { IoCloseCircleSharp } from "react-icons/io5";
-
+const initialOptions = {
+  clientId: "test",
+  currency: "PHP",
+  intent: "capture",
+};
 const Payment = () => {
   const startDate = localStorage.getItem('startDate');
   const endDate = localStorage.getItem('endDate');
@@ -26,20 +36,20 @@ const Payment = () => {
   useEffect(() => {
     rooms.map((room) => {     
       setImage(JSON.parse(room.file_name)[0]);
-      console.log(JSON.parse(room.file_name)[0]);
    })
   },[])
-
+  const onApprove = (data) => {
+    console.log(data);
+  }
   return (
     <>
       <Header />
       <div className="w-full grow bg-backColor h-auto flex flex-col justify-start items-center">
         {rooms.map((room) => (
-          <>
             <div
               id="booking"
-              className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-4 w-full h-auto"
-              key={room.id}
+            className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-4 w-full h-auto"
+            key={room.id}
             >
               <div
                 id="left"
@@ -161,16 +171,21 @@ const Payment = () => {
                     </div>
                   </div>
 
-                  <button
+                  {/* <button
                     className="bg-actNav text-xl font-bold w-full mt-4 text-actText py-3 px-8 
                                 rounded-lg transition duration-75 ease-in-out transform hover:scale-95"
                   >
                     Confirm and Pay
-                  </button>
+                  </button> */}
+                    <PayPalScriptProvider options={initialOptions}>
+                    <PayPalButtons
+                    // createOrder={createOrder}
+                      onApprove={onApprove}
+                  />
+                  </PayPalScriptProvider>
                 </div>
               </div>
             </div>
-          </>
         ))}
       </div>
 

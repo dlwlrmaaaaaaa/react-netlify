@@ -5,13 +5,19 @@ import { useStateContext } from '../contexts/contextProvider';
 
 
 const ProtectedRoutes = () => {
-    const { user, auth, roles, logout } = useStateContext();
+  const { user, roles, auth, logout } = useStateContext();
 
   return (
-      <>
-      {auth && roles === 'user'? <Outlet/> : auth && roles === 'admin' ? <Navigate to={'/dashboard'}/> : logout('/logout')}
-      </>
-    )
+    <>
+      {auth && roles == "user" && user ? (
+        <Outlet />
+      ) : auth && roles === "admin" ? (
+        <Navigate to={"/dashboard"} />
+      ) : (
+        logout("/logout")
+      )}
+    </>
+  );
 }
 export default ProtectedRoutes;
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import room from "../JSON/Room.json";
@@ -18,11 +18,23 @@ import {
 import { IoCloseCircleSharp } from "react-icons/io5";
 
 const Payment = () => {
+  const startDate = localStorage.getItem('startDate');
+  const endDate = localStorage.getItem('endDate');
+  const guest = localStorage.getItem('guest');
+  const [rooms, setRooms] = useState([JSON.parse(localStorage.getItem('room'))]);
+  const [image, setImage] = useState("");
+  useEffect(() => {
+    rooms.map((room) => {     
+      setImage(JSON.parse(room.file_name)[0]);
+      console.log(JSON.parse(room.file_name)[0]);
+   })
+  },[])
+
   return (
     <>
       <Header />
       <div className="w-full grow bg-backColor h-auto flex flex-col justify-start items-center">
-        {room.map((room) => (
+        {rooms.map((room) => (
           <>
             <div
               id="booking"
@@ -50,7 +62,7 @@ const Payment = () => {
                         Dates
                       </h1>
                       <h1 className="text-lg text-act-text font-semibold">
-                        Date - Date
+                        {startDate + " - " + endDate}
                       </h1>
                       <h1 className="text-lg text-act-text font-semibold hover:underline duration-75 ease-in-out hover:scale-95">
                         <a href="">Edit</a>
@@ -61,7 +73,7 @@ const Payment = () => {
                         Guest
                       </h1>
                       <h1 className="text-lg text-act-text font-semibold">
-                        # Guest
+                        # {guest}
                       </h1>
                       <h1 className="text-lg text-act-text font-semibold hover:underline duration-75 ease-in-out hover:scale-95">
                         <a href="">Edit</a>
@@ -70,7 +82,7 @@ const Payment = () => {
                     <div className="bg-mainBorder h-[3px] w-full mt-2"></div>
 
                     <h1 className="text-3xl text-act-text font-bold text-notActText mt-4">
-                      Pay with:
+                      Pay with: Paypal
                     </h1>
                     <img
                       src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/GCash_logo.svg/1280px-GCash_logo.svg.png"
@@ -114,13 +126,13 @@ const Payment = () => {
                     <div className="flex flex-row gap-5">
                       <div className="h-32 w-52">
                         <img
-                          src={br1}
-                          alt={room.title}
+                          src={`http://localhost:8000/storage/images/${image}` }
+                          alt={room.room_name}
                           className="object-cover w-full h-full rounded-xl"
                         />
                       </div>
                       <h1 className="text-2xl text-act-text font-bold text-actText mt-2">
-                        {room.title}
+                        {room.room_name}
                       </h1>
                     </div>
 
@@ -137,18 +149,14 @@ const Payment = () => {
                           Additional Guest
                         </h1>
                         <h1 className="text-sm font-semibold">Total Cost</h1>
-                        <h1 className="text-sm font-semibold">
-                          Pay upon booking
-                        </h1>
                       </div>
                       <div className="flex flex-col gap-2">
                         <h1 className="text-sm font-semibold">
-                          ₱ {room.price}
+                          ₱ {localStorage.getItem('room_price')}
                         </h1>
-                        <h1 className="text-sm font-semibold"># Night/s</h1>
-                        <h1 className="text-sm font-semibold"># Guest/s</h1>
-                        <h1 className="text-sm font-semibold"> ₱ Price</h1>
-                        <h1 className="text-sm font-semibold">₱ Price</h1>
+                        <h1 className="text-sm font-semibold"># {localStorage.getItem('days')}</h1>
+                        <h1 className="text-sm font-semibold"># {localStorage.getItem('guest')}</h1>
+                        <h1 className="text-sm font-semibold"> ₱ {localStorage.getItem('price')}</h1>
                       </div>
                     </div>
                   </div>

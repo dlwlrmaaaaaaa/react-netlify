@@ -19,30 +19,55 @@ const Home = () => {
     br1: br1,
     br2: br2,
   };
+
   const [rooms, setRooms] = useState([])
   const [image, setImage] = useState([])
   const location = useLocation();
 
   useEffect(() => {
-    getRooms().then(res => {
-      return res.data;
-    })
-    .then((res) => {
-      setRooms(res.data);
-    })
-  }, [])
+    getRooms()
+      .then((res) => {
+        localStorage.removeItem("room");
+        return res.data;
+      })
+      .then((res) => {
+        setRooms(res.data);
+      });
+  }, []);
 
-  const renderImage = (room) => {
+  const checkRoom = (id) => {
+    axiosClient
+      .get("/room/" + id)
+      .then((res) => {
+        return res.data.data;
+      })
+      .then((res) => {
+        localStorage.setItem("room", JSON.stringify(res));
+        navigate("/book");
+      })
+      .catch((err) => {
+        console.log(err);
+        localStorage.removeItem("room");
+        window.location.reload();
+      });
+  };
+
+  const renderImage = (room, room_id) => {
     const file_name = JSON.parse(room.file_name)[0];
-      return (
-        <img
-           src={`http://localhost:8000/storage/images/${file_name}`}
-                className="object-cover w-full h-3/4 rounded-xl"
-                alt={room.room_name}
-        ></img>
-      )
-  }
-  
+    return (
+      <img
+        src={`http://localhost:8000/storage/images/${file_name}`}
+        className="object-cover w-full h-3/4 rounded-xl"
+        alt={room.room_name}
+        key={room_id}
+        onClick={(e) => {
+          e.preventDefault();
+          checkRoom(room_id);
+        }}
+      ></img>
+    );
+  };
+
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace("#", "");
@@ -69,28 +94,32 @@ const Home = () => {
             Available Rooms
           </h1>
         </div>
-     
+
         <div className="grid lg:grid-cols-3 grid-cols-2 mt-3 p-3 justify-center">
-       {rooms.map((room) => (
-          <div id="rooms" className="flex justify-center" key={room.id}>
-          <div
-            id="roomEdit"
-            className="lg:w-4/5 w-full lg:h-[100%]  h-full  relative bg-white rounded-xl Rounded-xl gap-4 
+          {rooms.map((room) => (
+            <div
+              id="rooms"
+              className="flex justify-center cursor-pointer"
+              key={room.id}
+            >
+              <div
+                id="roomEdit"
+                className="lg:w-4/5 w-full lg:h-[100%]  h-full  relative bg-white rounded-xl Rounded-xl gap-4 
                     border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl"
-          >
-            <Link to="/book">
-             {renderImage(room)}
-              <h1 className="m-1 g-2 text-actText lg:text-xl md:text-xl text-sm font-semibold ">
-                {room.room_name}
-              </h1>
-              <h2 className="m-1 g-2 text-darkText lg:text-xl md:text-xl text-sm">
-              ₱ {room.price}
-              </h2>
-  
-            </Link>
-          </div>
-        </div>
-        ))}
+              >
+                {/* <Link to="/book"> */}
+                {renderImage(room, room.id)}
+                <h1 className="m-1 g-2 text-actText lg:text-xl md:text-xl text-sm font-semibold ">
+                  {room.room_name}
+                </h1>
+                <h2 className="m-1 g-2 text-darkText lg:text-xl md:text-xl text-sm">
+                  ₱ {room.price}
+                </h2>
+
+                {/* </Link> */}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
       <Footer />

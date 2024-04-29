@@ -87,7 +87,8 @@ const BookRoom = () => {
   // }
 
   const renderRoomImage = () => {
-    return room.map((room) =>
+      return room.map((room) =>
+        
       JSON.parse(room.file_name).map((img, index) => (
         <img
           src={`http://localhost:8000/storage/images/${img}`}

@@ -22,15 +22,17 @@ import {
   MdPlaylistAdd,
 } from "react-icons/md";
 import { IoCloseCircleSharp } from "react-icons/io5";
+import axiosClient from "../axios";
 const initialOptions = {
-  clientId: "test",
+  "client-id": "AUZjhukssPPk3IUosdMMnhPX02Dp3Ebpjn0Nv_utiI2THzqv9_FpNApVQ-5YXI5TMpr-7UEs4i4Bkj0C",
   currency: "PHP",
-  intent: "capture",
+  intent: 'capture'
 };
 const Payment = () => {
   const startDate = localStorage.getItem('startDate');
   const endDate = localStorage.getItem('endDate');
   const guest = localStorage.getItem('guest');
+  const [room_id, setRoomId] = useState(localStorage.getItem("room_id"));
   const [rooms, setRooms] = useState([JSON.parse(localStorage.getItem('room'))]);
   const [image, setImage] = useState("");
   useEffect(() => {
@@ -38,9 +40,24 @@ const Payment = () => {
       setImage(JSON.parse(room.file_name)[0]);
    })
   },[])
-  const onApprove = (data) => {
-    console.log(data);
+
+  const createOrder = (data, actions) => {
+    axiosClient.post(`/payment`, {
+      room_id: room_id,
+      amount: localStorage.getItem('price')
+    })
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "PHP",
+            value: localStorage.getItem('price')
+          }
+        }
+      ]
+    })
   }
+
   return (
     <>
       <Header />
@@ -177,11 +194,16 @@ const Payment = () => {
                   >
                     Confirm and Pay
                   </button> */}
-                    <PayPalScriptProvider options={initialOptions}>
-                    <PayPalButtons
-                    // createOrder={createOrder}
-                      onApprove={onApprove}
-                  />
+                <PayPalScriptProvider options={initialOptions}>
+                  <PayPalButtons    
+                   createOrder={(data, actions) => createOrder(data, actions)}    
+                    onApprove={(data, actions) => {
+                    // Implement your logic for handling the approved payment here
+                      return actions.order.capture().then(function (details) {
+                      console.log("This is a Data: " + data.orderID) ;
+                    })
+                  }}                
+                              />
                   </PayPalScriptProvider>
                 </div>
               </div>

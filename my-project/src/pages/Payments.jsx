@@ -3,6 +3,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import room from "../JSON/Room.json";
 import br1 from "../assets/br1.jpg";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+
 import {
   FaCalendar,
   FaUsers,
@@ -18,6 +20,13 @@ import {
 import { IoCloseCircleSharp } from "react-icons/io5";
 
 const Payment = () => {
+
+  const initialOptions = {
+    clientId: "test",
+    currency: "PHP",
+    intent: "capture",
+};
+
   return (
     <>
       <Header />
@@ -110,16 +119,16 @@ const Payment = () => {
               {/* booking bar */}
               <div id="right" className="p-2 flex mt-5 flex-col gap-4 h-auto">
                 <div className="sticky top-24 mb-4">
-                  <div className="bg-mainCol border-b-[1px] border-mainBorder p-4 w-full h-auto rounded-xl flex flex-col justify-center items-center gap-6 shadow">
-                    <div className="flex flex-row gap-5">
+                  <div className="bg-mainCol border-b-[1px] border-mainBorder mb-4 p-4 w-full h-auto rounded-xl flex flex-col justify-center items-center gap-6 shadow">
+                    <div className="flex flex-row gap-5 container">
                       <div className="h-32 w-52">
                         <img
                           src={br1}
                           alt={room.title}
-                          className="object-cover w-full h-full rounded-xl"
+                          className="object-cover w-full lg:h-full h-[100px] rounded-xl"
                         />
                       </div>
-                      <h1 className="text-2xl text-act-text font-bold text-actText mt-2">
+                      <h1 className="lg:text-2xl text-md text-act-text font-bold text-actText mt-2">
                         {room.title}
                       </h1>
                     </div>
@@ -142,7 +151,7 @@ const Payment = () => {
                         </h1>
                       </div>
                       <div className="flex flex-col gap-2">
-                        <h1 className="text-sm font-semibold">
+                        <h1 className="text-sm font-semibold ">
                           ₱ {room.price}
                         </h1>
                         <h1 className="text-sm font-semibold"># Night/s</h1>
@@ -153,12 +162,9 @@ const Payment = () => {
                     </div>
                   </div>
 
-                  <button
-                    className="bg-actNav text-xl font-bold w-full mt-4 text-actText py-3 px-8 
-                                rounded-lg transition duration-75 ease-in-out transform hover:scale-95"
-                  >
-                    Confirm and Pay
-                  </button>
+                  <PayPalScriptProvider options={initialOptions}>
+                      <PayPalButtons style={{ layout: "horizontal" }} />
+                  </PayPalScriptProvider>
                 </div>
               </div>
             </div>

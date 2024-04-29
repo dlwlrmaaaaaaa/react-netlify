@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import { FaCircleUser } from "react-icons/fa6";
-import usersData from '../JSON/Users.json';
-import { IoMdEye } from "react-icons/io";
-import axiosClient from '../axios';
+// import React, { useState, useEffect } from 'react';
+// import Header from '../components/Header';
+// import Footer from '../components/Footer';
+// import { FaCircleUser } from "react-icons/fa6";
+// import usersData from '../JSON/Users.json';
+// import { IoMdEye } from "react-icons/io";
+// import axiosClient from '../axios';
 
 // const Profile = () => {
 //     // State to manage the users data and editing mode
@@ -151,54 +151,52 @@ import axiosClient from '../axios';
 
 // export default Profile;
 
+import React, { useState, useEffect } from 'react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { FaCircleUser } from "react-icons/fa6";
+import { IoMdEye } from "react-icons/io";
+import axiosClient from '../axios';
+
 const Profile = () => {
-    const [user, setUser] = useState({
-        name: '',
-        email: '',
-        cpNum: '',
-        password: ''
-    });
-    const [name, setName] = useState();
-    const [email, setEmail] = useState();
-    const [cpNum, setCpNum] = useState();
-    const [password, setPassword] = useState();
+    const [user, setUser] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         axiosClient.get('/user')
-        .then((res) => {
-            console.log(res.email); // Accessing the data property of the response object
-            setName(res.name); // Assuming the data format directly matches the user state
-        }).catch((err) => console.log(err));
+            .then(res => {
+                console.log("User data:", res.data)  // Check the structure here
+                if (res.data && res.data.data) {
+                    setUser(res.data.data);  // Make sure 'data.data' is correct
+                }
+            })
+            .catch(err => {
+                console.error("Error fetching user data", err);
+            });
     }, []);
+    
+
+    const handleEdit = () => {
+        setIsEditing(!isEditing);
+    };
 
     const handleChange = (event) => {
         const { name, value } = event.target;
         setUser(prev => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
-        setIsEditing(false);
-        try {
-            const response = await fetch('/api/user/update', { // Your API endpoint to update user data
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(user)
-            });
-            const data = await response.json();
-            console.log('User updated:', data);
-        } catch (error) {
-            console.error('Failed to update user', error);
-        }
+        handleEdit();  // To toggle off editing mode
+        // Optionally send updated data back to server here
     };
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+
+    if (!user) return "Loading..."; // Or any other loading state representation
 
     return (
         <>
@@ -210,56 +208,31 @@ const Profile = () => {
                 <div className='flex flex-col justify-center items-center'>
                     <FaCircleUser size={200} className='my-4 text-notActText' />
                     <h1 className='text-2xl font-semibold text-actText'>{user.name}</h1>
-                </div>
-                <form className='w-full max-w-lg p-4 m-4' onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        name="name"
-                        value={name}
-                        onChange={handleChange}
-                        placeholder="Name"
-                        disabled={!isEditing}
-                    />
-                    <input
-                        type="email"
-                        name="email"
-                        value={user.email}
-                        onChange={handleChange}
-                        placeholder="Email Address"
-                        disabled={!isEditing}
-                    />
-                    <input
-                        type="text"
-                        name="cpNum"
-                        value={user.cpNum}
-                        onChange={handleChange}
-                        placeholder="Phone Number"
-                        disabled={!isEditing}
-                    />
-                    <div className='relative'>
-                        <input
-                            type={showPassword ? "text" : "password"}
-                            name="password"
-                            value={user.password}
-                            onChange={handleChange}
-                            placeholder="Password"
-                            disabled={!isEditing}
-                        />
-                        <button 
-                            type="button" 
-                            onClick={togglePasswordVisibility}
-                            disabled={!isEditing}>
-                            <IoMdEye size={20} />
+                    <form className='w-full p-4' onSubmit={handleSubmit}>
+                        <div className='mb-4'>
+                            <label>Email Address:</label>
+                            <input type="email" name="email" value={user.email} onChange={handleChange} disabled={!isEditing} />
+                        </div>
+                        <div className='mb-4'>
+                            <label>Phone Number:</label>
+                            <input type="text" name="contact_number" value={user.contact_number} onChange={handleChange} disabled={!isEditing} />
+                        </div>
+                        <div className='mb-4 relative'>
+                            <label>Password:</label>
+                            <input type={showPassword ? "text" : "password"} name="password" value={user.password} onChange={handleChange} disabled={!isEditing} />
+                            <button type="button" onClick={togglePasswordVisibility} disabled={!isEditing}>
+                                <IoMdEye size={20} />
+                            </button>
+                        </div>
+                        <button type="button" onClick={handleEdit}>
+                            {isEditing ? 'Save' : 'Edit Info'}
                         </button>
-                    </div>
-                    <button type="button" onClick={() => setIsEditing(!isEditing)}>
-                        {isEditing ? 'Save' : 'Edit Info'}
-                    </button>
-                </form>
+                    </form>
+                </div>
             </div>
             <Footer />
         </>
     );
-};
+}
 
 export default Profile;

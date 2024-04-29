@@ -9,9 +9,9 @@ const EmailVerify = () => {
   const [countdown, setCountdown] = useState(0); // Countdown in seconds
   const [isResending, setIsResending] = useState(false);
  
-  const {user, errors, setErrors, loading, email_verify, resend_pin} = useStateContext();
+  const { errors, setErrors, loading, email_verify, resend_pin} = useStateContext();
   const navigate = useNavigate();
-
+  const user = JSON.parse(localStorage.getItem('user'));
   // if(user.isVerified && auth){
   //   navigate('/home');
   // }else if(!auth){

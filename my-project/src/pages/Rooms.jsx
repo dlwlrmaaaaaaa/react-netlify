@@ -33,13 +33,11 @@ const Rooms = () => {
       })
       .then((res) => {
         res.data.map((item) => setData((prev) => [...prev, item]));
+        setLoading(true)
       })
       .catch((err) => {
         console.log(err);
       });
-    setTimeout(() => {
-      setLoading(true);
-    }, 3000);
   };
 
   const closeModal = () => {

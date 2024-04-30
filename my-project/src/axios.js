@@ -30,6 +30,7 @@ axiosClient.interceptors.response.use(
     const {response} = error;
     if(response.status === 401){
       axiosClient.post('/logout').then(() => {
+        localStorage.removeItem("room");
         localStorage.removeItem("user");
         localStorage.removeItem("auth");
         localStorage.removeItem("roles");

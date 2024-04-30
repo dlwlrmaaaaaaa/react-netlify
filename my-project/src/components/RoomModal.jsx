@@ -19,6 +19,7 @@ const RoomModal = ({
   const [description, setDescription] = useState("");
   const [roomAmenitiesData, setRoomAmenitiesData] = useState([]);
   const [buildingAmenitiesData, setBuildingAmenitiesData] = useState([]);
+  const [maximum_guest, setMaximumGuest] = useState("");
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ const RoomModal = ({
         // setFiles(JSON.parse(selectedRoom.file_name));
         setImage(JSON.parse(selectedRoom.file_name));
         setRoomAmenitiesData(JSON.parse(JSON.parse(selectedRoom.room_amenities)))
-        setBuildingAmenitiesData(JSON.parse(JSON.parse(selectedRoom.building_amenities)))
+        // setBuildingAmenitiesData(JSON.parse(JSON.parse(selectedRoom.building_amenities)))
       }
     setLoading(true);
   };
@@ -92,8 +93,8 @@ const RoomModal = ({
       case "roomAmenitiesData":
         setRoomAmenitiesData(value);
         break;
-      case "buildingAmenitiesData":
-        setBuildingAmenitiesData(value);
+      case "maximum_guest":
+        setMaximumGuest(value);
         break;
       default:
         break;
@@ -150,11 +151,7 @@ const RoomModal = ({
     formData.append("mini_description", miniDes);
     formData.append("description", description);
     formData.append("room_amenities", JSON.stringify(roomAmenitiesData));
-    formData.append(
-      "building_amenities",
-      JSON.stringify(buildingAmenitiesData)
-    );
-
+    formData.append("maximum_guest", maximum_guest);
     formData.append("file_name", files);
    if(roomId){
     axiosClient.post(`/admin/room/${roomId}`, formData)
@@ -330,9 +327,16 @@ const RoomModal = ({
               <div className="w-1/2 pl-2">
                 <label className="block text-black text-sm font-semibold mt-1">
                   {" "}
-                  Building Amenities:{" "}
+                  Maximum Guest:{" "}
                 </label>
-                <MultiSelect      
+                <input
+                  name="maximum_guest"
+                  value={maximum_guest}
+                  className="shadow appearance-none border rounded w-full py-1 px-1 bg-white text-darkText"
+                  // defaultValue={roomToEdit ? roomToEdit.miniDes : ""}
+                  onChange={handleChange}
+                />
+                {/* <MultiSelect      
                   onChange={handleChange}
                   name="buildingAmenitiesData"
                   options={buildingAmenities}
@@ -341,7 +345,7 @@ const RoomModal = ({
                   filter
                   placeholder="Select Amenities"
                   className="shadow appearance-none border rounded w-full bg-white text-darkText"
-                />
+                /> */}
               </div>
             </div>
           </div>

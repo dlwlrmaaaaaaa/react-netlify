@@ -19,30 +19,56 @@ const Home = () => {
     br1: br1,
     br2: br2,
   };
+
   const [rooms, setRooms] = useState([])
   const [image, setImage] = useState([])
   const location = useLocation();
 
   useEffect(() => {
-    getRooms().then(res => {
-      return res.data;
-    })
-    .then((res) => {
-      setRooms(res.data);
-    })
-  }, [])
+    getRooms()
+      .then((res) => {
+        localStorage.removeItem("room");
+        return res.data;
+      })
+      .then((res) => {
+        setRooms(res.data);
+      });
+  }, []);
 
-  const renderImage = (room) => {
+  const checkRoom = (id) => {
+    axiosClient
+      .get("/room/" + id)
+      .then((res) => {
+        return res.data.data;
+      })
+      .then((res) => {
+        localStorage.setItem("room", JSON.stringify(res));
+        localStorage.setItem("room_id", JSON.stringify(res.id))
+        navigate("/book");
+      })
+      .catch((err) => {
+        console.log(err);
+        localStorage.removeItem("room");
+        window.location.reload();
+      });
+  };
+
+  const renderImage = (room, room_id) => {
     const file_name = JSON.parse(room.file_name)[0];
-      return (
-        <img
-           src={`http://localhost:8000/storage/images/${file_name}`}
-                className="object-cover w-full h-3/4 rounded-xl"
-                alt={room.room_name}
-        ></img>
-      )
-  }
-  
+    return (
+      <img
+        src={`http://localhost:8000/storage/images/${file_name}`}
+        className="object-cover w-full h-3/4 rounded-xl"
+        alt={room.room_name}
+        key={room_id}
+        onClick={(e) => {
+          e.preventDefault();
+          checkRoom(room_id);
+        }}
+      ></img>
+    );
+  };
+
   useEffect(() => {
     if (location.hash) {
       const id = location.hash.replace("#", "");
@@ -69,7 +95,6 @@ const Home = () => {
             Available Rooms
           </h1>
         </div>
-     
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-7 mt-3 p-7 justify-center">
        {rooms.map((room) => (
           <div id="rooms" className="flex justify-center" key={room.id}>

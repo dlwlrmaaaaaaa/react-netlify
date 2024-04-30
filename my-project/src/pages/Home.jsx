@@ -36,6 +36,7 @@ const Home = () => {
   }, []);
 
   const checkRoom = (id) => {
+    console.log(id)
     axiosClient
       .get("/room/" + id)
       .then((res) => {
@@ -48,8 +49,8 @@ const Home = () => {
       })
       .catch((err) => {
         console.log(err);
-        localStorage.removeItem("room");
-        window.location.reload();
+        // localStorage.removeItem("room");
+        // window.location.reload();
       });
   };
 
@@ -104,7 +105,7 @@ const Home = () => {
                     border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl container"
           >
             <Link to="/book">
-             {renderImage(room)}
+             {renderImage(room, room.id)}
               <h1 className="m-1 g-2 text-actText lg:text-xl md:text-xl text-sm font-semibold ">
                 {room.room_name}
               </h1>

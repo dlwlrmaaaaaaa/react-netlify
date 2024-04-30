@@ -70,12 +70,12 @@ const Home = () => {
           </h1>
         </div>
      
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-7 mt-3 p-3 justify-center">
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-7 mt-3 p-7 justify-center">
        {rooms.map((room) => (
           <div id="rooms" className="flex justify-center" key={room.id}>
           <div
             id="roomEdit"
-            className="w-full h-full  relative bg-white rounded-xl Rounded-xl gap-4 
+            className="w-full h-full  relative bg-white rounded-xl Rounded-xl gap-8 
                     border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl container"
           >
             <Link to="/book">

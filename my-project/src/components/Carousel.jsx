@@ -95,7 +95,7 @@ export default function Carousel() {
     <div className="overflow-hidden relative">
       {/* image */}
       <div
-        className="flex transition ease-out duration-40"
+        className="flex transition ease-out duration-40 w-full h-[550px]"
         style={{
           transform: `translateX(-${current * 100}%)`,
         }}
@@ -105,7 +105,7 @@ export default function Carousel() {
             <img
               key={s.id}
               src={s.src}
-              className="object-cover w-screen h-[550px]"
+              className="object-cover w-full"
             />
           );
         })}

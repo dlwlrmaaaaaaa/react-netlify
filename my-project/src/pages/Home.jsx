@@ -95,32 +95,27 @@ const Home = () => {
             Available Rooms
           </h1>
         </div>
-
-        <div className="grid lg:grid-cols-3 grid-cols-2 mt-3 p-3 justify-center">
-          {rooms.map((room) => (
-            <div
-              id="rooms"
-              className="flex justify-center cursor-pointer"
-              key={room.id}
-            >
-              <div
-                id="roomEdit"
-                className="lg:w-4/5 w-full lg:h-[100%]  h-full  relative bg-white rounded-xl Rounded-xl gap-4 
-                    border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl"
-              >
-                {/* <Link to="/book"> */}
-                {renderImage(room, room.id)}
-                <h1 className="m-1 g-2 text-actText lg:text-xl md:text-xl text-sm font-semibold ">
-                  {room.room_name}
-                </h1>
-                <h2 className="m-1 g-2 text-darkText lg:text-xl md:text-xl text-sm">
-                  ₱ {room.price}
-                </h2>
-
-                {/* </Link> */}
-              </div>
-            </div>
-          ))}
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-7 mt-3 p-7 justify-center">
+       {rooms.map((room) => (
+          <div id="rooms" className="flex justify-center" key={room.id}>
+          <div
+            id="roomEdit"
+            className="w-full h-full  relative bg-white rounded-xl Rounded-xl gap-8 
+                    border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl container"
+          >
+            <Link to="/book">
+             {renderImage(room)}
+              <h1 className="m-1 g-2 text-actText lg:text-xl md:text-xl text-sm font-semibold ">
+                {room.room_name}
+              </h1>
+              <h2 className="m-1 g-2 text-darkText lg:text-xl md:text-xl text-sm">
+              ₱ {room.price}
+              </h2>
+  
+            </Link>
+          </div>
+        </div>
+        ))}
         </div>
       </div>
       <Footer />

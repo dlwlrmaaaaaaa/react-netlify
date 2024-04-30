@@ -167,8 +167,8 @@ const Payment = () => {
               {/* booking bar */}
               <div id="right" className="p-2 flex mt-5 flex-col gap-4 h-auto">
                 <div className="sticky top-24 mb-4">
-                  <div className="bg-mainCol border-b-[1px] border-mainBorder p-4 w-full h-auto rounded-xl flex flex-col justify-center items-center gap-6 shadow">
-                    <div className="flex flex-row gap-5">
+                  <div className="bg-mainCol border-b-[1px] border-mainBorder mb-4 p-4 w-full h-auto rounded-xl flex flex-col justify-center items-center gap-6 shadow">
+                    <div className="flex flex-row gap-5 container">
                       <div className="h-32 w-52">
                         <img
                           src={`http://localhost:8000/storage/images/${image}` }
@@ -176,7 +176,7 @@ const Payment = () => {
                           className="object-cover w-full h-full rounded-xl"
                         />
                       </div>
-                      <h1 className="text-2xl text-act-text font-bold text-actText mt-2">
+                      <h1 className="lg:text-2xl text-md text-act-text font-bold text-actText mt-2">
                         {room.room_name}
                       </h1>
                     </div>

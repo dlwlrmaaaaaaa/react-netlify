@@ -43,6 +43,7 @@ const Home = () => {
       })
       .then((res) => {
         localStorage.setItem("room", JSON.stringify(res));
+        localStorage.setItem("room_id", JSON.stringify(res.id))
         navigate("/book");
       })
       .catch((err) => {

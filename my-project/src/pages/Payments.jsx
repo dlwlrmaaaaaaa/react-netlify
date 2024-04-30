@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
+import {
+  PayPalScriptProvider,
+  PayPalButtons,
+  usePayPalScriptReducer
+} from "@paypal/react-paypal-js";
+
 import Footer from "../components/Footer";
 import room from "../JSON/Room.json";
 import br1 from "../assets/br1.jpg";
+import Loading from "../components/SimpleLoading";
 import {
   FaCalendar,
   FaUsers,
@@ -16,30 +23,68 @@ import {
   MdPlaylistAdd,
 } from "react-icons/md";
 import { IoCloseCircleSharp } from "react-icons/io5";
-
+import axiosClient from "../axios";
+import { useNavigate } from "react-router-dom";
+const initialOptions = {
+  "client-id": "AUZjhukssPPk3IUosdMMnhPX02Dp3Ebpjn0Nv_utiI2THzqv9_FpNApVQ-5YXI5TMpr-7UEs4i4Bkj0C",
+  currency: "PHP",
+  intent: 'capture'
+};
 const Payment = () => {
   const startDate = localStorage.getItem('startDate');
   const endDate = localStorage.getItem('endDate');
   const guest = localStorage.getItem('guest');
+  const [room_id, setRoomId] = useState(localStorage.getItem("room_id"));
   const [rooms, setRooms] = useState([JSON.parse(localStorage.getItem('room'))]);
   const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     rooms.map((room) => {     
       setImage(JSON.parse(room.file_name)[0]);
-      console.log(JSON.parse(room.file_name)[0]);
    })
   },[])
 
+  const createOrder = (data, actions) => {
+    axiosClient.post(`/payment`, {
+      room_id: room_id,
+      amount: localStorage.getItem('price')
+    })
+    return actions.order.create({
+      purchase_units: [
+        {
+          amount: {
+            currency_code: "PHP",
+            value: localStorage.getItem('price')
+          }
+        }
+      ]
+    })
+  }
+
+  const cancel_booking = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    axiosClient.post('/cancel_booking', {
+      room_id: localStorage.getItem('room_id')
+    })
+      .then(() => {
+        setLoading(false);
+        navigate('/home');
+      }).catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
+  }
   return (
     <>
       <Header />
       <div className="w-full grow bg-backColor h-auto flex flex-col justify-start items-center">
         {rooms.map((room) => (
-          <>
             <div
               id="booking"
-              className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-4 w-full h-auto"
-              key={room.id}
+            className="grid lg:grid-cols-3 md:grid-cols-3 grid-cols-1 gap-4 w-full h-auto"
+            key={room.id}
             >
               <div
                 id="left"
@@ -157,20 +202,37 @@ const Payment = () => {
                         <h1 className="text-sm font-semibold"># {localStorage.getItem('days')}</h1>
                         <h1 className="text-sm font-semibold"># {localStorage.getItem('guest')}</h1>
                         <h1 className="text-sm font-semibold"> ₱ {localStorage.getItem('price')}</h1>
-                      </div>
                     </div>
+                    
+                  </div>
+                  <div className="w-full">
+                  <PayPalScriptProvider options={initialOptions}>
+                  <PayPalButtons    
+                   createOrder={(data, actions) => createOrder(data, actions)}    
+                    onApprove={(data, actions) => {
+                    // Implement your logic for handling the approved payment here
+                      return actions.order.capture().then(function (details) {
+                      console.log("This is a Data: " + data.orderID ) ;
+                    })
+                  }} />
+                  </PayPalScriptProvider>
+                  </div>
+                  <button onClick={cancel_booking} className="bg-red-400 rounded-full px-8 py-2 text-sm text-white hover:transition-all hover:scale-110">
+                    {loading && <Loading />}
+                    {!loading && "Cancel Booking"}
+                  </button>
                   </div>
 
-                  <button
+                  {/* <button
                     className="bg-actNav text-xl font-bold w-full mt-4 text-actText py-3 px-8 
                                 rounded-lg transition duration-75 ease-in-out transform hover:scale-95"
                   >
                     Confirm and Pay
-                  </button>
+                  </button> */}
+               
                 </div>
               </div>
             </div>
-          </>
         ))}
       </div>
 

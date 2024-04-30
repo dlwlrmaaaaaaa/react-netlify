@@ -19,9 +19,13 @@ import {
   MdPlaylistAdd,
 } from "react-icons/md";
 import { IoCloseCircleSharp } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Loading from '../components/SimpleLoading';
 import room8 from "../assets/images/room8.jpeg";
+import axiosClient from "../axios";
 const BookRoom = () => {
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
   const [room, setRoom] = useState([JSON.parse(localStorage.getItem("room"))]);
   {
     /* Calendar */
@@ -37,17 +41,15 @@ const BookRoom = () => {
   useEffect(() => {
     const start = date[0].startDate;
     const end = date[0].endDate;
-  
-    const startDateString = `${start.toLocaleString("default", {
-      month: "long",
-    })} ${start.getDate()}`;
-    const endDateString = `${end.toLocaleString("default", {
-      month: "long",
-    })} ${end.getDate()}`;
-      localStorage.setItem('days', getTotalDays());
-      localStorage.setItem('startDate', startDateString);
-      localStorage.setItem('endDate', endDateString);
+    
+    const startDateString = start.toISOString().split('T')[0];
+    const endDateString = end.toISOString().split('T')[0];
+    
+    localStorage.setItem('days', getTotalDays());
+    localStorage.setItem('startDate', startDateString);
+    localStorage.setItem('endDate', endDateString);
   }, [date]);
+  
   const getTotalDays = () => {
     const start = date[0].startDate;
     const end = date[0].endDate;
@@ -85,9 +87,30 @@ const BookRoom = () => {
   // const pricePortion = () => {
   //     return totalPrice() * 0.2;
   // }
+  const cancel_booking = (e) => {
+    e.preventDefault();
+    navigate('/home')
+  }
+  const continue_booking = (e) => {
+    e.preventDefault(); 
+    setLoading(true);
+    const data = {
+      room_id: localStorage.getItem('room_id'),
+      starting_date: localStorage.getItem('startDate'),
+      ending_date: localStorage.getItem('endDate'),
+    }
+    axiosClient.post('/reservation', data)
+      .then(() => {
+        setLoading(false);
+        navigate('/book/payment');
+      }).catch(() => {
+        setLoading(false);
+      });
+  }
 
   const renderRoomImage = () => {
-    return room.map((room) =>
+      return room.map((room) =>
+        
       JSON.parse(room.file_name).map((img, index) => (
         <img
           src={`http://localhost:8000/storage/images/${img}`}
@@ -270,11 +293,15 @@ const BookRoom = () => {
                       {/* <h1 className='text-sm font-semibold'>₱ {pricePortion()}</h1> */}
                     </div>
                   </div>
-                  <Link to="/book/payment">
-                    <button className="bg-actNav text-sm text-actText py-3 px-8 md:ml-8 rounded-full transition duration-75 ease-in-out transform hover:scale-95">
-                      Continue Booking
+                  <div className="flex">
+                  <button onClick={cancel_booking} className="bg-red-400 text-sm w-40 text-actText px-6 md:ml-5 rounded-full transition duration-75 ease-in-out transform hover:scale-95">
+                      Cancel Booking
                     </button>
-                  </Link>
+                    <button onClick={continue_booking} className="bg-actNav text-sm w-40 text-actText px-6 md:ml-5 rounded-full transition duration-75 ease-in-out transform hover:scale-95">
+                      {loading && <Loading />}
+                      {!loading && "Continue Booking"}
+                    </button>
+                  </div>
                   <h1 className="text-sm mt-[-10px]">
                     When you continue booking this room, it will not
                     automatically reserve until you finish with the payment

@@ -95,7 +95,6 @@ const Home = () => {
             Available Rooms
           </h1>
         </div>
-
         <div className="grid lg:grid-cols-3 grid-cols-2 mt-3 p-3 justify-center">
           {rooms.map((room) => (
             <div

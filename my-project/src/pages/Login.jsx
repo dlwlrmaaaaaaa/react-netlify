@@ -78,10 +78,10 @@ const Login = () => {
     const passwordPattern =
       /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
 
-    if (password !== passwordConfirmation) {
-      setErrors({ ...error, _Html: "Password does not match" });
-      return;
-    }
+    // if (password !== passwordConfirmation) {
+    //   setErrors({ ...error, _Html: "Password does not match" });
+    //   return;
+    // }
     if (!passwordPattern.test(password)) {
       setErrors({
         ...errors,

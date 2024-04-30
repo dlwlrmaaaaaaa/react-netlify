@@ -26,21 +26,21 @@ const Inbox = () => {
       }
     };
 
+    
     const fetchData = async () => {
       try {
-        const response = await axiosClient.get("/inbox/messages");
-        const messages = response.data.map((message) => ({
-          id: message.id,
-          name: message.name,
-          message: message.messages,
-          date: message.date,
-        }));
-        setData(messages);
+          const response = await axiosClient.get("/user-messages"); 
+          const messages = response.data.map((message) => ({
+              id: message.id,
+              name: message.name,
+              message: message.user_messages, 
+              date: message.date,
+          }));
+          setData(messages);
       } catch (error) {
-        console.error("Error fetching data:", error);
+          console.error("Error fetching data:", error);
       }
-    };
-
+  };
     fetchOptions();
     fetchData();
   }, []);
@@ -51,19 +51,20 @@ const Inbox = () => {
         receiver_email: selectedOption,
         message: message,
       });
-
+  
       console.log("Message sent successfully", response.data);
-
-      setData([
-        ...data,
-        {
-          id: data.length + 1,
-          name: selectedOption,
-          message,
-          date: new Date().toISOString().slice(0, 10),
-        },
-      ]);
-
+  
+      const updatedResponse = await axiosClient.get("/user-messages");
+      const updatedMessages = updatedResponse.data.map((message) => ({
+        id: message.id,
+        name: message.name,
+        message: message.user_messages, 
+        date: message.date,
+      }));
+  
+      setData(updatedMessages); 
+  
+      window.alert("Message sent successfully!");
       setMessage("");
       setSelectedOption("Choose a User");
     } catch (error) {
@@ -81,7 +82,7 @@ const Inbox = () => {
     try {
       await axiosClient.delete(`/inbox/messages/${id}`);
       setData(data.filter((item) => item.id !== id));
-      window.location.reload(); // Remove the deleted message from the frontend
+      window.location.reload(); 
     } catch (error) {
       console.error("Error deleting message:", error);
     }

@@ -11,22 +11,18 @@ const Inbox = () => {
   const [selectedOption, setSelectedOption] = useState("Choose a User");
   const [options, setOptions] = useState([]);
   const [message, setMessage] = useState("");
+  const [data, setData] = useState([{}]);
 
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const response = await axiosClient.get("/inbox", {
-          withCredentials: true,
-          withXSRFToken: true,
-        });
+        const response = await axiosClient.get("/inbox");
         const names = response.data;
         setOptions(names);
       } catch (error) {
         console.error("Error fetching options:", error);
       }
     };
-
-    
     const fetchData = async () => {
       try {
           const response = await axiosClient.get("/user-messages"); 
@@ -44,27 +40,14 @@ const Inbox = () => {
     fetchOptions();
     fetchData();
   }, []);
-
+  console.log(data);
   const sendMessage = async () => {
     try {
       const response = await axiosClient.post("/inbox/message", {
         receiver_email: selectedOption,
         message: message,
       });
-  
-      console.log("Message sent successfully", response.data);
-  
-      const updatedResponse = await axiosClient.get("/user-messages");
-      const updatedMessages = updatedResponse.data.map((message) => ({
-        id: message.id,
-        name: message.name,
-        message: message.user_messages, 
-        date: message.date,
-      }));
-  
-      setData(updatedMessages); 
-  
-      window.alert("Message sent successfully!");
+
       setMessage("");
       setSelectedOption("Choose a User");
     } catch (error) {
@@ -97,7 +80,7 @@ const Inbox = () => {
     // },
     {
       name: "Name",
-      selector: (row) => row.name,
+      selector: (row) => row.data.name,
       cell: (row) => <div style={{ wordWrap: "break-word" }}>{row.name}</div>,
       width: "20%",
     },
@@ -133,7 +116,6 @@ const Inbox = () => {
     },
   ];
 
-  const [data, setData] = useState([{}]);
 
   const customStyles = {
     headRow: {

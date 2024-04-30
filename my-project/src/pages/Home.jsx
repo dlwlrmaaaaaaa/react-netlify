@@ -116,7 +116,6 @@ const Home = () => {
                 <h2 className="m-1 g-2 text-darkText lg:text-xl md:text-xl text-sm">
                   ₱ {room.price}
                 </h2>
-
                 {/* </Link> */}
               </div>
             </div>

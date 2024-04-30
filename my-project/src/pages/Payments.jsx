@@ -46,10 +46,6 @@ const Payment = () => {
   },[])
 
   const createOrder = (data, actions) => {
-    axiosClient.post(`/payment`, {
-      room_id: room_id,
-      amount: localStorage.getItem('price')
-    })
     return actions.order.create({
       purchase_units: [
         {
@@ -60,6 +56,21 @@ const Payment = () => {
         }
       ]
     })
+  }
+  const onApprove = (data, actions) => {
+    return actions.order.capture().then(function (details) {
+      axiosClient.post('/payment', {
+        room_id: localStorage.getItem('room_id'),
+        amount: localStorage.getItem('price'),
+        starting_date: localStorage.getItem("startDate"),
+        ending_date: localStorage.getItem("endDate"),
+        order_id: data.orderID
+      }).then(() => {
+        navigate('/home');
+      }).catch((err) => {
+        console.log(err);
+      })
+    });
   }
 
   const cancel_booking = (e) => {
@@ -209,11 +220,7 @@ const Payment = () => {
                   <PayPalScriptProvider options={initialOptions}>
                   <PayPalButtons    
                    createOrder={(data, actions) => createOrder(data, actions)}    
-                    onApprove={(data, actions) => {
-                    // Implement your logic for handling the approved payment here
-                      return actions.order.capture().then(function (details) {
-                      console.log("This is a Data: " + data.orderID ) ;
-                    })
+                    onApprove={(data, actions) => { onApprove(data, actions) 
                   }} />
                   </PayPalScriptProvider>
                   </div>

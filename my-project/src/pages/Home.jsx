@@ -36,6 +36,7 @@ const Home = () => {
   }, []);
 
   const checkRoom = (id) => {
+    console.log(id)
     axiosClient
       .get("/room/" + id)
       .then((res) => {
@@ -48,8 +49,8 @@ const Home = () => {
       })
       .catch((err) => {
         console.log(err);
-        localStorage.removeItem("room");
-        window.location.reload();
+        // localStorage.removeItem("room");
+        // window.location.reload();
       });
   };
 

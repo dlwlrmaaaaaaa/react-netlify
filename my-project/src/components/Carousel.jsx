@@ -109,6 +109,22 @@ export default function Carousel() {
             />
           );
         })}
+        {/* <div key={s.id}>
+        <img
+          
+          {imagesList.map((s) => {
+            return (
+              <img
+                key={s.id}
+                src={s.src}
+                className="object-cover w-full"
+              />
+            );
+          })}
+          className="object-cover w-full"
+          
+        ></img>
+        </div> */}
       </div>
 
       {/* Buttons */}

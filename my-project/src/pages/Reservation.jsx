@@ -257,16 +257,6 @@ const Reservation = () => {
             </div>
           </div>
           {/* Reservation Part diko pa lang alam gagawin hehe */}
-          <div className="bg-mainCol mt-4 pt-1 border-b-[1px] border-mainBorder p-4 rounded-xl shadow">
-            {/* Add your content for the new grid here */}
-            <h2 className="py-2 text-3xl text-center">- Room Number -</h2>
-
-            <div className="flex justify-center">
-              <button className="bg-notActText hover:bg-cirlce text-white font-bold py-2 px-4 rounded mt-4">
-                Extra Button
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </section>

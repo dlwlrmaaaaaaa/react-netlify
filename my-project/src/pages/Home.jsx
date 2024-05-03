@@ -100,12 +100,12 @@ const Home = () => {
           {rooms.map((room) => (
             <div
               id="rooms"
-              className="flex justify-center cursor-pointer"
+              className="flex justify-center cursor-pointer p-4"
               key={room.id}
             >
               <div
                 id="roomEdit"
-                className="lg:w-4/5 w-full lg:h-[100%]  h-full  relative bg-white rounded-xl Rounded-xl gap-4 
+                className="lg:w-4/5 w-full  h-full  relative bg-white rounded-xl Rounded-xl gap-4 
                     border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl"
               >
                 {/* <Link to="/book"> */}

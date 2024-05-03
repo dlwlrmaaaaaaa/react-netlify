@@ -19,9 +19,10 @@ const Dashboard = () => {
   const [reservationCount, setReservationCount] = useState(0);
 
   const statusColors = {
-    "status-confirmed": "#90ee90",  // Light green
+    "status-paid": "#90ee90",  // Light green
     "status-pending": "#ffcc00",    // Yellow
     "status-cancelled": "#ff6347",  // Tomato
+    "status-done": "##9da19e",  // Light grey
   };
 
   const getReservations = () => {

@@ -15,7 +15,7 @@ const FeedbackModal = ({ closeModal, option2 }) => {
     useEffect(() => {
         const fetchUserId = async () => {
             try {
-                const response = await axiosClient.get('/user'); // Assuming '/api/user' is the endpoint that returns the authenticated user's ID
+                const response = await axiosClient.get('rd/user'); // Assuming '/api/user' is the endpoint that returns the authenticated user's ID
                 setUserId(response.data.id);
             } catch (error) {
                 console.error('Error fetching user ID:', error);

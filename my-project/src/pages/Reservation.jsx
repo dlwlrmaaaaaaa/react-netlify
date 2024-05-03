@@ -98,7 +98,7 @@ const Reservation = () => {
       );
       const reservationData = response.data;
       setReservationInfo(reservationData);
-      setSelectedDate(date); // Set the selected date here
+      setSelectedDate(date); 
     } catch (error) {
       console.error("Error fetching reservation data:", error);
     }
@@ -164,10 +164,8 @@ const Reservation = () => {
                         clonedDate <= bookingEnd &&
                         date.getMonth() === selectedMonth
                       ) {
-                        // Date is within the booking range and within the selected month
-                        if (reservationInfo.room_status === "Occupied") {
-                          return "#ADD8E6"; // Blue for occupied rooms
-                        } else if (reservationInfo.room_status === "Reserved") {
+                        
+                        if (reservationInfo.room_status === "Reserved") {
                           return "#ed4242"; // Red for reserved rooms
                         }
                       } else if (date.getMonth() !== selectedMonth) {

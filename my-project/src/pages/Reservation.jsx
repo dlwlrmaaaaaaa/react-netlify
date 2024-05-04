@@ -98,7 +98,7 @@ const Reservation = () => {
       );
       const reservationData = response.data;
       setReservationInfo(reservationData);
-      setSelectedDate(date); // Set the selected date here
+      setSelectedDate(date); 
     } catch (error) {
       console.error("Error fetching reservation data:", error);
     }
@@ -164,10 +164,8 @@ const Reservation = () => {
                         clonedDate <= bookingEnd &&
                         date.getMonth() === selectedMonth
                       ) {
-                        // Date is within the booking range and within the selected month
-                        if (reservationInfo.room_status === "Occupied") {
-                          return "#ADD8E6"; // Blue for occupied rooms
-                        } else if (reservationInfo.room_status === "Reserved") {
+                        
+                        if (reservationInfo.room_status === "Reserved") {
                           return "#ed4242"; // Red for reserved rooms
                         }
                       } else if (date.getMonth() !== selectedMonth) {
@@ -259,16 +257,6 @@ const Reservation = () => {
             </div>
           </div>
           {/* Reservation Part diko pa lang alam gagawin hehe */}
-          <div className="bg-mainCol mt-4 pt-1 border-b-[1px] border-mainBorder p-4 rounded-xl shadow">
-            {/* Add your content for the new grid here */}
-            <h2 className="py-2 text-3xl text-center">- Room Number -</h2>
-
-            <div className="flex justify-center">
-              <button className="bg-notActText hover:bg-cirlce text-white font-bold py-2 px-4 rounded mt-4">
-                Extra Button
-              </button>
-            </div>
-          </div>
         </div>
       </div>
     </section>

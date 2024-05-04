@@ -23,7 +23,7 @@ const Contact = () => {
         // Optionally reset form here
         setName('');
         setEmail('');
-        setMessage('');
+        setUserMessage('');
       })
       .catch((error) => console.error("Error: ", error));
   };

@@ -36,6 +36,7 @@ const Home = () => {
   }, []);
 
   const checkRoom = (id) => {
+    console.log(id)
     axiosClient
       .get("/room/" + id)
       .then((res) => {
@@ -48,8 +49,8 @@ const Home = () => {
       })
       .catch((err) => {
         console.log(err);
-        localStorage.removeItem("room");
-        window.location.reload();
+        // localStorage.removeItem("room");
+        // window.location.reload();
       });
   };
 
@@ -111,14 +112,14 @@ const Home = () => {
           {rooms.map((room) => (
             <div
               id="rooms"
-              className="flex justify-center cursor-pointer"
+              className="flex justify-center cursor-pointer p-4"
               key={room.id}
             >
               <div
                 id="roomEdit"
-                className={`lg:w-4/5 w-full lg:h-[100%]  h-full flex  bg-gray-100 gap-4 
-                   transfrom duration-75 ease-in-out transform shadow-sm z-10`}
-               >
+                className="lg:w-4/5 w-full  h-full  relative bg-white rounded-xl Rounded-xl gap-4 
+                    border transfrom duration-75 ease-in-out transform  hover:scale-105 shadow-xl"
+              >
                 {/* <Link to="/book"> */}
                 {renderImage(room, room.id)}
                 <div className={`absolute  h-full w-3/4 px-1 py-2  hover:transition-all flex flex-col border-none -z-10 ${translate} hover:opacity-100`}

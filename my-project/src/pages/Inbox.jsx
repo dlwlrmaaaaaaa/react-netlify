@@ -25,7 +25,7 @@ const Inbox = () => {
     };
     const fetchData = async () => {
       try {
-          const response = await axiosClient.get("/user-messages"); 
+          const response = axiosClient.get("/user-messages"); 
           const messages = response.data.map((message) => ({
               id: message.id,
               name: message.name,
